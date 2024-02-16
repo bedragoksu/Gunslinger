@@ -17,11 +17,11 @@ public class CardDisplay : MonoBehaviour
 
     void Start()
     {
-        nameText.text = card.name;
+        //nameText.text = card.name;
 
-        pictureImage.sprite = card.picture;
-        symbolImage.sprite = card.symbol;
+        //pictureImage.sprite = card.picture;
+        //symbolImage.sprite = card.symbol;
 
-        numberText.text = card.number.ToString();
+        //numberText.text = card.number.ToString();
     }
 }
