@@ -8,6 +8,8 @@ using FishNet.Example.ColliderRollbacks;
 
 public class PlayerAnimationController : NetworkBehaviour
 {
+    public PlayerModel.TypeOfPlayer PlayerType;
+
     Animator _animator;
     NetworkAnimator _networkAnimator;
 
