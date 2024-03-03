@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerModel : MonoBehaviour
 {
+    public int PlayerID;
     public string PlayerName;
     public int CurrentBulletPoint;
     public TypeOfPlayer PlayerRole;

@@ -6,79 +6,84 @@ using FishNet.Component.Transforming;
 using FishNet.Object;
 using FishNet.Example.ColliderRollbacks;
 
-public class PlayerAnimationController : NetworkBehaviour
+namespace Gunslinger.Controller
 {
-    public PlayerModel.TypeOfPlayer PlayerType;
 
-    Animator _animator;
-    NetworkAnimator _networkAnimator;
+    public class PlayerAnimationController : NetworkBehaviour
+    {
+        public PlayerModel.TypeOfPlayer PlayerType;
 
-    bool _hasRifle = false;
-    bool _isPlaying = false;
-    // Start is called before the first frame update
-    void Start()
-    {
-        _animator = GetComponent<Animator>();
-        _networkAnimator = GetComponent<NetworkAnimator>();
-    }
-    public override void OnStartClient()
-    {
-        base.OnStartClient();
-        if (!base.IsOwner)
+        Animator _animator;
+        NetworkAnimator _networkAnimator;
+
+        bool _hasRifle = false;
+        bool _isPlaying = false;
+        // Start is called before the first frame update
+        void Start()
         {
-            gameObject.GetComponent<PlayerAnimationController>().enabled = false;
+            _animator = GetComponent<Animator>();
+            _networkAnimator = GetComponent<NetworkAnimator>();
         }
-    }
-    // Update is called once per frame
-    void Update()
-    {
-        Debug.Log("here");
-        if (Input.anyKeyDown)
+        public override void OnStartClient()
         {
-            if (Input.GetKeyDown(KeyCode.I))
+            base.OnStartClient();
+            if (!base.IsOwner)
             {
-                // injure
-                _networkAnimator.SetTrigger("Is Injured");
-            }
-            else if (Input.GetKeyDown(KeyCode.P))
-            {
-                // pistol or rifle
-                _hasRifle = !_hasRifle;
-                _animator.SetBool("Has Rifle", _hasRifle);
-                _animator.SetBool("Is Playing", false);
-                _isPlaying = false;
-            }
-            else if (Input.GetKeyDown(KeyCode.R))
-            {
-                // reset
-                _animator.SetBool("Has Rifle", false);
-                _hasRifle = false;
-                _animator.SetBool("Is Playing", false);
-                _isPlaying = false;
-            }
-            else if (Input.GetKeyDown(KeyCode.X))
-            {
-                // death
-                _networkAnimator.SetTrigger("Is Death");
-            }
-            else if (Input.GetKeyDown(KeyCode.D))
-            {
-                // dodge
-                _networkAnimator.SetTrigger("Is Dodging");
-            }
-            else if (Input.GetKeyDown(KeyCode.C))
-            {
-                // current (playing)
-                _isPlaying = !_isPlaying;
-                _animator.SetBool("Is Playing", _isPlaying);
+                gameObject.GetComponent<PlayerAnimationController>().enabled = false;
             }
         }
-
-        // Listen for left mouse button press
-        if (Input.GetMouseButtonDown(0))
+        // Update is called once per frame
+        void Update()
         {
-            _networkAnimator.SetTrigger("Is Firing");
+            Debug.Log("here");
+            if (Input.anyKeyDown)
+            {
+                if (Input.GetKeyDown(KeyCode.I))
+                {
+                    // injure
+                    _networkAnimator.SetTrigger("Is Injured");
+                }
+                else if (Input.GetKeyDown(KeyCode.P))
+                {
+                    // pistol or rifle
+                    _hasRifle = !_hasRifle;
+                    _animator.SetBool("Has Rifle", _hasRifle);
+                    _animator.SetBool("Is Playing", false);
+                    _isPlaying = false;
+                }
+                else if (Input.GetKeyDown(KeyCode.R))
+                {
+                    // reset
+                    _animator.SetBool("Has Rifle", false);
+                    _hasRifle = false;
+                    _animator.SetBool("Is Playing", false);
+                    _isPlaying = false;
+                }
+                else if (Input.GetKeyDown(KeyCode.X))
+                {
+                    // death
+                    _networkAnimator.SetTrigger("Is Death");
+                }
+                else if (Input.GetKeyDown(KeyCode.D))
+                {
+                    // dodge
+                    _networkAnimator.SetTrigger("Is Dodging");
+                }
+                else if (Input.GetKeyDown(KeyCode.C))
+                {
+                    // current (playing)
+                    _isPlaying = !_isPlaying;
+                    _animator.SetBool("Is Playing", _isPlaying);
+                }
+            }
+
+            // Listen for left mouse button press
+            if (Input.GetMouseButtonDown(0))
+            {
+                _networkAnimator.SetTrigger("Is Firing");
+            }
         }
+
     }
 
 }
