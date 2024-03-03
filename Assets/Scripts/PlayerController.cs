@@ -24,6 +24,8 @@ public class PlayerController : NetworkBehaviour
 
     [SerializeField]
     private float cameraYOffset = 0.4f;
+    [SerializeField]
+    private float cameraZOffset = 2.0f;
     private Camera playerCamera;
 
 
@@ -33,7 +35,7 @@ public class PlayerController : NetworkBehaviour
         if (base.IsOwner)
         {
             playerCamera = Camera.main;
-            playerCamera.transform.position = new Vector3(transform.position.x, transform.position.y + cameraYOffset, transform.position.z);
+            playerCamera.transform.position = new Vector3(transform.position.x, transform.position.y + cameraYOffset, transform.position.z + cameraZOffset);
             playerCamera.transform.SetParent(transform);
         }
         else
