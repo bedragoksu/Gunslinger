@@ -3,49 +3,49 @@ using System.Collections.Generic;
 using UnityEngine;
 using FishNet.Object;
 using FishNet.Connection;
+using FishNet.Managing;
+using FishNet.Transporting;
+using FishNet.Example;
 
-public class PlayerRolesController : NetworkBehaviour
+namespace Gunslinger.Controller
 {
-    public List<Transform> playerlist { get; private set; }
-    public GameObject[] players { get; private set; }
-    bool CanStart = true;
-
-    void Start()
-	{
-		playerlist = new List<Transform>();
-		players = GameObject.FindGameObjectsWithTag("Player");
-		foreach (GameObject p in players)
-		{
-			playerlist.Add(p.transform);
-		}
-	}
-
-    //public override void OnStartClient()
-    //   {
-    //       base.OnStartClient();
-    //       Debug.Log("in server connect");
-    //	playerlist.Clear();
-    //	players = GameObject.FindGameObjectsWithTag("Player");
-    //	foreach (GameObject p in players)
-    //	{
-    //		playerlist.Add(p.transform);
-    //	}
-    //}
-
-
-    private int sheriffNumber = 1;
-    private int renegadeNumber = 1;
-    private int outlawNumber = 2;
-    private int deputyNumber = 0;
-
-    List<PlayerModel.TypeOfPlayer> possiblePlayerTypes = new List<PlayerModel.TypeOfPlayer>();
-
-    public void StartTheGame()
+    public class PlayerRolesController : NetworkBehaviour
     {
-		if(players.Length>=4 && players.Length <= 7 && CanStart)
+        public List<Transform> playerlist { get; private set; }
+        public GameObject[] players { get; private set; }
+        bool CanStart = true;
+
+        void Start()
         {
-			Debug.Log("we can start");
+            playerlist = new List<Transform>();
+            players = GameObject.FindGameObjectsWithTag("Player");
+            foreach (GameObject p in players)
+            {
+                playerlist.Add(p.transform);
+            }
+        }
+
+     
+        public override void OnStartClient()
+        {
+            base.OnStartClient();
+            Debug.Log("in server connect");
+            Debug.Log(ObjectId);
+        }
+
+
+        private int sheriffNumber = 1;
+        private int renegadeNumber = 1;
+        private int outlawNumber = 2;
+        private int deputyNumber = 0;
+
+        List<PlayerModel.TypeOfPlayer> possiblePlayerTypes = new List<PlayerModel.TypeOfPlayer>();
+
+        public void StartTheGame()
+        {
             CanStart = false;
+
+            Debug.Log("we can start");
 
             possiblePlayerTypes.Add(PlayerModel.TypeOfPlayer.Sheriff);
             possiblePlayerTypes.Add(PlayerModel.TypeOfPlayer.Renegade);
@@ -75,41 +75,50 @@ public class PlayerRolesController : NetworkBehaviour
             // assign roles to players
             foreach (var player in players)
             {
-                var randomint = Random.Range(0,possiblePlayerTypes.Count);
+                var randomint = Random.Range(0, possiblePlayerTypes.Count);
                 var type = possiblePlayerTypes[randomint];
                 possiblePlayerTypes.RemoveAt(randomint);
                 player.GetComponent<PlayerAnimationController>().PlayerType = type;
             }
-        }
-    }
 
-    void Update()
-    {
-        
-        if (Input.anyKeyDown)
+        }
+
+        void Update()
         {
-            if (Input.GetKeyDown(KeyCode.B))
+
+            if (Input.anyKeyDown)
             {
-                playerlist.Clear();
-                players = GameObject.FindGameObjectsWithTag("Player");
-                foreach (GameObject p in players)
+                if (Input.GetKeyDown(KeyCode.B) && CanStart)
                 {
-                    playerlist.Add(p.transform);
+                    playerlist.Clear();
+                    players = GameObject.FindGameObjectsWithTag("Player");
+                    foreach (GameObject p in players)
+                    {
+                        playerlist.Add(p.transform);
+                    }
+                    Debug.Log($"player num: {players.Length}");
+
+                    if (players.Length >= 4 && players.Length <= 7)
+                    {
+                        StartTheGame();
+                    }
                 }
-                Debug.Log($"player num: {players.Length}");
-                StartTheGame();
             }
         }
+
+        public void OnPlayerEntered()
+        {
+
+        }
+
+        //void OnPlayerDisconnected(NetworkPlayer player)
+        //{
+        //    Transform playerTransform = GameObject.Find("Player_" + player.guid);
+        //    if (playerTransform != null)
+        //        Destroy(playerTransform.gameObject);
+
+        //    Network.RemoveRPCs(networkPlayer);
+        //    Network.DestroyPlayerObjects(networkPlayer);
+        //}
     }
-
-
-    //void OnPlayerDisconnected(NetworkPlayer player)
-    //{
-    //    Transform playerTransform = GameObject.Find("Player_" + player.guid);
-    //    if (playerTransform != null)
-    //        Destroy(playerTransform.gameObject);
-
-    //    Network.RemoveRPCs(networkPlayer);
-    //    Network.DestroyPlayerObjects(networkPlayer);
-    //}
 }
