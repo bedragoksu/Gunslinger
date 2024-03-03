@@ -188,7 +188,8 @@ MonoBehaviour:
   lookSpeed: 2
   lookXLimit: 45
   canMove: 1
-  cameraYOffset: 8.4
+  cameraYOffset: 20
+  cameraZOffset: -15
 --- !u!114 &5199731734732856853
 MonoBehaviour:
   m_ObjectHideFlags: 0
