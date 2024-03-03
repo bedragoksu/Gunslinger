@@ -31,7 +31,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5294451582369181646}
   m_LocalRotation: {x: 0.000000014901161, y: -0.9970748, z: -0.000000029802322, w: 0.076432854}
-  m_LocalPosition: {x: -8.4, y: 0.3, z: -9.7}
+  m_LocalPosition: {x: -8.4, y: 0, z: -9.7}
   m_LocalScale: {x: 5.8, y: 5.8, z: 5.8}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -118,7 +118,7 @@ MonoBehaviour:
   NetworkObserver: {fileID: 0}
   <PrefabId>k__BackingField: 2
   <SpawnableCollectionId>k__BackingField: 0
-  _scenePathHash: 584410112
+  _scenePathHash: 0
   <SceneId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 4795288743386393173
 --- !u!114 &5393582696082837165
@@ -204,6 +204,7 @@ MonoBehaviour:
   _componentIndexCache: 2
   _addedNetworkObject: {fileID: 5944478505647257100}
   _networkObjectCache: {fileID: 5944478505647257100}
+  PlayerType: 0
 --- !u!114 &8280983042249677542
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -9,6 +9,7 @@ public class PlayerModel : MonoBehaviour
     public TypeOfPlayer PlayerRole;
     public bool CanPlayMultipleBangs = false;
     public GunModel gun; // can change
+    public CharacterModel character;
     
 
 

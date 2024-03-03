@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class CardDisplay : MonoBehaviour
 {
     [SerializeField]
-    private Card card;
+    private CardModel card;
     [SerializeField]
     private TextMeshPro nameText;
     private Image pictureImage;
