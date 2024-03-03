@@ -6,6 +6,7 @@ using FishNet.Connection;
 using FishNet.Managing;
 using FishNet.Transporting;
 using FishNet.Example;
+using NeptunDigital;
 
 namespace Gunslinger.Controller
 {
@@ -14,6 +15,11 @@ namespace Gunslinger.Controller
         public List<Transform> playerlist { get; private set; }
         public GameObject[] players { get; private set; }
         bool CanStart = true;
+
+        private GameObject _thisPlayer;
+
+        [SerializeField]
+        private NetworkManager _networkManager;
 
         void Start()
         {
@@ -25,14 +31,57 @@ namespace Gunslinger.Controller
             }
         }
 
-     
+
         public override void OnStartClient()
         {
             base.OnStartClient();
-            Debug.Log("in server connect");
-            Debug.Log(ObjectId);
-        }
 
+            ScreenLog.Instance.SendEvent(TextType.Debug, $"onstartclienttt: {base.ObjectId}");
+
+
+            playerlist.Clear();
+            players = GameObject.FindGameObjectsWithTag("Player");
+            
+            for(int i=0; i<players.Length;i++)
+            {
+                var _p = players[i];
+                ScreenLog.Instance.SendEvent(TextType.Debug, $"onstartclienttt: {_p.GetInstanceID()}");
+
+                playerlist.Add(_p.transform);
+                if(i == players.Length - 1)
+                {
+                    _thisPlayer = _p;
+                }
+            }
+            //Debug.Log($"player num: {players.Length}");
+
+            PlayerModel player = _thisPlayer.AddComponent<PlayerModel>();
+
+            player.PlayerID = players.Length - 1;
+            player.PlayerRole = PlayerModel.TypeOfPlayer.Sheriff;
+
+            ScreenLog.Instance.SendEvent(TextType.Debug, $"helo {player.PlayerID}");
+            ScreenLog.Instance.SendEvent(TextType.Debug, $"player num: {players.Length}");
+
+            //AddPlayerModelServer(_thisPlayer, players);
+
+        }
+        [ServerRpc]
+        public void AddPlayerModelServer(GameObject tp, GameObject[] ps)
+        {
+            AddPlayerModel(tp, ps);
+        }
+        [ObserversRpc]
+        public void AddPlayerModel(GameObject tp, GameObject[] ps)
+        {
+            PlayerModel player = tp.AddComponent<PlayerModel>();
+
+            player.PlayerID = ps.Length - 1;
+            player.PlayerRole = PlayerModel.TypeOfPlayer.Sheriff;
+
+            ScreenLog.Instance.SendEvent(TextType.Debug, $"helo {player.PlayerID}");
+            ScreenLog.Instance.SendEvent(TextType.Debug, $"player num: {ps.Length}");
+        }
 
         private int sheriffNumber = 1;
         private int renegadeNumber = 1;
@@ -43,6 +92,12 @@ namespace Gunslinger.Controller
 
         public void StartTheGame()
         {
+
+            //if (!IsServer)
+            //{
+            //    return;
+            //}
+
             CanStart = false;
 
             Debug.Log("we can start");
@@ -78,9 +133,24 @@ namespace Gunslinger.Controller
                 var randomint = Random.Range(0, possiblePlayerTypes.Count);
                 var type = possiblePlayerTypes[randomint];
                 possiblePlayerTypes.RemoveAt(randomint);
-                player.GetComponent<PlayerAnimationController>().PlayerType = type;
+                ScreenLog.Instance.SendEvent(TextType.Debug, $"player stuff: {player} {type}");
+                AssignRolesServer(player, type);
+                //player.GetComponent<PlayerModel>().PlayerRole = type;
+
             }
 
+        }
+
+        [ServerRpc]
+        public void AssignRolesServer(GameObject player, PlayerModel.TypeOfPlayer type)
+        {
+            AssignRoles(player, type);
+        }
+
+        [ObserversRpc]
+        public void AssignRoles(GameObject player, PlayerModel.TypeOfPlayer type)
+        {
+            player.GetComponent<PlayerModel>().PlayerRole = type;
         }
 
         void Update()
@@ -92,16 +162,22 @@ namespace Gunslinger.Controller
                 {
                     playerlist.Clear();
                     players = GameObject.FindGameObjectsWithTag("Player");
-                    foreach (GameObject p in players)
+                    foreach (var p in players)
                     {
                         playerlist.Add(p.transform);
                     }
-                    Debug.Log($"player num: {players.Length}");
-
+                    ScreenLog.Instance.SendEvent(TextType.Debug, $"player num: {players.Length}");
                     if (players.Length >= 4 && players.Length <= 7)
                     {
                         StartTheGame();
                     }
+                }
+
+                if (Input.GetKeyDown(KeyCode.N))
+                {
+                    if(_thisPlayer.GetComponent<PlayerModel>() != null)
+                        ScreenLog.Instance.SendEvent(TextType.Debug, $"player id: {_thisPlayer.GetComponent<PlayerModel>().PlayerID}");
+                        ScreenLog.Instance.SendEvent(TextType.Debug, $"player type: {_thisPlayer.GetComponent<PlayerModel>().PlayerRole}");
                 }
             }
         }
