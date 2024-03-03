@@ -69,6 +69,7 @@ GameObject:
   - component: {fileID: 4099913241451220254}
   - component: {fileID: 5199731734732856853}
   - component: {fileID: 8280983042249677542}
+  - component: {fileID: 8179070045381790412}
   m_Layer: 0
   m_Name: Character_Sheriff_01
   m_TagString: Player
@@ -237,7 +238,6 @@ MonoBehaviour:
   _componentIndexCache: 2
   _addedNetworkObject: {fileID: 5944478505647257100}
   _networkObjectCache: {fileID: 5944478505647257100}
-  PlayerType: 0
 --- !u!114 &8280983042249677542
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -259,6 +259,21 @@ MonoBehaviour:
   _interpolation: 2
   _clientAuthoritative: 1
   _sendToOwner: 0
+--- !u!114 &8179070045381790412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5294451582369181646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c71fd7f855ec523429999fc4e14a1928, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _overrideType: 3
+  _updateHostVisibility: 1
+  _observerConditions: []
 --- !u!1 &5294491858687964962
 GameObject:
   m_ObjectHideFlags: 0

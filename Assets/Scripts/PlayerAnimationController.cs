@@ -11,8 +11,6 @@ namespace Gunslinger.Controller
 
     public class PlayerAnimationController : NetworkBehaviour
     {
-        public PlayerModel.TypeOfPlayer PlayerType;
-
         Animator _animator;
         NetworkAnimator _networkAnimator;
 
