@@ -238,6 +238,7 @@ MonoBehaviour:
   _componentIndexCache: 2
   _addedNetworkObject: {fileID: 5944478505647257100}
   _networkObjectCache: {fileID: 5944478505647257100}
+  _animator: {fileID: 7560940687452204471}
 --- !u!114 &8280983042249677542
 MonoBehaviour:
   m_ObjectHideFlags: 0

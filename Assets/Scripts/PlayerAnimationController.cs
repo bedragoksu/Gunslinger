@@ -11,6 +11,7 @@ namespace Gunslinger.Controller
 
     public class PlayerAnimationController : NetworkBehaviour
     {
+        [SerializeField]
         Animator _animator;
         NetworkAnimator _networkAnimator;
 
@@ -19,7 +20,6 @@ namespace Gunslinger.Controller
         // Start is called before the first frame update
         void Start()
         {
-            _animator = GetComponent<Animator>();
             _networkAnimator = GetComponent<NetworkAnimator>();
         }
         public override void OnStartClient()
