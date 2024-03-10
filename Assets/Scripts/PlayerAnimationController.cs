@@ -15,6 +15,11 @@ namespace Gunslinger.Controller
         Animator _animator;
         NetworkAnimator _networkAnimator;
 
+        [SerializeField]
+        SkinnedMeshRenderer _skinnedMesh;
+        [SerializeField]
+        Material _whitishMaterial;
+
         bool _hasRifle = false;
         bool _isPlaying = false;
         // Start is called before the first frame update
@@ -94,7 +99,10 @@ namespace Gunslinger.Controller
         }
         public void playDeath()
         {
+            gameObject.GetComponent<PlayerController>().enabled = false;
+
             _networkAnimator.SetTrigger("Is Death");
+            //_skinnedMesh.material = _whitishMaterial;
         }
         public void playDodge()
         {
