@@ -39,49 +39,76 @@ namespace Gunslinger.Controller
                 if (Input.GetKeyDown(KeyCode.I))
                 {
                     // injure
-                    _networkAnimator.SetTrigger("Is Injured");
+                    playInjure();
                 }
                 else if (Input.GetKeyDown(KeyCode.P))
                 {
                     // pistol or rifle
-                    _hasRifle = !_hasRifle;
-                    _animator.SetBool("Has Rifle", _hasRifle);
-                    _animator.SetBool("Is Playing", false);
-                    _isPlaying = false;
+                    playSwitchGun();
                 }
                 else if (Input.GetKeyDown(KeyCode.R))
                 {
                     // reset
-                    _animator.SetBool("Has Rifle", false);
-                    _hasRifle = false;
-                    _animator.SetBool("Is Playing", false);
-                    _isPlaying = false;
+                    resetAnimations();
                 }
                 else if (Input.GetKeyDown(KeyCode.X))
                 {
                     // death
-                    _networkAnimator.SetTrigger("Is Death");
+                    playDeath();
                 }
                 else if (Input.GetKeyDown(KeyCode.D))
                 {
                     // dodge
-                    _networkAnimator.SetTrigger("Is Dodging");
+                    playDodge();
                 }
                 else if (Input.GetKeyDown(KeyCode.C))
                 {
                     // current (playing)
-                    _isPlaying = !_isPlaying;
-                    _animator.SetBool("Is Playing", _isPlaying);
+                    playRifleAim();
                 }
             }
 
             // Listen for left mouse button press
             if (Input.GetMouseButtonDown(0))
             {
-                _networkAnimator.SetTrigger("Is Firing");
+                playFire();
             }
         }
-
+        public void playInjure()
+        {
+            _networkAnimator.SetTrigger("Is Injured");
+        }
+        public void playSwitchGun()
+        {
+            _hasRifle = !_hasRifle;
+            _animator.SetBool("Has Rifle", _hasRifle);
+            _animator.SetBool("Is Playing", false);
+            _isPlaying = false;
+        }
+        public void resetAnimations()
+        {
+            _animator.SetBool("Has Rifle", false);
+            _hasRifle = false;
+            _animator.SetBool("Is Playing", false);
+            _isPlaying = false;
+        }
+        public void playDeath()
+        {
+            _networkAnimator.SetTrigger("Is Death");
+        }
+        public void playDodge()
+        {
+            _networkAnimator.SetTrigger("Is Dodging");
+        }
+        public void playRifleAim()
+        {
+            _isPlaying = !_isPlaying;
+            _animator.SetBool("Is Playing", _isPlaying);
+        }
+        public void playFire()
+        {
+            _networkAnimator.SetTrigger("Is Firing");
+        }
     }
 
 }
