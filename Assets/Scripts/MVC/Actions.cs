@@ -3,47 +3,85 @@ using System.Collections.Generic;
 using UnityEngine;
 using FishNet.Connection;
 using FishNet.Object;
+using System;
 
 public class Actions : NetworkBehaviour
 {
     // Card Actions
-    void BangAction()
+    void BangAction(GameObject target) // Bang
+    {
+        PlayerModel targetPlayer = target.GetComponent<PlayerModel>();
+
+        if (CalculateScope(target) >= 0)
+        {
+            targetPlayer.CurrentBulletPoint--; 
+            
+            foreach (CardModel card in targetPlayer.openHand)
+            {
+                if (card.Name == "Missed") // Karavana
+                {
+                    MissedAction(targetPlayer);
+                    return;
+                }
+            }
+        }
+    }
+    void MissedAction(PlayerModel player) // Karavana
+    {
+        player.CurrentBulletPoint++;
+    }
+    void BeerAction() // Bitki çayý
+    {
+        GetComponent<PlayerModel>().CurrentBulletPoint++;
+    }
+    void DrawAction() // Fýçý
     {
 
     }
-    void MissedAction()
+    void PanicAction() // Panik
     {
 
     }
-    void BeerAction()
+    void SaloonAction() // Kahvehane
     {
 
     }
-    void DrawAction()
-    {
-
-    }
-    void PanicAction()
-    {
-
-    }
-    void SaloonAction()
-    {
-
-    }
-    void GatlingAction()
+    void GatlingAction() // Makineli tüfek
     {
 
     }
 
     // General Functions
-    void CalculateDistance()
+    public int CalculateDistance(GameObject target)
     {
+        PlayerModel thisPlayer = GetComponent<PlayerModel>();
+        PlayerModel targetPlayer = target.GetComponent<PlayerModel>();
 
+        int dist = Mathf.Abs(targetPlayer.position - thisPlayer.position);
+
+        foreach (CardModel card in thisPlayer.openHand)
+        {
+            if (card.Name == "Appaloosa") // Dürbün
+            {
+                dist--;
+            }
+        }
+
+        foreach (CardModel card in targetPlayer.openHand)
+        {
+            if (card.Name == "Mustang") // Mustang
+            {
+                dist++;
+            }
+        }
+
+        return dist;
     }
-    void CalculateScope()
+    public int CalculateScope(GameObject target)
     {
+        PlayerModel thisPlayer = GetComponent<PlayerModel>();
 
+        return Mathf.Abs(thisPlayer.gun.ScopeLevel - CalculateDistance(target)); // if >=0 can if <0 cannot
     }
     void PullCard()
     {
@@ -53,9 +91,19 @@ public class Actions : NetworkBehaviour
     {
 
     }
-    void ChangeWeapon()
+    public void ChangeWeapon(GunModel gun)
     {
+        PlayerModel thisPlayer = GetComponent<PlayerModel>();
 
+        thisPlayer.gun = gun;
+    }
+    public bool CheckBullet(GameObject player)
+    {
+        if(player.GetComponent<PlayerModel>().CurrentBulletPoint > 0)
+        {
+            return true;
+        }
+        return false;
     }
 
     // increase/decrease bullet points
