@@ -71,6 +71,15 @@ namespace Gunslinger.Controller
                     // current (playing)
                     playRifleAim();
                 }
+                else if (Input.GetKeyDown(KeyCode.S))
+                {
+                    // walking back
+                    playWalkingBack();
+                }
+                else if (Input.GetKeyDown(KeyCode.W))
+                {
+                    playWalkingFront();
+                }
             }
 
             // Listen for left mouse button press
@@ -116,6 +125,14 @@ namespace Gunslinger.Controller
         public void playFire()
         {
             _networkAnimator.SetTrigger("Is Firing");
+        }
+        public void playWalkingBack()
+        {
+            _networkAnimator.SetTrigger("Is Walking Back");
+        }
+        public void playWalkingFront()
+        {
+            _networkAnimator.SetTrigger("Is Walking Front");
         }
     }
 
