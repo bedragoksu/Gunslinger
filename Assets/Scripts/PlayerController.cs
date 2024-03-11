@@ -84,7 +84,8 @@ public class PlayerController : NetworkBehaviour
         }
 
         // Move the controller
-        characterController.Move(moveDirection * Time.deltaTime);
+        //characterController.Move(moveDirection * Time.deltaTime);
+        characterController.Move(new Vector3(0, 0, 0) * Time.deltaTime);
 
         // Player and Camera rotation
         if (canMove && playerCamera != null)
