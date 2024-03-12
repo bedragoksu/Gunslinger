@@ -21,4 +21,5 @@ public class PlayerModel : MonoBehaviour
         Outlaw, // Haydut
         Renegade, // Hain
     }
+
 }

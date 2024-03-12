@@ -8,7 +8,7 @@ using System;
 public class Actions : NetworkBehaviour
 {
     // Card Actions
-    void BangAction(GameObject target) // Bang
+    public void BangAction(GameObject target) // Bang
     {
         PlayerModel targetPlayer = target.GetComponent<PlayerModel>();
 
@@ -20,11 +20,13 @@ public class Actions : NetworkBehaviour
             {
                 if (card.Name == "Missed") // Karavana
                 {
+                    DiscardCard(card);
                     MissedAction(targetPlayer);
                     return;
                 }
             }
         }
+        Debug.Log("bang");
     }
     void MissedAction(PlayerModel player) // Karavana
     {
@@ -33,6 +35,10 @@ public class Actions : NetworkBehaviour
     void BeerAction() // Bitki çayý
     {
         GetComponent<PlayerModel>().CurrentBulletPoint++;
+        if(GetComponent<PlayerModel>().CurrentBulletPoint > GetComponent<CharacterModel>().MaxBulletPoint)
+        {
+            GetComponent<PlayerModel>().CurrentBulletPoint = GetComponent<CharacterModel>().MaxBulletPoint;
+        }
     }
     void DrawAction() // Fýçý
     {
@@ -83,11 +89,11 @@ public class Actions : NetworkBehaviour
 
         return Mathf.Abs(thisPlayer.gun.ScopeLevel - CalculateDistance(target)); // if >=0 can if <0 cannot
     }
-    void PullCard()
+    public void PullCard(CardModel card)
     {
 
     }
-    void DiscardCard()
+    public void DiscardCard(CardModel card)
     {
 
     }
