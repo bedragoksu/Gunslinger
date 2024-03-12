@@ -1,18 +1,25 @@
+using FishNet.Object;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
+using FishNet.Connection;
 
-public class NewBehaviourScript : MonoBehaviour
+public class NewBehaviourScript : NetworkBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public GameObject target;
+
+    public override void OnStartClient()
     {
-        
+        base.OnStartClient();
+        if (base.IsOwner)
+        {
+
+        }
+        else
+        {
+            GetComponent<Actions>().BangAction(target);
+        }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

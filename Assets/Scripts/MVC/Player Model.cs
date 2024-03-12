@@ -11,7 +11,10 @@ public class PlayerModel : MonoBehaviour
     public TypeOfPlayer PlayerRole;
     public bool CanPlayMultipleBangs = false;
     public GunModel gun; // can change
-    
+    public CharacterModel character;
+    public List<CardModel> openHand = new List<CardModel>();
+    public int position;
+
 
 
     public enum TypeOfPlayer
