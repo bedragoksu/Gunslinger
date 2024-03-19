@@ -55,32 +55,15 @@ namespace Gunslinger.Controller
             }
             //Debug.Log($"player num: {players.Length}");
 
-            PlayerModel player = _thisPlayer.AddComponent<PlayerModel>();
+            PlayerModel player = _thisPlayer.GetComponent<PlayerModel>();
 
             player.PlayerID = players.Length - 1;
-            player.PlayerRole = PlayerModel.TypeOfPlayer.Sheriff;
+            player.PlayerRole = PlayerModel.TypeOfPlayer.Bos;
 
             ScreenLog.Instance.SendEvent(TextType.Debug, $"helo {player.PlayerID}");
             ScreenLog.Instance.SendEvent(TextType.Debug, $"player num: {players.Length}");
 
-            //AddPlayerModelServer(_thisPlayer, players);
 
-        }
-        [ServerRpc]
-        public void AddPlayerModelServer(GameObject tp, GameObject[] ps)
-        {
-            AddPlayerModel(tp, ps);
-        }
-        [ObserversRpc]
-        public void AddPlayerModel(GameObject tp, GameObject[] ps)
-        {
-            PlayerModel player = tp.AddComponent<PlayerModel>();
-
-            player.PlayerID = ps.Length - 1;
-            player.PlayerRole = PlayerModel.TypeOfPlayer.Sheriff;
-
-            ScreenLog.Instance.SendEvent(TextType.Debug, $"helo {player.PlayerID}");
-            ScreenLog.Instance.SendEvent(TextType.Debug, $"player num: {ps.Length}");
         }
 
         private int sheriffNumber = 1;
@@ -135,13 +118,10 @@ namespace Gunslinger.Controller
                 possiblePlayerTypes.RemoveAt(randomint);
                 ScreenLog.Instance.SendEvent(TextType.Debug, $"player stuff: {player} {type}");
                 AssignRolesServer(player, type);
-                //player.GetComponent<PlayerModel>().PlayerRole = type;
-
             }
 
         }
 
-        [ServerRpc]
         public void AssignRolesServer(GameObject player, PlayerModel.TypeOfPlayer type)
         {
             AssignRoles(player, type);
@@ -158,7 +138,7 @@ namespace Gunslinger.Controller
 
             if (Input.anyKeyDown)
             {
-                if (Input.GetKeyDown(KeyCode.B) && CanStart)
+                if (Input.GetKeyDown(KeyCode.B) && CanStart && IsServer)
                 {
                     playerlist.Clear();
                     players = GameObject.FindGameObjectsWithTag("Player");
