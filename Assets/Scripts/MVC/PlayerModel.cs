@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using FishNet.Object;
+using FishNet.Object.Synchronizing;
 
-public class PlayerModel : MonoBehaviour
+public class PlayerModel : NetworkBehaviour
 {
     public int PlayerID;
     public string PlayerName;
     public int CurrentBulletPoint;
-    public TypeOfPlayer PlayerRole;
+    [SyncVar] public TypeOfPlayer PlayerRole;
     public bool CanPlayMultipleBangs = false;
     public GunModel gun; // can change
     public CharacterModel character;
@@ -23,5 +24,6 @@ public class PlayerModel : MonoBehaviour
         Deputy, // Aynasýz
         Outlaw, // Haydut
         Renegade, // Hain
+        Bos
     }
 }

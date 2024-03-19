@@ -70,6 +70,7 @@ GameObject:
   - component: {fileID: 5199731734732856853}
   - component: {fileID: 8280983042249677542}
   - component: {fileID: 8179070045381790412}
+  - component: {fileID: -5703473049046557337}
   m_Layer: 0
   m_Name: Character_Sheriff_01
   m_TagString: Player
@@ -277,6 +278,27 @@ MonoBehaviour:
   _overrideType: 3
   _updateHostVisibility: 1
   _observerConditions: []
+--- !u!114 &-5703473049046557337
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5294451582369181646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a6357ef0f07f8448a70d7a8a312327b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayerID: 0
+  PlayerName: 
+  CurrentBulletPoint: 0
+  PlayerRole: 0
+  CanPlayMultipleBangs: 0
+  gun: {fileID: 0}
+  character: {fileID: 0}
+  openHand: []
+  position: 0
 --- !u!1 &5294491858687964962
 GameObject:
   m_ObjectHideFlags: 0
