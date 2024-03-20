@@ -52,29 +52,28 @@ namespace Gunslinger.Controller
             }
             //Debug.Log($"player num: {players.Length}");
 
+
             PlayerModel player = _thisPlayer.GetComponent<PlayerModel>();
 
-            player.PlayerID = Players.Length - 1;
-            player.PlayerRole = PlayerModel.TypeOfPlayer.Bos;
+            //player.PlayerID = Players.Length - 1;
+            //player.PlayerRole = PlayerModel.TypeOfPlayer.Bos;
 
             string playerName = PlayerUIScript.PlayerName;
-            player.PlayerName = (playerName.Equals("")) ? $"Player {player.PlayerID + 1}" : playerName;
+            //player.PlayerName = (playerName.Equals("")) ? $"Player {player.PlayerID + 1}" : playerName;
 
-            //AssignPlayerModelServer(_thisPlayer.GetComponent<PlayerModel>(), 
-            //    Players.Length - 1, 
-            //    (playerName.Equals("")) ? $"Player {player.PlayerID + 1}" : playerName);
+            AssignPlayerModelServer(_thisPlayer.GetComponent<PlayerModel>(),
+                Players.Length - 1,
+                (playerName.Equals("")) ? $"Player {player.PlayerID + 1}" : playerName);
 
             ScreenLog.Instance.SendEvent(TextType.Debug, $"helo {player.PlayerID}");
             ScreenLog.Instance.SendEvent(TextType.Debug, $"player num: {Players.Length}");
         }
 
-        [ServerRpc]
+        
         public void AssignPlayerModelServer(PlayerModel player, int playerID, string name)
         {
-            if (IsServer)
-            {
-                AssignPlayerModel(player, playerID, name);
-            }
+            AssignPlayerModel(player, playerID, name);
+            
         }
 
         [ObserversRpc]

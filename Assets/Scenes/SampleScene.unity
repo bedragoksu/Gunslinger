@@ -5400,6 +5400,28 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 705469630}
   m_CullTransparentMesh: 1
+--- !u!114 &707208041 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: -5703473049046557337, guid: c3f7c570566afbc489354b64f1fdba75, type: 3}
+  m_PrefabInstance: {fileID: 1410926799892246403}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a6357ef0f07f8448a70d7a8a312327b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &707208047 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5944478505647257100, guid: c3f7c570566afbc489354b64f1fdba75, type: 3}
+  m_PrefabInstance: {fileID: 1410926799892246403}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &754325388
 GameObject:
   m_ObjectHideFlags: 0
@@ -15323,7 +15345,7 @@ GameObject:
   - component: {fileID: 1931095539}
   - component: {fileID: 1931095538}
   m_Layer: 0
-  m_Name: Player UI
+  m_Name: PlayerUIHelper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16979,6 +17001,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -5703473049046557337, guid: c3f7c570566afbc489354b64f1fdba75, type: 3}
+      propertyPath: _networkObjectCache
+      value: 
+      objectReference: {fileID: 707208047}
+    - target: {fileID: -5703473049046557337, guid: c3f7c570566afbc489354b64f1fdba75, type: 3}
+      propertyPath: _componentIndexCache
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 4099913241451220254, guid: c3f7c570566afbc489354b64f1fdba75, type: 3}
       propertyPath: lookSpeed
       value: 2
@@ -17065,12 +17095,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5944478505647257100, guid: c3f7c570566afbc489354b64f1fdba75, type: 3}
       propertyPath: _networkBehaviours.Array.size
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5944478505647257100, guid: c3f7c570566afbc489354b64f1fdba75, type: 3}
       propertyPath: _networkBehaviours.Array.data[4]
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 707208041}
     m_RemovedComponents:
     - {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: c3f7c570566afbc489354b64f1fdba75, type: 3}
