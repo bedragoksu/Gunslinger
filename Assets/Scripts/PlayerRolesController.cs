@@ -1,33 +1,30 @@
-using System.Collections;
+using FishNet.Managing;
+using FishNet.Object;
+using NeptunDigital;
 using System.Collections.Generic;
 using UnityEngine;
-using FishNet.Object;
-using FishNet.Connection;
-using FishNet.Managing;
-using FishNet.Transporting;
-using FishNet.Example;
-using NeptunDigital;
 
 namespace Gunslinger.Controller
 {
     public class PlayerRolesController : NetworkBehaviour
     {
-        public List<Transform> playerlist { get; private set; }
-        public GameObject[] players { get; private set; }
-        bool CanStart = true;
+        [SerializeField] private NetworkManager _networkManager;
 
+        public List<Transform> Playerlist { get; private set; } //assign game manager to this value, at gamemanagerscript, when game started
+        public GameObject[] Players { get; private set; } //assign game manager to this value, at gamemanagerscript, when game started
+
+        private bool _canStart = true;
         private GameObject _thisPlayer;
 
-        [SerializeField]
-        private NetworkManager _networkManager;
+        public PlayerUI PlayerUIScript;
 
         void Start()
         {
-            playerlist = new List<Transform>();
-            players = GameObject.FindGameObjectsWithTag("Player");
-            foreach (GameObject p in players)
+            Playerlist = new List<Transform>();
+            Players = GameObject.FindGameObjectsWithTag("Player");
+            foreach (GameObject p in Players)
             {
-                playerlist.Add(p.transform);
+                Playerlist.Add(p.transform);
             }
         }
 
@@ -39,16 +36,16 @@ namespace Gunslinger.Controller
             ScreenLog.Instance.SendEvent(TextType.Debug, $"onstartclienttt: {base.ObjectId}");
 
 
-            playerlist.Clear();
-            players = GameObject.FindGameObjectsWithTag("Player");
-            
-            for(int i=0; i<players.Length;i++)
+            Playerlist.Clear();
+            Players = GameObject.FindGameObjectsWithTag("Player");
+
+            for (int i = 0; i < Players.Length; i++)
             {
-                var _p = players[i];
+                var _p = Players[i];
                 ScreenLog.Instance.SendEvent(TextType.Debug, $"onstartclienttt: {_p.GetInstanceID()}");
 
-                playerlist.Add(_p.transform);
-                if(i == players.Length - 1)
+                Playerlist.Add(_p.transform);
+                if (i == Players.Length - 1)
                 {
                     _thisPlayer = _p;
                 }
@@ -57,31 +54,49 @@ namespace Gunslinger.Controller
 
             PlayerModel player = _thisPlayer.GetComponent<PlayerModel>();
 
-            player.PlayerID = players.Length - 1;
+            player.PlayerID = Players.Length - 1;
             player.PlayerRole = PlayerModel.TypeOfPlayer.Bos;
 
+            string playerName = PlayerUIScript.PlayerName;
+            player.PlayerName = (playerName.Equals("")) ? $"Player {player.PlayerID+1}":playerName;
+
+            //AssignPlayerModelServer(_thisPlayer.GetComponent<PlayerModel>(), 
+            //    Players.Length - 1, 
+            //    (playerName.Equals("")) ? $"Player {player.PlayerID + 1}" : playerName);
+
             ScreenLog.Instance.SendEvent(TextType.Debug, $"helo {player.PlayerID}");
-            ScreenLog.Instance.SendEvent(TextType.Debug, $"player num: {players.Length}");
-
-
+            ScreenLog.Instance.SendEvent(TextType.Debug, $"player num: {Players.Length}");
         }
 
-        private int sheriffNumber = 1;
-        private int renegadeNumber = 1;
-        private int outlawNumber = 2;
-        private int deputyNumber = 0;
+        [ServerRpc]
+        public void AssignPlayerModelServer(PlayerModel player, int playerID, string name)
+        {
+            if (IsServer)
+            {
+                AssignPlayerModel(player, playerID, name);
+            }
+        }
+
+        [ObserversRpc]
+        public void AssignPlayerModel(PlayerModel player, int playerID, string name)
+        {
+            player.PlayerID = playerID;
+            player.PlayerName = name;
+            player.PlayerRole = PlayerModel.TypeOfPlayer.Bos;
+        }
+
+
+
+        private int _sheriffNumber = 1;
+        private int _renegadeNumber = 1;
+        private int _outlawNumber = 2;
+        private int _deputyNumber = 0;
 
         List<PlayerModel.TypeOfPlayer> possiblePlayerTypes = new List<PlayerModel.TypeOfPlayer>();
 
         public void StartTheGame()
         {
-
-            //if (!IsServer)
-            //{
-            //    return;
-            //}
-
-            CanStart = false;
+            _canStart = false;
 
             Debug.Log("we can start");
 
@@ -90,28 +105,28 @@ namespace Gunslinger.Controller
             possiblePlayerTypes.Add(PlayerModel.TypeOfPlayer.Outlaw);
             possiblePlayerTypes.Add(PlayerModel.TypeOfPlayer.Outlaw);
 
-            switch (players.Length)
+            switch (Players.Length)
             {
                 case 4: // might delete
                     break;
                 case 5:
-                    deputyNumber = 1;
+                    _deputyNumber = 1;
                     possiblePlayerTypes.Add(PlayerModel.TypeOfPlayer.Deputy);
                     break;
                 case 6:
-                    outlawNumber = 3;
-                    deputyNumber = 1;
+                    _outlawNumber = 3;
+                    _deputyNumber = 1;
                     possiblePlayerTypes.Add(PlayerModel.TypeOfPlayer.Outlaw);
                     break;
                 case 7:
-                    outlawNumber = 3;
-                    deputyNumber = 2;
+                    _outlawNumber = 3;
+                    _deputyNumber = 2;
                     possiblePlayerTypes.Add(PlayerModel.TypeOfPlayer.Deputy);
                     break;
             }
 
             // assign roles to players
-            foreach (var player in players)
+            foreach (var player in Players)
             {
                 var randomint = Random.Range(0, possiblePlayerTypes.Count);
                 var type = possiblePlayerTypes[randomint];
@@ -138,16 +153,16 @@ namespace Gunslinger.Controller
 
             if (Input.anyKeyDown)
             {
-                if (Input.GetKeyDown(KeyCode.B) && CanStart && IsServer)
+                if (Input.GetKeyDown(KeyCode.B) && _canStart && IsServer)
                 {
-                    playerlist.Clear();
-                    players = GameObject.FindGameObjectsWithTag("Player");
-                    foreach (var p in players)
+                    Playerlist.Clear();
+                    Players = GameObject.FindGameObjectsWithTag("Player");
+                    foreach (var p in Players)
                     {
-                        playerlist.Add(p.transform);
+                        Playerlist.Add(p.transform);
                     }
-                    ScreenLog.Instance.SendEvent(TextType.Debug, $"player num: {players.Length}");
-                    if (players.Length >= 4 && players.Length <= 7)
+                    ScreenLog.Instance.SendEvent(TextType.Debug, $"player num: {Players.Length}");
+                    if (Players.Length >= 4 && Players.Length <= 7)
                     {
                         StartTheGame();
                     }
@@ -155,9 +170,11 @@ namespace Gunslinger.Controller
 
                 if (Input.GetKeyDown(KeyCode.N))
                 {
-                    if(_thisPlayer.GetComponent<PlayerModel>() != null)
+                    if (_thisPlayer.GetComponent<PlayerModel>() != null)
+                    {
                         ScreenLog.Instance.SendEvent(TextType.Debug, $"player id: {_thisPlayer.GetComponent<PlayerModel>().PlayerID}");
                         ScreenLog.Instance.SendEvent(TextType.Debug, $"player type: {_thisPlayer.GetComponent<PlayerModel>().PlayerRole}");
+                    }
                 }
             }
         }

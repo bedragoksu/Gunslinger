@@ -1,33 +1,83 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+using FishNet.Object;
+using NeptunDigital;
 
-public class GameManager : MonoBehaviour
+
+public class GameManager : NetworkBehaviour
 {
     public int NumberOfPlayers;
 
-    private int sheriffNumber = 1;
-    private int renegadeNumber = 1;
-    private int outlawNumber = 2;
-    private int deputyNumber = 0;
+    [HideInInspector] public int SheriffNumber = 1;
+    [HideInInspector] public int RenegadeNumber = 1;
+    [HideInInspector] public int OutlawNumber = 2;
+    [HideInInspector] public int DeputyNumber = 0;
+
+    [HideInInspector] public GameState CurrentGameState;
+    private static event Action<GameState> _onGameStateChanged;
+
+
 
     private void Start()
     {
-        switch (NumberOfPlayers)
+        UpdateGameState(GameState.Lobby);
+    }
+
+    private void Update()
+    {
+        if (Input.anyKeyDown)
         {
-            case 4: // might delete
+            if (Input.GetKeyDown(KeyCode.CapsLock) && IsServer)
+            {
+                ScreenLog.Instance.SendEvent(TextType.Debug, $"we are at game manager btw");
+            }
+        }
+    }
+
+
+
+    public enum GameState
+    {
+        Lobby,
+        Initialization,
+        DrawCard,
+        PlayCard,
+        DiscardCard,
+        EndOfGame
+    }
+
+    public void UpdateGameState(GameState newState)
+    {
+        CurrentGameState = newState;
+
+        switch (CurrentGameState)
+        {
+            case GameState.Lobby:
+                HandleLobby();
                 break;
-            case 5:
-                deputyNumber = 1;
+            case GameState.Initialization:
+                //HandleInitialization();
                 break;
-            case 6:
-                outlawNumber = 3;
-                deputyNumber = 1;
+            case GameState.DrawCard:
+                //HandleDrawCard();
                 break;
-            case 7:
-                outlawNumber = 3;
-                deputyNumber = 2;
+            case GameState.PlayCard:
+                //HandlePlayCard();
+                break;
+            case GameState.DiscardCard:
+                //HandleDiscardCard();
+                break;
+            case GameState.EndOfGame:
+                //HandleEndOfGame();
                 break;
         }
+        _onGameStateChanged?.Invoke(newState);
+    }
+
+    private void HandleLobby()
+    {
+        ScreenLog.Instance.SendEvent(TextType.Debug, $"LOBBY STATE");
     }
 }
