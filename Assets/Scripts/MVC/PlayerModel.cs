@@ -30,37 +30,49 @@ public class PlayerModel : NetworkBehaviour
         Bos
     }
 
+    int counter;
     public override void OnStartClient()
     {
         base.OnStartClient();
 
         ScreenLog.Instance.SendEvent(TextType.Debug, $"onstartclienttt: {base.ObjectId}");
+        counter= base.ObjectId;
 
         if (base.IsOwner)
         {
             PlayerModel player = GetComponent<PlayerModel>();
+            _thisPlayer = player;
 
-            //player.PlayerID = Players.Length - 1;
-            //player.PlayerRole = PlayerModel.TypeOfPlayer.Bos;
 
             PlayerUI ui = GameObject.Find("PlayerUIHelper").GetComponent<PlayerUI>();
             string playerName = ui.PlayerName;
-            //player.PlayerName = (playerName.Equals("")) ? $"Player {player.PlayerID + 1}" : playerName;
-            int id = GameObject.Find("RoleManager").GetComponent<PlayerRolesController>().Players.Length;
 
-            AssignPlayerModelServer(GetComponent<PlayerModel>(),
-                id,
-                (playerName.Equals("")) ? $"Player {id + 1}" : playerName);
+            ScreenLog.Instance.SendEvent(TextType.Debug, $"name and id: {playerName} {counter}");
 
-            //ScreenLog.Instance.SendEvent(TextType.Debug, $"helo {player.PlayerID}");
-            //ScreenLog.Instance.SendEvent(TextType.Debug, $"player num: {Players.Length}");
+            AssignPlayerModelServer(player,
+                counter,
+                (playerName.Equals("")) ? $"Player {counter}" : playerName);
+
+            
         }
         else
         {
             GetComponent<PlayerModel>().enabled = false;
         }
 
-        
+
+    }
+
+    private PlayerModel _thisPlayer;
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            ScreenLog.Instance.SendEvent(TextType.Debug, $"player id: {_thisPlayer.PlayerID}");
+            ScreenLog.Instance.SendEvent(TextType.Debug, $"player type: {_thisPlayer.PlayerRole}");
+            ScreenLog.Instance.SendEvent(TextType.Debug, $"player name: {_thisPlayer.PlayerName}");
+        }
     }
 
     [ServerRpc]
