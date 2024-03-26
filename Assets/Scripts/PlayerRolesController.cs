@@ -14,12 +14,12 @@ namespace Gunslinger.Controller
         public GameObject[] Players { get; private set; } //assign game manager to this value, at gamemanagerscript, when game started
 
         private bool _canStart = true;
-        private GameObject _thisPlayer;
 
         public PlayerUI PlayerUIScript;
 
         void Start()
         {
+
             Playerlist = new List<Transform>();
             Players = GameObject.FindGameObjectsWithTag("Player");
             foreach (GameObject p in Players)
@@ -32,57 +32,11 @@ namespace Gunslinger.Controller
         public override void OnStartClient()
         {
             base.OnStartClient();
-
-            ScreenLog.Instance.SendEvent(TextType.Debug, $"onstartclienttt: {base.ObjectId}");
-
-
             Playerlist.Clear();
             Players = GameObject.FindGameObjectsWithTag("Player");
-
-            for (int i = 0; i < Players.Length; i++)
-            {
-                var _p = Players[i];
-                ScreenLog.Instance.SendEvent(TextType.Debug, $"onstartclienttt: {_p.GetInstanceID()}");
-
-                Playerlist.Add(_p.transform);
-                if (i == Players.Length - 1)
-                {
-                    _thisPlayer = _p;
-                }
-            }
-            //Debug.Log($"player num: {players.Length}");
-
-
-            PlayerModel player = _thisPlayer.GetComponent<PlayerModel>();
-
-            //player.PlayerID = Players.Length - 1;
-            //player.PlayerRole = PlayerModel.TypeOfPlayer.Bos;
-
-            string playerName = PlayerUIScript.PlayerName;
-            //player.PlayerName = (playerName.Equals("")) ? $"Player {player.PlayerID + 1}" : playerName;
-
-            AssignPlayerModelServer(_thisPlayer.GetComponent<PlayerModel>(),
-                Players.Length - 1,
-                (playerName.Equals("")) ? $"Player {player.PlayerID + 1}" : playerName);
-
-            ScreenLog.Instance.SendEvent(TextType.Debug, $"helo {player.PlayerID}");
-            ScreenLog.Instance.SendEvent(TextType.Debug, $"player num: {Players.Length}");
         }
 
-        
-        public void AssignPlayerModelServer(PlayerModel player, int playerID, string name)
-        {
-            AssignPlayerModel(player, playerID, name);
-            
-        }
 
-        [ObserversRpc]
-        public void AssignPlayerModel(PlayerModel player, int playerID, string name)
-        {
-            player.PlayerID = playerID;
-            player.PlayerName = name;
-            player.PlayerRole = PlayerModel.TypeOfPlayer.Bos;
-        }
 
 
 
@@ -131,14 +85,9 @@ namespace Gunslinger.Controller
                 var type = possiblePlayerTypes[randomint];
                 possiblePlayerTypes.RemoveAt(randomint);
                 ScreenLog.Instance.SendEvent(TextType.Debug, $"player stuff: {player} {type}");
-                AssignRolesServer(player, type);
+                AssignRoles(player, type);
             }
 
-        }
-
-        public void AssignRolesServer(GameObject player, PlayerModel.TypeOfPlayer type)
-        {
-            AssignRoles(player, type);
         }
 
         [ObserversRpc]
@@ -167,30 +116,8 @@ namespace Gunslinger.Controller
                     }
                 }
 
-                if (Input.GetKeyDown(KeyCode.N))
-                {
-                    if (_thisPlayer.GetComponent<PlayerModel>() != null)
-                    {
-                        ScreenLog.Instance.SendEvent(TextType.Debug, $"player id: {_thisPlayer.GetComponent<PlayerModel>().PlayerID}");
-                        ScreenLog.Instance.SendEvent(TextType.Debug, $"player type: {_thisPlayer.GetComponent<PlayerModel>().PlayerRole}");
-                    }
-                }
             }
         }
 
-        public void OnPlayerEntered()
-        {
-
-        }
-
-        //void OnPlayerDisconnected(NetworkPlayer player)
-        //{
-        //    Transform playerTransform = GameObject.Find("Player_" + player.guid);
-        //    if (playerTransform != null)
-        //        Destroy(playerTransform.gameObject);
-
-        //    Network.RemoveRPCs(networkPlayer);
-        //    Network.DestroyPlayerObjects(networkPlayer);
-        //}
     }
 }

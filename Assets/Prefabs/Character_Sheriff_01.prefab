@@ -85,7 +85,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5294451582369181646}
-  m_LocalRotation: {x: 0.000000014901161, y: -0.9970748, z: -0.000000029802322, w: 0.076432854}
+  m_LocalRotation: {x: 0, y: -0.99707484, z: 0, w: 0.07643192}
   m_LocalPosition: {x: -8.4, y: 0.3, z: -9.7}
   m_LocalScale: {x: 5.8, y: 5.8, z: 5.8}
   m_ConstrainProportionsScale: 1
@@ -139,6 +139,7 @@ MonoBehaviour:
   - {fileID: 4099913241451220254}
   - {fileID: 5199731734732856853}
   - {fileID: 8280983042249677542}
+  - {fileID: -5703473049046557337}
   <ParentNetworkObject>k__BackingField: {fileID: 0}
   <ChildNetworkObjects>k__BackingField: []
   SerializedTransformProperties:
@@ -152,7 +153,7 @@ MonoBehaviour:
   NetworkObserver: {fileID: 0}
   <PrefabId>k__BackingField: 2
   <SpawnableCollectionId>k__BackingField: 0
-  _scenePathHash: 0
+  _scenePathHash: 584410112
   <SceneId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 4795288743386393173
 --- !u!114 &5393582696082837165
@@ -290,6 +291,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a6357ef0f07f8448a70d7a8a312327b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _componentIndexCache: 4
+  _addedNetworkObject: {fileID: 5944478505647257100}
+  _networkObjectCache: {fileID: 5944478505647257100}
   PlayerID: 0
   PlayerName: 
   CurrentBulletPoint: 0
@@ -299,6 +303,7 @@ MonoBehaviour:
   character: {fileID: 0}
   openHand: []
   position: 0
+  PlayerUIScript: {fileID: 0}
 --- !u!1 &5294491858687964962
 GameObject:
   m_ObjectHideFlags: 0
