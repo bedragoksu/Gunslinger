@@ -84,8 +84,8 @@ public class PlayerController : NetworkBehaviour
         }
 
         // Move the controller
-        //characterController.Move(moveDirection * Time.deltaTime);
-        characterController.Move(new Vector3(0, 0, 0) * Time.deltaTime);
+        characterController.Move(moveDirection * Time.deltaTime);
+        //characterController.Move(new Vector3(0, 0, 0) * Time.deltaTime);
 
         // Player and Camera rotation
         if (canMove && playerCamera != null)
@@ -93,7 +93,8 @@ public class PlayerController : NetworkBehaviour
             rotationX += -Input.GetAxis("Mouse Y") * lookSpeed;
             rotationX = Mathf.Clamp(rotationX, -lookXLimit, lookXLimit);
             playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
-            transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
+            transform.Rotate(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
+
         }
     }
 }
