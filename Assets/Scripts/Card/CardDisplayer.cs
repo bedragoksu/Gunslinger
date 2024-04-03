@@ -11,7 +11,9 @@ public class CardDisplayer : MonoBehaviour
     public Image picture;
     public Image symbol;
     public CardScriptableObject card;
+    public Image background;
     public TextMeshProUGUI range;
+
     //public GunCard gun;
 
     void Start()
@@ -24,6 +26,7 @@ public class CardDisplayer : MonoBehaviour
         nameText.text = card.name;
         picture.sprite = card.picture;
         symbol.sprite = card.symbol;
+        background.sprite = card.background;
     }
 
 }
