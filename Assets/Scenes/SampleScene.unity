@@ -2185,7 +2185,8 @@ MonoBehaviour:
   descriptionText: {fileID: 0}
   picture: {fileID: 1968451548}
   symbol: {fileID: 779979850}
-  card: {fileID: 11400000, guid: 3f61ff489b2be034a9423876b88627e6, type: 2}
+  card: {fileID: 11400000, guid: b3523777eb4618847bd37c4e0685f0c8, type: 2}
+  background: {fileID: 1521745898}
   range: {fileID: 0}
 --- !u!1001 &422319638
 PrefabInstance:
@@ -15549,7 +15550,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1951646465
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16468,7 +16469,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2064150339
 RectTransform:
   m_ObjectHideFlags: 0

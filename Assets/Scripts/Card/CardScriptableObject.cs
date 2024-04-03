@@ -2,12 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum CardType
-{
-    Character,
-    Action,
-    Gun
-}
 
 [CreateAssetMenu(fileName = "New Card", menuName = "Card/Card")]
 public class CardScriptableObject : ScriptableObject
@@ -16,7 +10,6 @@ public class CardScriptableObject : ScriptableObject
     public Sprite picture;
     public string description;
     public Sprite background;
-    public CardType cardType;
     public Sprite symbol;
 }
 
