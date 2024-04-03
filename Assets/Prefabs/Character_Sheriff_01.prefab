@@ -87,7 +87,7 @@ Transform:
   m_GameObject: {fileID: 5294451582369181646}
   m_LocalRotation: {x: 0, y: -0.99707484, z: 0, w: 0.07643192}
   m_LocalPosition: {x: -8.4, y: 0.3, z: -9.7}
-  m_LocalScale: {x: 5.8, y: 5.8, z: 5.8}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5290469685548694274}
@@ -143,9 +143,9 @@ MonoBehaviour:
   <ParentNetworkObject>k__BackingField: {fileID: 0}
   <ChildNetworkObjects>k__BackingField: []
   SerializedTransformProperties:
-    Position: {x: -8.4, y: 0.3, z: -9.7}
-    Rotation: {x: 0.000000014901161, y: -0.9970748, z: -0.000000029802322, w: 0.076432854}
-    LocalScale: {x: 5.8, y: 5.8, z: 5.8}
+    Position: {x: -16.746048, y: 0.00000047683716, z: -3.1569335}
+    Rotation: {x: 0, y: -0.99707484, z: 0, w: 0.07643192}
+    LocalScale: {x: 1, y: 1, z: 1}
   _isNetworked: 1
   _isGlobal: 0
   _initializeOrder: 0
@@ -223,8 +223,8 @@ MonoBehaviour:
   lookSpeed: 2
   lookXLimit: 45
   canMove: 1
-  cameraYOffset: 20
-  cameraZOffset: -15
+  cameraYOffset: 2
+  cameraZOffset: -3
 --- !u!114 &5199731734732856853
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -303,7 +303,6 @@ MonoBehaviour:
   character: {fileID: 0}
   openHand: []
   position: 0
-  PlayerUIScript: {fileID: 0}
 --- !u!1 &5294491858687964962
 GameObject:
   m_ObjectHideFlags: 0
