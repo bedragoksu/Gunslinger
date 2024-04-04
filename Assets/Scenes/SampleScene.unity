@@ -3304,11 +3304,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 542264660}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7eea9793f43f96d4c85d21848153a421, type: 3}
+  m_Script: {fileID: 11500000, guid: dc5935b53791c80428d8a7bd9b416f58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  nameText: {fileID: 705051312}
+  descriptionText: {fileID: 0}
+  picture: {fileID: 1641402233}
+  symbol: {fileID: 141291193}
   card: {fileID: 0}
-  nameText: {fileID: 0}
+  background: {fileID: 1998261080}
+  range: {fileID: 0}
 --- !u!1 &552102160
 GameObject:
   m_ObjectHideFlags: 0
@@ -7642,6 +7647,55 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1048181709}
   m_CullTransparentMesh: 1
+--- !u!1 &1050099532
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1050099533}
+  - component: {fileID: 1050099534}
+  m_Layer: 0
+  m_Name: Cards
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1050099533
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1050099532}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 207.34525, y: 37.607597, z: 0.012094498}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 17
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1050099534
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1050099532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64e457ae363de9344af511c9b0855d56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cards:
+  - {fileID: 11400000, guid: 3f61ff489b2be034a9423876b88627e6, type: 2}
+  - {fileID: 11400000, guid: 752ba73a2636b4f4498245aba911243f, type: 2}
+  cardObject: {fileID: 542264660}
+  _parentObject: {fileID: 1865650270}
 --- !u!1 &1062848558
 GameObject:
   m_ObjectHideFlags: 0
@@ -14169,6 +14223,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   numberOfEdges: 4
   spawnPointPrefab: {fileID: 2742076359095175921, guid: 3ca3e30f5eb9c284988836aa5b61e916, type: 3}
+  spawnPoints: {fileID: 1214311362}
 --- !u!1 &1817589136 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5295833845410892128, guid: c3f7c570566afbc489354b64f1fdba75, type: 3}

@@ -8,6 +8,7 @@ public class SpawnPointManager : MonoBehaviour
     public int numberOfEdges;
     public GameObject spawnPointPrefab;
     private PlayerSpawner spawner;
+    [SerializeField] private GameObject spawnPoints;
     void Start()
     {
         spawner = GetComponent<PlayerSpawner>();
@@ -18,13 +19,7 @@ public class SpawnPointManager : MonoBehaviour
 
         Transform[] corners = CalculatePolygonCorners(origin, numberOfEdges, radius);
 
-        Debug.Log("Corner Coordinates:");
-        //foreach (Transform corner in corners)
-        //{
-
-        //    Debug.Log(corner);
-        //    Instantiate(spawnPointPrefab, corner, Quaternion.identity);
-        //}
+        
         for (int i = 0; i < numberOfEdges; i++)
         {
             spawner.Spawns[i] = corners[i];
@@ -42,9 +37,10 @@ public class SpawnPointManager : MonoBehaviour
             float x = origin.x + radius * Mathf.Cos(angle * Mathf.Deg2Rad);
             float z = origin.z + radius * Mathf.Sin(angle * Mathf.Deg2Rad);
 
-            GameObject cornerObject = new GameObject("SpawnPoints/SpawnPoint_" + i);
+            GameObject cornerObject = new GameObject("SpawnPoint_" + i);
             cornerObject.transform.position = new Vector3(x, 0f, z);
             corners[i] = cornerObject.transform;
+            cornerObject.transform.SetParent(spawnPoints.transform);
         }
 
         return corners;
