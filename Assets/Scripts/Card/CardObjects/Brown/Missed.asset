@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 144464e45f097294f87e7cee8dfed2b9, type: 3}
   m_Name: Missed
   m_EditorClassIdentifier: 
-  name: Miss
+  name: Missed
   picture: {fileID: 21300000, guid: f5be776d1cedad546be40e418b03dad6, type: 3}
   description: 
   background: {fileID: 21300000, guid: a504f1cf3ced0a14692c1996bc68a75b, type: 3}
