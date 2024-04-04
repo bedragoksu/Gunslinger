@@ -12,8 +12,7 @@ namespace Gunslinger.Controller
 
         public List<Transform> Playerlist { get; private set; } //assign game manager to this value, at gamemanagerscript, when game started
         public GameObject[] Players { get; private set; } //assign game manager to this value, at gamemanagerscript, when game started
-
-        private bool _canStart = true;
+        // also needed for turn queue
 
         public PlayerUI PlayerUIScript;
 
@@ -47,10 +46,8 @@ namespace Gunslinger.Controller
 
         List<PlayerModel.TypeOfPlayer> possiblePlayerTypes = new List<PlayerModel.TypeOfPlayer>();
 
-        public void StartTheGame()
+        public void AssignRoles()
         {
-            _canStart = false;
-
             Debug.Log("we can start");
 
             possiblePlayerTypes.Add(PlayerModel.TypeOfPlayer.Sheriff);
@@ -90,34 +87,25 @@ namespace Gunslinger.Controller
 
         }
 
+        public int PlayersUpdate()
+        {
+            Playerlist.Clear();
+            Players = GameObject.FindGameObjectsWithTag("Player");
+            foreach (var p in Players)
+            {
+                Playerlist.Add(p.transform);
+            }
+            ScreenLog.Instance.SendEvent(TextType.Debug, $"player num: {Players.Length}");
+
+            return Players.Length;
+        }
+
         [ObserversRpc]
         public void AssignRoles(GameObject player, PlayerModel.TypeOfPlayer type)
         {
             player.GetComponent<PlayerModel>().PlayerRole = type;
         }
 
-        void Update()
-        {
-
-            if (Input.anyKeyDown)
-            {
-                if (Input.GetKeyDown(KeyCode.B) && _canStart && IsServer)
-                {
-                    Playerlist.Clear();
-                    Players = GameObject.FindGameObjectsWithTag("Player");
-                    foreach (var p in Players)
-                    {
-                        Playerlist.Add(p.transform);
-                    }
-                    ScreenLog.Instance.SendEvent(TextType.Debug, $"player num: {Players.Length}");
-                    if (Players.Length >= 4 && Players.Length <= 7)
-                    {
-                        StartTheGame();
-                    }
-                }
-
-            }
-        }
 
     }
 }
