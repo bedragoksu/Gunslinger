@@ -29,14 +29,6 @@ public class GameManager : NetworkBehaviour
 
     private void Update()
     {
-        //if (Input.anyKeyDown)
-        //{
-        //    if (Input.GetKeyDown(KeyCode.CapsLock) && IsServer)
-        //    {
-        //        ScreenLog.Instance.SendEvent(TextType.Debug, $"we are at game manager btw");
-        //    }
-        //}
-
 
         if (Input.anyKeyDown)
         {
@@ -109,8 +101,8 @@ public class GameManager : NetworkBehaviour
     private void HandleLobby()
     {
         ScreenLog.Instance.SendEvent(TextType.Debug, $"LOBBY STATE");
-        MixTheCards();
-
+        //MixTheCards();
+        _canStart = true;
     }
 
     private void MixTheCards()
