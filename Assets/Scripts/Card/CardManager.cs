@@ -7,8 +7,18 @@ public class CardManager : MonoBehaviour
     public CardScriptableObject[] cards;
     public GameObject cardObject;
     [SerializeField] private GameObject _parentObject;
+
+    public GameObject[] CardObjects { get; private set; }
+    public List<int> CardOrder { get; private set; }
+
+    private int _cardNum = 37;
+    private int _cardCounter = 0;
+
+
     void Start()
     {
+        CardObjects = new GameObject[_cardNum];
+        CardOrder = new List<int>();
         foreach (var card in cards)
         {
             GameObject sampleCard = createSampleCard(card);
@@ -22,6 +32,13 @@ public class CardManager : MonoBehaviour
 
             }
         }
+
+        CardOrder = ShuffleList(CardOrder);
+        var i = 0;
+        for (; i < _cardNum; i++)
+        {
+            Debug.Log(CardObjects[CardOrder[i]].name);
+        }
     }
     GameObject createSampleCard(CardScriptableObject card)
     {
@@ -29,6 +46,9 @@ public class CardManager : MonoBehaviour
         newCard.name = card.name;
         CardDisplayer cardDisplayer = newCard.GetComponent<CardDisplayer>();
         cardDisplayer.card = card;
+
+        CardOrder.Add(_cardCounter);
+        CardObjects[_cardCounter++] = newCard;
 
         return newCard;
     }
@@ -43,9 +63,23 @@ public class CardManager : MonoBehaviour
             GameObject newCard = Instantiate(sampleCard, _parentObject.transform);
 
             newCard.name = cardname + "_" + (i+1);
+
+            CardOrder.Add(_cardCounter);
+            CardObjects[_cardCounter++] = newCard;
         }
 
     }
 
-    
+    public List<int> ShuffleList(List<int> list)
+    {
+        for (int i = list.Count - 1; i > 0; i--)
+        {
+            int j = UnityEngine.Random.Range(0, i + 1);
+            int temp = list[i];
+            list[i] = list[j];
+            list[j] = temp;
+        }
+        return list;
+    }
+
 }
