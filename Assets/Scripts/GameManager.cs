@@ -20,7 +20,7 @@ public class GameManager : NetworkBehaviour
     private static event Action<GameState> _onGameStateChanged;
 
     private bool _canStart = false;
-    private PlayerRolesController _prc;
+    [SerializeField] private PlayerRolesController _prc;
 
     private void Start()
     {
