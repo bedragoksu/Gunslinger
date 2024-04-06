@@ -1439,12 +1439,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <IsNested>k__BackingField: 0
-  <ComponentIndex>k__BackingField: 0
+  <IsNested>k__BackingField: 1
+  <ComponentIndex>k__BackingField: 1
   <PredictedSpawn>k__BackingField: {fileID: 0}
   _networkBehaviours:
   - {fileID: 307276242}
-  <ParentNetworkObject>k__BackingField: {fileID: 0}
+  <ParentNetworkObject>k__BackingField: {fileID: 1212423229}
   <ChildNetworkObjects>k__BackingField: []
   SerializedTransformProperties:
     Position: {x: 28.767843, y: -8.374614, z: -9.285767}
@@ -7691,6 +7691,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64e457ae363de9344af511c9b0855d56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _componentIndexCache: 0
+  _addedNetworkObject: {fileID: 1212423229}
+  _networkObjectCache: {fileID: 1212423229}
   cards:
   - {fileID: 11400000, guid: 3f61ff489b2be034a9423876b88627e6, type: 2}
   - {fileID: 11400000, guid: 752ba73a2636b4f4498245aba911243f, type: 2}
@@ -8930,6 +8933,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1212423228}
+  - component: {fileID: 1212423229}
   m_Layer: 0
   m_Name: Helpers
   m_TagString: Untagged
@@ -8955,6 +8959,40 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1212423229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1212423227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <IsNested>k__BackingField: 0
+  <ComponentIndex>k__BackingField: 0
+  <PredictedSpawn>k__BackingField: {fileID: 0}
+  _networkBehaviours:
+  - {fileID: 1050099534}
+  <ParentNetworkObject>k__BackingField: {fileID: 0}
+  <ChildNetworkObjects>k__BackingField:
+  - {fileID: 307276243}
+  SerializedTransformProperties:
+    Position: {x: -28.767843, y: 8.374614, z: 9.285767}
+    Rotation: {x: 0, y: 0, z: 0, w: 1}
+    LocalScale: {x: 1, y: 1, z: 1}
+  _isNetworked: 1
+  _isGlobal: 0
+  _initializeOrder: 0
+  _defaultDespawnType: 0
+  NetworkObserver: {fileID: 0}
+  <PrefabId>k__BackingField: 0
+  <SpawnableCollectionId>k__BackingField: 0
+  _scenePathHash: 584410112
+  <SceneId>k__BackingField: 2510022321061731385
+  <AssetPathHash>k__BackingField: 0
 --- !u!1 &1214311362
 GameObject:
   m_ObjectHideFlags: 0

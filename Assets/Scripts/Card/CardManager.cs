@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using FishNet.Object;
 using UnityEngine;
+using FishNet.Managing;
 
-public class CardManager : MonoBehaviour
+public class CardManager : NetworkBehaviour
 {
     public CardScriptableObject[] cards;
     public GameObject cardObject;
@@ -14,32 +16,30 @@ public class CardManager : MonoBehaviour
     private int _cardNum = 37;
     private int _cardCounter = 0;
 
-
-    void Start()
+    public override void OnStartClient()
     {
-        CardObjects = new GameObject[_cardNum];
-        CardOrder = new List<int>();
-        foreach (var card in cards)
+        base.OnStartClient();
+        if (IsServer)
         {
-            GameObject sampleCard = createSampleCard(card);
-            Debug.Log(sampleCard.name);
-            switch (card.name)
+            CardObjects = new GameObject[_cardNum];
+            CardOrder = new List<int>();
+            foreach (var card in cards)
             {
-                case "Bang":
-                    createCards(sampleCard, 25); break;
-                case "Missed":
-                    createCards(sampleCard, 12); break;
+                GameObject sampleCard = createSampleCard(card);
+                switch (card.name)
+                {
+                    case "Bang":
+                        createCards(sampleCard, 25); break;
+                    case "Missed":
+                        createCards(sampleCard, 12); break;
 
+                }
             }
-        }
 
-        CardOrder = ShuffleList(CardOrder);
-        var i = 0;
-        for (; i < _cardNum; i++)
-        {
-            Debug.Log(CardObjects[CardOrder[i]].name);
+            CardOrder = ShuffleList(CardOrder);
         }
     }
+
     GameObject createSampleCard(CardScriptableObject card)
     {
         var newCard = Instantiate(cardObject, _parentObject.transform);
