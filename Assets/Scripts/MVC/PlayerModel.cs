@@ -82,7 +82,25 @@ public class PlayerModel : NetworkBehaviour
             foreach(var player in prc.Players)
             {
                 
-                Assign5AsMagicNumServer(player.GetComponent<PlayerModel>(), 5);
+                AssignMagicNumServer(player.GetComponent<PlayerModel>(), 5);
+            }
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha6))
+        {
+            var prc = GameObject.Find("RoleController").GetComponent<PlayerRolesController>();
+            foreach (var player in prc.Players)
+            {
+
+                AssignMagicNumServer(player.GetComponent<PlayerModel>(), 6);
+            }
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha7))
+        {
+            var prc = GameObject.Find("RoleController").GetComponent<PlayerRolesController>();
+            foreach (var player in prc.Players)
+            {
+
+                AssignMagicNumServer(player.GetComponent<PlayerModel>(), 7);
             }
         }
     }
@@ -99,18 +117,17 @@ public class PlayerModel : NetworkBehaviour
     {
         player.PlayerID = playerID;
         player.PlayerName = name;
-        player.PlayerRole = PlayerModel.TypeOfPlayer.Bos;
+        player.PlayerRole = TypeOfPlayer.Bos;
     }
 
     [ServerRpc]
-    public void Assign5AsMagicNumServer(PlayerModel player, int magicNum)
+    public void AssignMagicNumServer(PlayerModel player, int magicNum)
     {
-        Assign5AsMagicNum(player, magicNum);
-
+        AssignMagicNum(player, magicNum);
     }
 
     [ObserversRpc]
-    public void Assign5AsMagicNum(PlayerModel player, int magicNum)
+    public void AssignMagicNum(PlayerModel player, int magicNum)
     {
         player.magicNum = magicNum;
     }
