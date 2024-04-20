@@ -83,7 +83,7 @@ namespace Gunslinger.Controller
                 possiblePlayerTypes.RemoveAt(randomint);
                 ScreenLog.Instance.SendEvent(TextType.Debug, $"player stuff: {player} {type}");
                 AssignRoles(player, type);
-                //AssignCards(player, servercardmanager.CardObjects, servercardmanager.CardOrder);
+                AssignCards(player, servercardmanager.CardOrder);
             }
 
         }
@@ -108,10 +108,11 @@ namespace Gunslinger.Controller
         }
 
         [ObserversRpc]
-        public void AssignCards(GameObject player, GameObject[] cardObjects, List<int> cardOrder)
+        public void AssignCards(GameObject player, List<int> cardOrder)
         {
             var card = player.GetComponent<CardManager>();
-            card.CardObjects = cardObjects;
+
+            //card.CardObjects = cardObjects;
             card.CardOrder = cardOrder;
         }
 
