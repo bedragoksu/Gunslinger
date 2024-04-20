@@ -10,7 +10,7 @@ public class CardDisplayer : MonoBehaviour
     public TextMeshProUGUI descriptionText;
     public Image picture;
     public Image symbol;
-    public CardScriptableObject card;
+    public CardObject card;
     public Image background;
     public TextMeshProUGUI range;
 
@@ -18,15 +18,26 @@ public class CardDisplayer : MonoBehaviour
 
     void Start()
     {
-        if (card is GunCard)
+        //if (card is GunCard)
+        //{
+        //    GunCard gunCard = (GunCard)card;
+        //    range.text = gunCard.range.ToString();
+        //}
+        if (card != null)
         {
-            GunCard gunCard = (GunCard)card;
-            range.text = gunCard.range.ToString();
+            nameText.text = card.name;
+            picture.sprite = card.picture;
+            symbol.sprite = card.symbol;
+            background.sprite = card.background;
         }
-        nameText.text = card.name;
-        picture.sprite = card.picture;
-        symbol.sprite = card.symbol;
-        background.sprite = card.background;
+        
+    }
+    public void ChangeCard(CardObject cardObject)
+    {
+        nameText.text = cardObject.name;
+        picture.sprite = cardObject.picture;
+        symbol.sprite = cardObject.symbol;
+        background.sprite = cardObject.background;
     }
 
 }
