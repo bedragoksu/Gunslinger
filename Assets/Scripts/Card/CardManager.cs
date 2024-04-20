@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using FishNet.Object;
 using UnityEngine;
 using FishNet.Managing;
+using Gunslinger.Controller;
+using System.CodeDom.Compiler;
+using NeptunDigital;
 
 public class CardManager : NetworkBehaviour
 {
@@ -10,15 +13,26 @@ public class CardManager : NetworkBehaviour
     public GameObject cardObject;
     [SerializeField] private GameObject _parentObject;
 
-    public GameObject[] CardObjects { get; private set; }
-    public List<int> CardOrder { get; private set; }
+    public GameObject[] CardObjects;
+    public List<int> CardOrder;
 
     private int _cardNum = 37;
     private int _cardCounter = 0;
+    public GameObject[] Players;
+
+    private void Start()
+    {
+        cardObject = GameObject.Find("SampleCard");
+        _parentObject = GameObject.Find("OpenedCards");
+    }
 
     public override void OnStartClient()
     {
         base.OnStartClient();
+        //if (!base.IsOwner)
+        //{
+        //    gameObject.GetComponent<CardManager>().enabled = false;
+        //}
         if (IsServer)
         {
             CardObjects = new GameObject[_cardNum];
@@ -38,6 +52,20 @@ public class CardManager : NetworkBehaviour
 
             CardOrder = ShuffleList(CardOrder);
         }
+        //if (IsOwner && !IsServer)
+        //{
+        //    Players = GameObject.FindGameObjectsWithTag("Player");
+        //    if (Players.Length != 0)
+        //    {
+        //        CardObjects = Players[0].GetComponent<CardManager>().CardObjects;
+        //        Debug.Log(Players[0].GetComponent<CardManager>().CardObjects);
+        //        CardOrder = Players[0].GetComponent<CardManager>().CardOrder;
+        //        GenerateCards();
+        //    }
+
+        //}
+
+
     }
 
     GameObject createSampleCard(CardScriptableObject card)
@@ -62,7 +90,7 @@ public class CardManager : NetworkBehaviour
             //GameObject newCard = Instantiate(sampleCard, parentTransform); // Ebeveyni belirt
             GameObject newCard = Instantiate(sampleCard, _parentObject.transform);
 
-            newCard.name = cardname + "_" + (i+1);
+            newCard.name = cardname + "_" + (i + 1);
 
             CardOrder.Add(_cardCounter);
             CardObjects[_cardCounter++] = newCard;
@@ -81,5 +109,16 @@ public class CardManager : NetworkBehaviour
         }
         return list;
     }
+
+    private void GenerateCards()
+    {
+        Debug.Log(CardObjects);
+        Debug.Log(CardOrder);
+        //for (int i = 0; i < CardObjects.Length; i++)
+        //{
+        //    GameObject newCard = Instantiate(CardObjects[CardOrder[i]], _parentObject.transform);
+        //}
+    }
+
 
 }
