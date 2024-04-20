@@ -71,6 +71,7 @@ GameObject:
   - component: {fileID: 8280983042249677542}
   - component: {fileID: 8179070045381790412}
   - component: {fileID: -5703473049046557337}
+  - component: {fileID: -387489480983930929}
   m_Layer: 0
   m_Name: Character_Sheriff_01
   m_TagString: Player
@@ -140,6 +141,7 @@ MonoBehaviour:
   - {fileID: 5199731734732856853}
   - {fileID: 8280983042249677542}
   - {fileID: -5703473049046557337}
+  - {fileID: -387489480983930929}
   <ParentNetworkObject>k__BackingField: {fileID: 0}
   <ChildNetworkObjects>k__BackingField: []
   SerializedTransformProperties:
@@ -303,6 +305,30 @@ MonoBehaviour:
   character: {fileID: 0}
   openHand: []
   position: 0
+  magicNum: 0
+--- !u!114 &-387489480983930929
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5294451582369181646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64e457ae363de9344af511c9b0855d56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _componentIndexCache: 5
+  _addedNetworkObject: {fileID: 5944478505647257100}
+  _networkObjectCache: {fileID: 5944478505647257100}
+  cards:
+  - {fileID: 11400000, guid: 3f61ff489b2be034a9423876b88627e6, type: 2}
+  - {fileID: 11400000, guid: 752ba73a2636b4f4498245aba911243f, type: 2}
+  cardObject: {fileID: 0}
+  _parentObject: {fileID: 0}
+  CardObjects: []
+  CardOrder: 
+  Players: []
 --- !u!1 &5294491858687964962
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,6 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using FishNet.Object;
+using FishNet.Object.Synchronizing;
+using FishNet;
+using FishNet.Connection;
+using NeptunDigital;
 
 
 [CreateAssetMenu(fileName = "New Card", menuName = "Card/Card")]
