@@ -1883,7 +1883,8 @@ MonoBehaviour:
   <IsNested>k__BackingField: 0
   <ComponentIndex>k__BackingField: 0
   <PredictedSpawn>k__BackingField: {fileID: 0}
-  _networkBehaviours: []
+  _networkBehaviours:
+  - {fileID: 307276242}
   <ParentNetworkObject>k__BackingField: {fileID: 0}
   <ChildNetworkObjects>k__BackingField: []
   SerializedTransformProperties:
@@ -12919,6 +12920,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1347290120}
+  - component: {fileID: 1347290122}
+  - component: {fileID: 1347290121}
   m_Layer: 0
   m_Name: CardManager
   m_TagString: Untagged
@@ -12941,6 +12944,68 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1347290121
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1347290117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <IsNested>k__BackingField: 0
+  <ComponentIndex>k__BackingField: 0
+  <PredictedSpawn>k__BackingField: {fileID: 0}
+  _networkBehaviours:
+  - {fileID: 1347290122}
+  <ParentNetworkObject>k__BackingField: {fileID: 0}
+  <ChildNetworkObjects>k__BackingField: []
+  SerializedTransformProperties:
+    Position: {x: 0, y: 0, z: 0}
+    Rotation: {x: 0, y: 0, z: 0, w: 1}
+    LocalScale: {x: 1, y: 1, z: 1}
+  _isNetworked: 1
+  _isGlobal: 0
+  _initializeOrder: 0
+  _defaultDespawnType: 0
+  NetworkObserver: {fileID: 0}
+  <PrefabId>k__BackingField: 0
+  <SpawnableCollectionId>k__BackingField: 0
+  _scenePathHash: 584410112
+  <SceneId>k__BackingField: 2510022322191987249
+  <AssetPathHash>k__BackingField: 0
+--- !u!114 &1347290122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1347290117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 133938bb17ef5b445b472f1307a0fb2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _componentIndexCache: 0
+  _addedNetworkObject: {fileID: 1347290121}
+  _networkObjectCache: {fileID: 1347290121}
+  _cardSprites:
+  - {fileID: 21300000, guid: 60b6dd212d842fe40bbbc6da590337f8, type: 3}
+  - {fileID: 21300000, guid: f5be776d1cedad546be40e418b03dad6, type: 3}
+  _symbolSprites:
+  - {fileID: 21300000, guid: b08362ca4ea9b634f8319e1fa7a54ff5, type: 3}
+  _backgroundSprites:
+  - {fileID: 21300000, guid: a504f1cf3ced0a14692c1996bc68a75b, type: 3}
+  - {fileID: 21300000, guid: 161e38fef3c4b23419987e08db496b1d, type: 3}
+  name: 
+  picture: {fileID: 0}
+  description: 
+  background: {fileID: 0}
+  symbol: {fileID: 0}
+  cards: []
 --- !u!1 &1360634768
 GameObject:
   m_ObjectHideFlags: 0
@@ -16923,7 +16988,8 @@ MonoBehaviour:
   <IsNested>k__BackingField: 0
   <ComponentIndex>k__BackingField: 0
   <PredictedSpawn>k__BackingField: {fileID: 0}
-  _networkBehaviours: []
+  _networkBehaviours:
+  - {fileID: 1671340380}
   <ParentNetworkObject>k__BackingField: {fileID: 0}
   <ChildNetworkObjects>k__BackingField: []
   SerializedTransformProperties:
@@ -25330,6 +25396,8 @@ MonoBehaviour:
   <PredictedSpawn>k__BackingField: {fileID: 0}
   _networkBehaviours:
   - {fileID: 5393582697046877785}
+  - {fileID: 4099913240132511210}
+  - {fileID: 5199731736049219297}
   - {fileID: 8280983041418555922}
   <ParentNetworkObject>k__BackingField: {fileID: 0}
   <ChildNetworkObjects>k__BackingField: []
@@ -25394,7 +25462,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8cac635f24954048aad3a6ff9110beb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 1
+  _componentIndexCache: 3
   _addedNetworkObject: {fileID: 5944478506696482552}
   _networkObjectCache: {fileID: 5944478506696482552}
   IgnoredParameters: []

@@ -77,6 +77,7 @@ public class PlayerModel : NetworkBehaviour
             ScreenLog.Instance.SendEvent(TextType.Debug, $"magic number: {_thisPlayer.magicNum}");
 
             ScreenLog.Instance.SendEvent(TextType.Debug, $"card order: {_thisPlayer.GetComponentInParent<CardManager>().CardOrder[0]}");
+            ScreenLog.Instance.SendEvent(TextType.Debug, $"card order: {_thisPlayer.GetComponentInParent<CardManager>().Cards[0]}");
         }
         else if (Input.GetKeyDown(KeyCode.Alpha5))
         {
