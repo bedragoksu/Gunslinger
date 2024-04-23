@@ -15,6 +15,7 @@ namespace Gunslinger.Controller
         // also needed for turn queue
 
         public PlayerUI PlayerUIScript;
+        public GameManager gameManager;
 
         void Start()
         {
@@ -85,7 +86,8 @@ namespace Gunslinger.Controller
                 AssignRoles(player, type);
                 AssignCards(player, servercardmanager.CardOrder, servercardmanager.Cards);
             }
-
+            Debug.Log("roles assigned is true now");
+            gameManager._rolesAssigned = true;
         }
 
         public int PlayersUpdate()
