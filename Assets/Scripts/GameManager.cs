@@ -22,6 +22,8 @@ public class GameManager : NetworkBehaviour
     private bool _canStart = false;
     [SerializeField] private PlayerRolesController _prc;
 
+    private GameObject[] _turns;
+
     private void Start()
     {
         UpdateGameState(GameState.Lobby);
@@ -89,12 +91,20 @@ public class GameManager : NetworkBehaviour
 
     private void HandleInitialization()
     {
+        StartCoroutine(InitializationRoutine());
+    }
+    public bool _rolesAssigned = false;
+    private IEnumerator InitializationRoutine()
+    {
         _prc.AssignRoles();
 
+        yield return new WaitUntil(() => _rolesAssigned);
+        yield return new WaitForSecondsRealtime(1f); // bu bir f hiç olmadý ya :( neyse düzeltcez
         // deal the cards, wait until
 
         // who has the turn: ...
-        
+        Debug.Log("assign turns start");
+        _turns = AssignTurns();
         // draw cards (who has the turn)
     }
 
@@ -112,5 +122,26 @@ public class GameManager : NetworkBehaviour
         // mixing process, wait until
 
         _canStart = true;
+    }
+
+    private GameObject[] AssignTurns()
+    {
+        var Players = GameObject.FindGameObjectsWithTag("Player");
+        //foreach (var pl in Players)
+        //{
+        //    Debug.Log(pl.GetComponent<PlayerModel>().PlayerRole);
+        //}
+        Debug.Log(Players[0].GetComponent<PlayerModel>().PlayerRole);
+        while (Players[0].GetComponent<PlayerModel>().PlayerRole != PlayerModel.TypeOfPlayer.Sheriff)
+        {
+            Debug.Log(Players[0].GetComponent<PlayerModel>().PlayerRole);
+            var first = Players[0];
+            for (int i = 0; i < Players.Length - 1; i++)
+            {
+                Players[i] = Players[i + 1];
+            }
+            Players[Players.Length - 1] = first;
+        }
+        return Players;
     }
 }

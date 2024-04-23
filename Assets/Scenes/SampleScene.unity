@@ -1868,6 +1868,7 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 307276243}
   _networkManager: {fileID: 1744729131}
   PlayerUIScript: {fileID: 1931095538}
+  gameManager: {fileID: 1671340380}
 --- !u!114 &307276243
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16973,6 +16974,7 @@ MonoBehaviour:
   DeputyNumber: 0
   CurrentGameState: 0
   _prc: {fileID: 307276242}
+  _rolesAssigned: 0
 --- !u!114 &1671340381
 MonoBehaviour:
   m_ObjectHideFlags: 0
