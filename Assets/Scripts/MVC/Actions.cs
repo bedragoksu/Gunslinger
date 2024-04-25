@@ -13,9 +13,9 @@ public class Actions : MonoBehaviour
         {
             targetPlayer.CurrentBulletPoint--;
 
-            foreach (CardModel card in targetPlayer.openHand)
+            foreach (var card in targetPlayer.openHand)
             {
-                if (card.Name == "Missed") // Karavana
+                if (card.name.StartsWith("Missed")) // Karavana
                 {
                     DiscardCard(card);
                     MissedAction(targetPlayer);
@@ -61,17 +61,17 @@ public class Actions : MonoBehaviour
 
         int dist = Mathf.Abs(targetPlayer.position - thisPlayer.position);
 
-        foreach (CardModel card in thisPlayer.openHand)
+        foreach (var card in thisPlayer.openHand)
         {
-            if (card.Name == "Appaloosa") // Dürbün
+            if (card.name.StartsWith("Appaloosa")) // Dürbün
             {
                 dist--;
             }
         }
 
-        foreach (CardModel card in targetPlayer.openHand)
+        foreach (var card in targetPlayer.openHand)
         {
-            if (card.Name == "Mustang") // Mustang
+            if (card.name.StartsWith("Mustang")) // Mustang
             {
                 dist++;
             }
@@ -83,13 +83,13 @@ public class Actions : MonoBehaviour
     {
         PlayerModel thisPlayer = GetComponent<PlayerModel>();
 
-        return Mathf.Abs(thisPlayer.gun.ScopeLevel - CalculateDistance(target)); // if >=0 can if <0 cannot
+        return (thisPlayer.gun.ScopeLevel - CalculateDistance(target)); // if >=0 can if <0 cannot
     }
-    public void PullCard(CardModel card)
+    public void PullCard(GameObject card)
     {
 
     }
-    public void DiscardCard(CardModel card)
+    public void DiscardCard(GameObject card)
     {
 
     }

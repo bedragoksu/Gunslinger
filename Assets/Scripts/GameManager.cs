@@ -102,8 +102,9 @@ public class GameManager : NetworkBehaviour
     
     private void HandleInitialization()
     {
+        _turns = GameObject.FindGameObjectsWithTag("Player");
         // herkesin player modelini görsün herkes
-        
+
 
         StartCoroutine(InitializationRoutine());
     }

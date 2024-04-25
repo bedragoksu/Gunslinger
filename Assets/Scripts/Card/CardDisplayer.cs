@@ -3,6 +3,13 @@ using UnityEditor;
 using UnityEngine.UI;
 using TMPro;
 
+using FishNet.Object;
+using FishNet.Object.Synchronizing;
+using FishNet;
+using FishNet.Connection;
+using NeptunDigital;
+using Gunslinger.Controller;
+
 public class CardDisplayer : MonoBehaviour
 {
 

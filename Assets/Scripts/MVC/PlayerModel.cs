@@ -17,7 +17,7 @@ public class PlayerModel : NetworkBehaviour
     public bool CanPlayMultipleBangs = false;
     public GunModel gun; // can change
     public CharacterModel character;
-    public List<CardModel> openHand = new List<CardModel>();
+    public List<GameObject> openHand = new List<GameObject>();
     public int position;
 
     [SyncVar] public int magicNum = 0;
