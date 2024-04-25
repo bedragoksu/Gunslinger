@@ -76,6 +76,7 @@ namespace Gunslinger.Controller
                     break;
             }
             var servercardmanager = Players[0].GetComponent<CardManager>();
+            int counter = 0;
             // assign roles to players
             foreach (var player in Players)
             {
@@ -83,8 +84,10 @@ namespace Gunslinger.Controller
                 var type = possiblePlayerTypes[randomint];
                 possiblePlayerTypes.RemoveAt(randomint);
                 ScreenLog.Instance.SendEvent(TextType.Debug, $"player stuff: {player} {type}");
-                AssignRoles(player, type);
+                var plmodel = player.GetComponent<PlayerModel>();
+                AssignRolesServer(player, type, counter, plmodel.PlayerName);
                 AssignCards(player, servercardmanager.CardOrder, servercardmanager.Cards);
+                counter++;
             }
             Debug.Log("roles assigned is true now");
             gameManager._rolesAssigned = true;
@@ -104,9 +107,12 @@ namespace Gunslinger.Controller
         }
 
         [ObserversRpc]
-        public void AssignRoles(GameObject player, PlayerModel.TypeOfPlayer type)
+        public void AssignRolesServer(GameObject player, PlayerModel.TypeOfPlayer type, int id, string name)
         {
-            player.GetComponent<PlayerModel>().PlayerRole = type;
+            var model = player.GetComponent<PlayerModel>();
+            model.PlayerRole = type;
+            model.PlayerID = id;
+            model.PlayerName = name;
         }
 
         [ObserversRpc]

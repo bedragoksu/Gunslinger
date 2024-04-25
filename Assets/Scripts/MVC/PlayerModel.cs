@@ -20,8 +20,10 @@ public class PlayerModel : NetworkBehaviour
     public List<CardModel> openHand = new List<CardModel>();
     public int position;
 
-    public int magicNum = 0;
-
+    [SyncVar] public int magicNum = 0;
+    public void ChangeMagicNum(int num) { 
+        magicNum = num; 
+    }
 
     public enum TypeOfPlayer
     {
@@ -69,6 +71,7 @@ public class PlayerModel : NetworkBehaviour
 
     private void Update()
     {
+        var Players = GameObject.FindGameObjectsWithTag("Player");
         if (Input.GetKeyDown(KeyCode.N))
         {
             ScreenLog.Instance.SendEvent(TextType.Debug, $"player id: {_thisPlayer.PlayerID}");
@@ -81,28 +84,22 @@ public class PlayerModel : NetworkBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.Alpha5))
         {
-            var prc = GameObject.Find("RoleController").GetComponent<PlayerRolesController>();
-            foreach(var player in prc.Players)
+            foreach(var player in Players)
             {
-                
                 AssignMagicNumServer(player.GetComponent<PlayerModel>(), 5);
             }
         }
         else if (Input.GetKeyDown(KeyCode.Alpha6))
         {
-            var prc = GameObject.Find("RoleController").GetComponent<PlayerRolesController>();
-            foreach (var player in prc.Players)
+            foreach (var player in Players)
             {
-
                 AssignMagicNumServer(player.GetComponent<PlayerModel>(), 6);
             }
         }
         else if (Input.GetKeyDown(KeyCode.Alpha7))
         {
-            var prc = GameObject.Find("RoleController").GetComponent<PlayerRolesController>();
-            foreach (var player in prc.Players)
+            foreach (var player in Players)
             {
-
                 AssignMagicNumServer(player.GetComponent<PlayerModel>(), 7);
             }
         }
@@ -132,7 +129,7 @@ public class PlayerModel : NetworkBehaviour
     [ObserversRpc]
     public void AssignMagicNum(PlayerModel player, int magicNum)
     {
-        player.magicNum = magicNum;
+        player.ChangeMagicNum(magicNum);
     }
 
 }

@@ -98,9 +98,12 @@ public class GameManager : NetworkBehaviour
     }
 
     
+
+    
     private void HandleInitialization()
     {
         // herkesin player modelini görsün herkes
+        
 
         StartCoroutine(InitializationRoutine());
     }
