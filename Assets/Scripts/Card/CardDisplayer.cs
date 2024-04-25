@@ -34,7 +34,7 @@ public class CardDisplayer : MonoBehaviour
     }
     public void ChangeCard(CardObject cardObject)
     {
-        nameText.text = cardObject.name;
+        nameText.text = cardObject.cardName;
         picture.sprite = cardObject.picture;
         symbol.sprite = cardObject.symbol;
         background.sprite = cardObject.background;

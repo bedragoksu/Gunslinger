@@ -10,7 +10,7 @@ using NeptunDigital;
 public class CardManager : NetworkBehaviour
 {
     public CardObject[] Cards;
-    public GameObject cardObject;
+    public GameObject sampleCardObject;
     [SerializeField] private GameObject _parentObject;
 
     public GameObject[] CardObjects;
@@ -22,7 +22,7 @@ public class CardManager : NetworkBehaviour
 
     private void Start()
     {
-        cardObject = GameObject.Find("SampleCard");
+        // sampleCardObject = GameObject.Find("SampleCard");
         _parentObject = GameObject.Find("OpenedCards");
         Cards = GameObject.Find("CardManager").GetComponent<CardObject>().cards;
 
@@ -43,7 +43,7 @@ public class CardManager : NetworkBehaviour
             foreach (var card in Cards)
             {
                 GameObject sampleCard = createSampleCard(card);
-                switch (card.name)
+                switch (card.cardName)
                 {
                     case "Bang":
                         createCards(sampleCard, 25); break;
@@ -73,8 +73,8 @@ public class CardManager : NetworkBehaviour
 
     GameObject createSampleCard(CardObject card)
     {
-        var newCard = Instantiate(cardObject, _parentObject.transform);
-        newCard.name = card.name;
+        var newCard = Instantiate(sampleCardObject, _parentObject.transform);
+        newCard.name = card.cardName;
         CardDisplayer cardDisplayer = newCard.GetComponent<CardDisplayer>();
         cardDisplayer.ChangeCard(card);
 

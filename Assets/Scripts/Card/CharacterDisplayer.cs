@@ -12,10 +12,10 @@ public class CharacterDisplayer : MonoBehaviour
     public TextMeshProUGUI range;
     public Character character;
     public GameObject bullet;
-
+    public int bullets;
     void Start()
     {
-        for (int i = 0; i < character.maxBullet; i++)
+        for (int i = 0; i < bullets; i++)
         {
             // Instantiate the prefab as a child of the current object
             GameObject instantiatedPrefab = Instantiate(bullet, transform.position, Quaternion.identity, transform);
@@ -31,6 +31,21 @@ public class CharacterDisplayer : MonoBehaviour
         gunImage.sprite = character.gunImage;
         range.text = character.range.ToString();
     }
+    public void addBullet()
+    {
+        GameObject instantiatedPrefab = Instantiate(bullet, transform.position, Quaternion.identity, transform);
 
-   
+        instantiatedPrefab.transform.localPosition = Vector3.zero;
+        instantiatedPrefab.transform.localRotation = Quaternion.identity;
+    }
+    private void Update()
+    {
+        if (Input.anyKeyDown)
+        {
+            if (Input.GetKeyDown(KeyCode.Z))
+            {
+                addBullet();
+            }
+        }
+    }
 }
