@@ -12,7 +12,7 @@ public class PlayerModel : NetworkBehaviour
 {
     public int PlayerID;
     public string PlayerName;
-    public int CurrentBulletPoint;
+    public int CurrentBulletPoint = 4;
     [SyncVar] public TypeOfPlayer PlayerRole;
     public bool CanPlayMultipleBangs = false;
     public GunModel gun; // can change
