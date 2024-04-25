@@ -82,6 +82,7 @@ public class GameManager : NetworkBehaviour
             case GameState.DiscardCard:
                 //HandleDiscardCard();
                 _turnInt++;
+                if (_turnInt == _turns.Length) _turnInt = 0;
                 break;
             case GameState.EndOfGame:
                 //HandleEndOfGame();
@@ -90,13 +91,17 @@ public class GameManager : NetworkBehaviour
         _onGameStateChanged?.Invoke(newState);
     }
 
-    private void HandleDrawCard()
+    private void HandleDrawCard() // herkesin draw card state olmasý mý lazým?
     {
         var currentPlayer = _turns[_turnInt];
+
     }
 
+    
     private void HandleInitialization()
     {
+        // herkesin player modelini görsün herkes
+
         StartCoroutine(InitializationRoutine());
     }
     private IEnumerator InitializationRoutine()
@@ -109,9 +114,9 @@ public class GameManager : NetworkBehaviour
 
         // who has the turn: ...
         Debug.Log("assign turn int start");
-        AssignTurns();
-
+        yield return new WaitUntil(() => AssignTurns());
         // draw cards (who has the turn)
+        UpdateGameState(GameState.DrawCard);
     }
 
     private void HandleLobby()
@@ -130,9 +135,8 @@ public class GameManager : NetworkBehaviour
         _canStart = true;
     }
 
-    private void AssignTurns()
+    private bool AssignTurns()
     {
-        _turns = GameObject.FindGameObjectsWithTag("Player");
         for(int i=0; i< _turns.Length;i++)
         {
             if(_turns[i].GetComponent<PlayerModel>().PlayerRole == PlayerModel.TypeOfPlayer.Sheriff)
@@ -141,6 +145,7 @@ public class GameManager : NetworkBehaviour
                 break;
             }
         }
+        return true;
         //Debug.Log(Players[0].GetComponent<PlayerModel>().PlayerRole);
         //while (Players[0].GetComponent<PlayerModel>().PlayerRole != PlayerModel.TypeOfPlayer.Sheriff)
         //{
