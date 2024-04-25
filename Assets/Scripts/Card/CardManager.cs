@@ -23,7 +23,7 @@ public class CardManager : NetworkBehaviour
     private void Start()
     {
         // sampleCardObject = GameObject.Find("SampleCard");
-        _parentObject = GameObject.Find("DeskPanel");
+        _parentObject = GameObject.Find("DeckPanel");
         Cards = GameObject.Find("CardManager").GetComponent<CardObject>().cards;
 
     }

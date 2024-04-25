@@ -17,6 +17,8 @@ namespace Gunslinger.Controller
         public PlayerUI PlayerUIScript;
         public GameManager gameManager;
 
+        private int pointer;
+
         void Start()
         {
 
@@ -77,6 +79,7 @@ namespace Gunslinger.Controller
             }
             var servercardmanager = Players[0].GetComponent<CardManager>();
             int counter = 0;
+            pointer = 0;
             // assign roles to players
             foreach (var player in Players)
             {
@@ -86,7 +89,7 @@ namespace Gunslinger.Controller
                 ScreenLog.Instance.SendEvent(TextType.Debug, $"player stuff: {player} {type}");
                 var plmodel = player.GetComponent<PlayerModel>();
                 AssignRolesServer(player, type, counter, plmodel.PlayerName);
-                AssignCards(player, servercardmanager.CardOrder, servercardmanager.Cards);
+                AssignCards(player, servercardmanager.CardOrder, servercardmanager.CardObjects);
                 counter++;
             }
             Debug.Log("roles assigned is true now");
@@ -113,15 +116,32 @@ namespace Gunslinger.Controller
             model.PlayerRole = type;
             model.PlayerID = id;
             model.PlayerName = name;
+            model.CurrentBulletPoint = 4;
+            if(type == PlayerModel.TypeOfPlayer.Sheriff)
+            {
+                model.CurrentBulletPoint = 5;
+            }
         }
 
         [ObserversRpc]
-        public void AssignCards(GameObject player, List<int> cardOrder, CardObject[] cards)
+        public void AssignCards(GameObject player, List<int> cardOrder, GameObject[] cards)
         {
             var card = player.GetComponent<CardManager>();
 
-            card.Cards = cards;
+            //card.CardObjects = cards;
             card.CardOrder = cardOrder;
+
+            var pl = player.GetComponent<PlayerModel>();
+            var cardss = GameObject.Find("DeckPanel");
+            for (int i = 0; i < pl.CurrentBulletPoint; i++)
+            {
+                Debug.Log($"pointer value is {pointer}");
+                var a = cardOrder[pointer];
+                Debug.Log($"order value is {a}");
+                pl.openHand.Add(cardss.transform.GetChild(a).gameObject);
+                pointer++;
+            }
+
         }
 
     }
