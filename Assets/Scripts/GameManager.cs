@@ -22,7 +22,9 @@ public class GameManager : NetworkBehaviour
     private bool _canStart = false;
     [SerializeField] private PlayerRolesController _prc;
 
+    public bool _rolesAssigned = false;
     private GameObject[] _turns;
+    private int _turnInt = 0;
 
     private void Start()
     {
@@ -42,10 +44,8 @@ public class GameManager : NetworkBehaviour
                 {
                     _canStart = false;
                     UpdateGameState(GameState.Initialization);
-                    
                 }
             }
-
         }
     }
 
@@ -74,13 +74,14 @@ public class GameManager : NetworkBehaviour
                 HandleInitialization();
                 break;
             case GameState.DrawCard:
-                //HandleDrawCard();
+                HandleDrawCard();
                 break;
             case GameState.PlayCard:
                 //HandlePlayCard();
                 break;
             case GameState.DiscardCard:
                 //HandleDiscardCard();
+                _turnInt++;
                 break;
             case GameState.EndOfGame:
                 //HandleEndOfGame();
@@ -89,11 +90,15 @@ public class GameManager : NetworkBehaviour
         _onGameStateChanged?.Invoke(newState);
     }
 
+    private void HandleDrawCard()
+    {
+        var currentPlayer = _turns[_turnInt];
+    }
+
     private void HandleInitialization()
     {
         StartCoroutine(InitializationRoutine());
     }
-    public bool _rolesAssigned = false;
     private IEnumerator InitializationRoutine()
     {
         _prc.AssignRoles();
@@ -103,8 +108,9 @@ public class GameManager : NetworkBehaviour
         // deal the cards, wait until
 
         // who has the turn: ...
-        Debug.Log("assign turns start");
-        _turns = AssignTurns();
+        Debug.Log("assign turn int start");
+        AssignTurns();
+
         // draw cards (who has the turn)
     }
 
@@ -124,24 +130,27 @@ public class GameManager : NetworkBehaviour
         _canStart = true;
     }
 
-    private GameObject[] AssignTurns()
+    private void AssignTurns()
     {
-        var Players = GameObject.FindGameObjectsWithTag("Player");
-        //foreach (var pl in Players)
-        //{
-        //    Debug.Log(pl.GetComponent<PlayerModel>().PlayerRole);
-        //}
-        Debug.Log(Players[0].GetComponent<PlayerModel>().PlayerRole);
-        while (Players[0].GetComponent<PlayerModel>().PlayerRole != PlayerModel.TypeOfPlayer.Sheriff)
+        _turns = GameObject.FindGameObjectsWithTag("Player");
+        for(int i=0; i< _turns.Length;i++)
         {
-            Debug.Log(Players[0].GetComponent<PlayerModel>().PlayerRole);
-            var first = Players[0];
-            for (int i = 0; i < Players.Length - 1; i++)
+            if(_turns[i].GetComponent<PlayerModel>().PlayerRole == PlayerModel.TypeOfPlayer.Sheriff)
             {
-                Players[i] = Players[i + 1];
+                _turnInt = i;
+                break;
             }
-            Players[Players.Length - 1] = first;
         }
-        return Players;
+        //Debug.Log(Players[0].GetComponent<PlayerModel>().PlayerRole);
+        //while (Players[0].GetComponent<PlayerModel>().PlayerRole != PlayerModel.TypeOfPlayer.Sheriff)
+        //{
+        //    Debug.Log(Players[0].GetComponent<PlayerModel>().PlayerRole);
+        //    var first = Players[0];
+        //    for (int i = 0; i < Players.Length - 1; i++)
+        //    {
+        //        Players[i] = Players[i + 1];
+        //    }
+        //    Players[Players.Length - 1] = first;
+        //}
     }
 }
