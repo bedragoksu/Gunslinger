@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 144464e45f097294f87e7cee8dfed2b9, type: 3}
+  m_Name: Beer
+  m_EditorClassIdentifier: 
+  name: Beer
+  picture: {fileID: 21300000, guid: 06325df2b85eb334093008600f9b0f0f, type: 3}
+  description: 
+  background: {fileID: 21300000, guid: a504f1cf3ced0a14692c1996bc68a75b, type: 3}
+  symbol: {fileID: 21300000, guid: 20388def7287b1749bb1eac7ee4503b2, type: 3}
