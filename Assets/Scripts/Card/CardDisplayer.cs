@@ -30,6 +30,10 @@ public class CardDisplayer : MonoBehaviour
         //    GunCard gunCard = (GunCard)card;
         //    range.text = gunCard.range.ToString();
         //}
+        //nameText.text = "CardName";
+        //picture.sprite = Resources.Load<Sprite>("Panic");
+        //symbol.sprite = Resources.Load<Sprite>("Hearts");
+        //background.sprite = Resources.Load<Sprite>("_blue_card");
         if (card != null)
         {
             nameText.text = card.name;

@@ -13,6 +13,9 @@ public class CharacterDisplayer : MonoBehaviour
     public Character character;
     public GameObject bullet;
     public int bullets;
+    public GameObject player;
+    public string role;
+
     void Start()
     {
         for (int i = 0; i < bullets; i++)
@@ -26,11 +29,27 @@ public class CharacterDisplayer : MonoBehaviour
             instantiatedPrefab.transform.localRotation = Quaternion.identity;
         }
 
-        characterImage.sprite = character.characterImage;
-        identify.text = character.identify;
+        characterImage.sprite = Resources.Load<Sprite>("cowboy");
         gunImage.sprite = character.gunImage;
         range.text = character.range.ToString();
     }
+    //public override void OnStartClient()
+    //{
+    //    base.OnStartClient(); 
+    //    if (!base.IsOwner)
+    //    {
+    //        //GetComponent<CharacterDisplayer>().enabled = false;
+    //    }
+
+    //    GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+    //    foreach (GameObject p in players)
+    //    {
+    //        if (p.GetComponent<PlayerModel>().enabled)
+    //        {
+    //            player = p;
+    //        }
+    //    }
+    //}
     public void addBullet()
     {
         GameObject instantiatedPrefab = Instantiate(bullet, transform.position, Quaternion.identity, transform);
@@ -46,6 +65,19 @@ public class CharacterDisplayer : MonoBehaviour
             {
                 addBullet();
             }
+        }
+        if(GameObject.Find("GameManager") != null && GameObject.Find("GameManager").GetComponent<GameManager>().CurrentGameState == GameManager.GameState.Initialization)
+        {
+            GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+            foreach (GameObject player in players)
+            {
+                if (player.GetComponent<PlayerModel>().enabled)
+                {
+                    role = player.GetComponent<PlayerModel>().PlayerRole.ToString();
+                    identify.text = player.GetComponent<PlayerModel>().PlayerRole.ToString();
+                }
+            }
+
         }
     }
 }
