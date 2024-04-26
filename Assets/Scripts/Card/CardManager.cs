@@ -23,8 +23,8 @@ public class CardManager : NetworkBehaviour
     private void Start()
     {
         // sampleCardObject = GameObject.Find("SampleCard");
-        _parentObject = GameObject.Find("DeckPanel");
-        Cards = GameObject.Find("CardManager").GetComponent<CardObject>().cards;
+        //_parentObject = GameObject.Find("DeckPanel");
+        //Cards = GameObject.Find("CardManager").GetComponent<CardObject>().cards;
 
     }
 
@@ -35,7 +35,9 @@ public class CardManager : NetworkBehaviour
         //{
         //    gameObject.GetComponent<CardManager>().enabled = false;
         //}
-        if (IsServer)
+        _parentObject = GameObject.Find("DeckPanel");
+        Cards = GameObject.Find("CardManager").GetComponent<CardObject>().cards;
+        if (true)
         {
             
             CardObjects = new GameObject[_cardNum];

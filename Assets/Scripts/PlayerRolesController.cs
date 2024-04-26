@@ -89,12 +89,14 @@ namespace Gunslinger.Controller
                 ScreenLog.Instance.SendEvent(TextType.Debug, $"player stuff: {player} {type}");
                 var plmodel = player.GetComponent<PlayerModel>();
                 AssignRolesServer(player, type, counter, plmodel.PlayerName);
+
                 AssignCards(player, servercardmanager.CardOrder, servercardmanager.CardObjects);
                 counter++;
             }
             Debug.Log("roles assigned is true now");
             gameManager._rolesAssigned = true;
         }
+
 
         public int PlayersUpdate()
         {
@@ -138,10 +140,27 @@ namespace Gunslinger.Controller
                 Debug.Log($"pointer value is {pointer}");
                 var a = cardOrder[pointer];
                 Debug.Log($"order value is {a}");
-                pl.openHand.Add(cardss.transform.GetChild(a).gameObject);
+                
+                var child = GetChildOfDeck(a, cardss);
+                child.SetActive(true);
+                pl.openHand.Add(child);
                 pointer++;
             }
 
+        }
+
+        private GameObject GetChildOfDeck(int index, GameObject parent)
+        {
+            var counter = 0;
+            foreach(Transform c in parent.transform)
+            {
+                if(counter == index)
+                {
+                    return c.gameObject;
+                }
+                counter++;
+            }
+            return parent.transform.GetChild(index).gameObject;
         }
 
     }
