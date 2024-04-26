@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using FishNet.Object;
 using UnityEngine;
 
-public class CardObject : NetworkBehaviour
+public class CardObject : MonoBehaviour
 {
     // 0 = bang, 1 = missed
     [SerializeField] private Sprite[] _cardSprites;
