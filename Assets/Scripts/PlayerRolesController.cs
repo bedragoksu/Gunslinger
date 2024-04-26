@@ -138,15 +138,11 @@ namespace Gunslinger.Controller
                 Debug.Log($"pointer value is {pointer}");
                 var a = cardOrder[pointer];
                 Debug.Log($"order value is {a}");
-                
-                var child = cardss.transform.GetChild(a);
-                child.gameObject.SetActive(true);
-                pl.openHand.Add(child.gameObject);
+                pl.openHand.Add(cardss.transform.GetChild(a).gameObject);
                 pointer++;
             }
 
         }
-
 
     }
 }

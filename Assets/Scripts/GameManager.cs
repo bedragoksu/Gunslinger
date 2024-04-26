@@ -5,8 +5,7 @@ using System;
 using FishNet.Object;
 using NeptunDigital;
 using Gunslinger.Controller;
-using NeptunDigital;
-using FishNet.Object.Synchronizing;
+
 
 public class GameManager : NetworkBehaviour
 {
@@ -17,13 +16,13 @@ public class GameManager : NetworkBehaviour
     [HideInInspector] public int OutlawNumber = 2;
     [HideInInspector] public int DeputyNumber = 0;
 
-    [SyncVar][HideInInspector] public GameState CurrentGameState;
+    [HideInInspector] public GameState CurrentGameState;
     private static event Action<GameState> _onGameStateChanged;
 
     private bool _canStart = false;
     [SerializeField] private PlayerRolesController _prc;
 
-    [HideInInspector] public bool _rolesAssigned = false;
+    public bool _rolesAssigned = false;
     private GameObject[] _turns;
     private int _turnInt = 0;
 
@@ -47,11 +46,9 @@ public class GameManager : NetworkBehaviour
                     UpdateGameState(GameState.Initialization);
                 }
             }
-            else if (Input.GetKeyDown(KeyCode.DownArrow)){
-                ScreenLog.Instance.SendEvent(TextType.Debug, $"curr state: { CurrentGameState}");
-            }
         }
     }
+
 
 
     public enum GameState
@@ -96,8 +93,8 @@ public class GameManager : NetworkBehaviour
 
     private void HandleDrawCard() // herkesin draw card state olmasý mý lazým?
     {
-        //var currentPlayer = _turns[_turnInt];
-        ScreenLog.Instance.SendEvent(TextType.Debug, $"DRAW CARD STATE");
+        var currentPlayer = _turns[_turnInt];
+
     }
 
     
@@ -107,6 +104,7 @@ public class GameManager : NetworkBehaviour
     {
         _turns = GameObject.FindGameObjectsWithTag("Player");
         // herkesin player modelini görsün herkes
+
 
         StartCoroutine(InitializationRoutine());
     }
@@ -122,15 +120,7 @@ public class GameManager : NetworkBehaviour
         Debug.Log("assign turn int start");
         yield return new WaitUntil(() => AssignTurns());
         // draw cards (who has the turn)
-        // herkes draw card state'ine geçsin ve turn index paylaþýlsýn
-        //UpdateGameState(GameState.DrawCard);
-        AssignState(GameState.DrawCard, _turnInt);
-    }
-    [ObserversRpc]
-    public void AssignState(GameState newState, int index)
-    {
-        UpdateGameState(newState);
-        //gameManager._turnInt = index;
+        UpdateGameState(GameState.DrawCard);
     }
 
     private void HandleLobby()

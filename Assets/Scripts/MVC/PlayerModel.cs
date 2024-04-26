@@ -21,16 +21,8 @@ public class PlayerModel : NetworkBehaviour
     public int position;
 
     [SyncVar] public int magicNum = 0;
-
-    [HideInInspector] public GameManager GameManagerScript;
-
     public void ChangeMagicNum(int num) { 
         magicNum = num; 
-    }
-
-    private void Start()
-    {
-        GameManagerScript = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 
     public enum TypeOfPlayer
