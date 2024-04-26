@@ -31,11 +31,11 @@ public class CardManager : NetworkBehaviour
     public override void OnStartClient()
     {
         base.OnStartClient();
-        //if (!base.IsOwner)
-        //{
-        //    gameObject.GetComponent<CardManager>().enabled = false;
-        //}
-        if (IsServer)
+        if (!base.IsOwner)
+        {
+            gameObject.GetComponent<CardManager>().enabled = false;
+        }
+        if (base.IsServer && base.IsOwner)
         {
             
             CardObjects = new GameObject[_cardNum];
