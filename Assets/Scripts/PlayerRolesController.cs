@@ -49,7 +49,7 @@ namespace Gunslinger.Controller
 
         List<PlayerModel.TypeOfPlayer> possiblePlayerTypes = new List<PlayerModel.TypeOfPlayer>();
 
-        public void AssignRoles()
+        public bool AssignRoles()
         {
             Debug.Log("we can start");
 
@@ -89,12 +89,11 @@ namespace Gunslinger.Controller
                 ScreenLog.Instance.SendEvent(TextType.Debug, $"player stuff: {player} {type}");
                 var plmodel = player.GetComponent<PlayerModel>();
                 AssignRolesServer(player, type, counter, plmodel.PlayerName);
-
-                AssignCards(player, servercardmanager.CardOrder, servercardmanager.CardObjects);
+                AssignCards(player, servercardmanager.CardOrder);
                 counter++;
             }
-            Debug.Log("roles assigned is true now");
-            gameManager._rolesAssigned = true;
+
+            return true;
         }
 
 
@@ -126,7 +125,7 @@ namespace Gunslinger.Controller
         }
 
         [ObserversRpc]
-        public void AssignCards(GameObject player, List<int> cardOrder, GameObject[] cards)
+        public void AssignCards(GameObject player, List<int> cardOrder)
         {
             var card = player.GetComponent<CardManager>();
 
@@ -149,7 +148,7 @@ namespace Gunslinger.Controller
 
         }
 
-        private GameObject GetChildOfDeck(int index, GameObject parent)
+        public GameObject GetChildOfDeck(int index, GameObject parent)
         {
             var counter = 0;
             foreach(Transform c in parent.transform)

@@ -5,7 +5,7 @@ using System;
 using FishNet.Object;
 using NeptunDigital;
 using Gunslinger.Controller;
-
+using FishNet.Object.Synchronizing;
 
 public class GameManager : NetworkBehaviour
 {
@@ -19,12 +19,12 @@ public class GameManager : NetworkBehaviour
     [HideInInspector] public GameState CurrentGameState;
     private static event Action<GameState> _onGameStateChanged;
 
-    private bool _canStart = false;
     [SerializeField] private PlayerRolesController _prc;
 
-    public bool _rolesAssigned = false;
     private GameObject[] _turns;
-    private int _turnInt = 0;
+    [SyncVar] private int _turnInt = 0;
+
+    private bool _canStart = false;
 
     private void Start()
     {
@@ -46,9 +46,21 @@ public class GameManager : NetworkBehaviour
                     UpdateGameState(GameState.Initialization);
                 }
             }
+            else if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                ScreenLog.Instance.SendEvent(TextType.Debug, $"curr state: { CurrentGameState}");
+            }
+            else if (Input.GetKeyDown(KeyCode.Tab))
+            {
+                nextplayer();
+            }
         }
     }
 
+    public void nextplayer()
+    {
+
+    }
 
 
     public enum GameState
@@ -82,7 +94,7 @@ public class GameManager : NetworkBehaviour
             case GameState.DiscardCard:
                 //HandleDiscardCard();
                 _turnInt++;
-                if (_turnInt == _turns.Length) _turnInt = 0;
+                if (_turnInt == _turns.Length) _turnInt = 0; // observersla paylaþ
                 break;
             case GameState.EndOfGame:
                 //HandleEndOfGame();
@@ -91,36 +103,43 @@ public class GameManager : NetworkBehaviour
         _onGameStateChanged?.Invoke(newState);
     }
 
-    private void HandleDrawCard() // herkesin draw card state olmasý mý lazým?
+    private void HandleDrawCard()
+    {
+        ScreenLog.Instance.SendEvent(TextType.Debug, $"DRAW CARD STATE");
+        StartCoroutine(DrawCardRoutine());
+    }
+    private IEnumerator DrawCardRoutine()
     {
         var currentPlayer = _turns[_turnInt];
-
-    }
-
-    
-
+        var end = GameObject.Find("CardsController").GetComponent<CardsController>().DrawCards(currentPlayer, 2);
+        yield return new WaitUntil(() => end);
+        AssignState(GameState.PlayCard, _turnInt);
+    } 
     
     private void HandleInitialization()
     {
         _turns = GameObject.FindGameObjectsWithTag("Player");
         // herkesin player modelini görsün herkes
 
-
         StartCoroutine(InitializationRoutine());
     }
     private IEnumerator InitializationRoutine()
     {
-        _prc.AssignRoles();
-
-        yield return new WaitUntil(() => _rolesAssigned);
+        yield return new WaitUntil(() => _prc.AssignRoles());  // bu fonksiyonu parçala
         yield return new WaitForSecondsRealtime(1f); // bu bir f hiç olmadý ya :( neyse düzeltcez
-        // deal the cards, wait until
 
         // who has the turn: ...
         Debug.Log("assign turn int start");
         yield return new WaitUntil(() => AssignTurns());
-        // draw cards (who has the turn)
-        UpdateGameState(GameState.DrawCard);
+        
+        //UpdateGameState(GameState.DrawCard);
+        AssignState(GameState.DrawCard, _turnInt);
+    }
+    [ObserversRpc]
+    public void AssignState(GameState newState, int index)
+    {
+        UpdateGameState(newState);
+        _turnInt = index;
     }
 
     private void HandleLobby()
