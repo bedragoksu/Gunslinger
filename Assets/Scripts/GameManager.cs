@@ -6,6 +6,7 @@ using FishNet.Object;
 using NeptunDigital;
 using Gunslinger.Controller;
 using FishNet.Object.Synchronizing;
+using TMPro;
 
 public class GameManager : NetworkBehaviour
 {
@@ -121,10 +122,21 @@ public class GameManager : NetworkBehaviour
         }
         _onGameStateChanged?.Invoke(newState);
     }
-
+    
     private void HandleDrawCard()
     {
         ScreenLog.Instance.SendEvent(TextType.Debug, $"DRAW CARD STATE");
+        PlayerModel pl = new PlayerModel();
+        foreach(var p in GameObject.FindGameObjectsWithTag("Player"))
+        {
+            if (p.GetComponent<PlayerModel>().enabled)
+            {
+                pl = p.GetComponent<PlayerModel>();
+            }
+        }
+        var t = pl.PlayerRole.ToString();
+        var tpro = GameObject.Find("role").GetComponent<TMP_Text>();
+        tpro.text = t;
         StartCoroutine(DrawCardRoutine());
     }
     private IEnumerator DrawCardRoutine()
