@@ -22,7 +22,7 @@ public class GameManager : NetworkBehaviour
     [SerializeField] private PlayerRolesController _prc;
 
     private GameObject[] _turns;
-    [SyncVar] private int _turnInt = 0;
+    [SyncVar] private int _turnInt;
 
     private bool _canStart = false;
 
@@ -52,16 +52,37 @@ public class GameManager : NetworkBehaviour
             }
             else if (Input.GetKeyDown(KeyCode.Tab))
             {
-                nextplayer();
+                StartCoroutine(r());
             }
         }
     }
 
-    public void nextplayer()
+    private bool b = false;
+    private IEnumerator r()
     {
-
+        nextplayer();
+        AssignState(GameState.PlayCard);
+        yield return new WaitUntil(() => b);
+        yield return new WaitForSeconds(0.5f);
+        b = false;
+        AssignState(GameState.DrawCard);
     }
 
+    [ServerRpc(RequireOwnership = false)]
+    public void nextplayer()
+    {
+        //_turnInt = ++_turnInt%4;
+        //ScreenLog.Instance.SendEvent(TextType.Debug, $"_turnInt= {_turnInt}");
+        server();
+        b = true;
+    }
+    [ObserversRpc]
+    public void server()
+    {
+        _turnInt++;
+        _turnInt %= 4;
+        ScreenLog.Instance.SendEvent(TextType.Debug, $"_turnInt= {_turnInt}");
+    }
 
     public enum GameState
     {
@@ -93,8 +114,6 @@ public class GameManager : NetworkBehaviour
                 break;
             case GameState.DiscardCard:
                 //HandleDiscardCard();
-                _turnInt++;
-                if (_turnInt == _turns.Length) _turnInt = 0; // observersla paylaþ
                 break;
             case GameState.EndOfGame:
                 //HandleEndOfGame();
@@ -113,7 +132,7 @@ public class GameManager : NetworkBehaviour
         var currentPlayer = _turns[_turnInt];
         var end = GameObject.Find("CardsController").GetComponent<CardsController>().DrawCards(currentPlayer, 2);
         yield return new WaitUntil(() => end);
-        AssignState(GameState.PlayCard, _turnInt);
+        AssignState(GameState.PlayCard);
     } 
     
     private void HandleInitialization()
@@ -133,13 +152,12 @@ public class GameManager : NetworkBehaviour
         yield return new WaitUntil(() => AssignTurns());
         
         //UpdateGameState(GameState.DrawCard);
-        AssignState(GameState.DrawCard, _turnInt);
+        AssignState(GameState.DrawCard);
     }
     [ObserversRpc]
-    public void AssignState(GameState newState, int index)
+    public void AssignState(GameState newState)
     {
         UpdateGameState(newState);
-        _turnInt = index;
     }
 
     private void HandleLobby()
@@ -147,6 +165,7 @@ public class GameManager : NetworkBehaviour
         ScreenLog.Instance.SendEvent(TextType.Debug, $"LOBBY STATE");
         //MixTheCards();
         _canStart = true;
+        AssignTurnIndex(0);
     }
 
     private void MixTheCards()
@@ -164,7 +183,7 @@ public class GameManager : NetworkBehaviour
         {
             if(_turns[i].GetComponent<PlayerModel>().PlayerRole == PlayerModel.TypeOfPlayer.Sheriff)
             {
-                _turnInt = i;
+                AssignTurnIndex(i);
                 break;
             }
         }
@@ -180,5 +199,11 @@ public class GameManager : NetworkBehaviour
         //    }
         //    Players[Players.Length - 1] = first;
         //}
+    }
+    
+    [ObserversRpc]
+    public void AssignTurnIndex(int i)
+    {
+        _turnInt = i;
     }
 }
