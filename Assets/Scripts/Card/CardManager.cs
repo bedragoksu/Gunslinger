@@ -78,7 +78,7 @@ public class CardManager : NetworkBehaviour
         var newCard = Instantiate(sampleCardObject, _parentObject.transform);
         newCard.name = card.cardName;
         CardDisplayer cardDisplayer = newCard.GetComponent<CardDisplayer>();
-        cardDisplayer.ChangeCard(card);
+        cardDisplayer.DisplayCard(card);
 
         CardOrder.Add(_cardCounter);
         CardObjects[_cardCounter++] = newCard;
