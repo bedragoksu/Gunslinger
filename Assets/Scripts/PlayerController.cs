@@ -36,7 +36,17 @@ public class PlayerController : NetworkBehaviour
         {
             playerCamera = Camera.main;
             playerCamera.transform.position = new Vector3(transform.position.x, transform.position.y + cameraYOffset, transform.position.z + cameraZOffset);
+            
             playerCamera.transform.SetParent(transform);
+            playerCamera.transform.localRotation = Quaternion.Euler(45f, 0, 0);
+
+
+            Vector3 direction = (Vector3.zero - gameObject.transform.position).normalized;
+
+            Quaternion rotation = Quaternion.LookRotation(direction);
+
+            gameObject.transform.rotation = rotation;
+
         }
         else
         {
@@ -86,15 +96,15 @@ public class PlayerController : NetworkBehaviour
         // Move the controller
         characterController.Move(moveDirection * Time.deltaTime);
         //characterController.Move(new Vector3(0, 0, 0) * Time.deltaTime);
-
+        //playerCamera.transform.localRotation = Quaternion.Euler(45f, 0, 0);
         // Player and Camera rotation
-        if (canMove && playerCamera != null)
-        {
-            rotationX += -Input.GetAxis("Mouse Y") * lookSpeed;
-            rotationX = Mathf.Clamp(rotationX, -lookXLimit, lookXLimit);
-            playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
-            transform.Rotate(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
+        //if (canMove && playerCamera != null)
+        //{
+        //    rotationX += -Input.GetAxis("Mouse Y") * lookSpeed;
+        //    rotationX = Mathf.Clamp(rotationX, -lookXLimit, lookXLimit);
+        //    playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
+        //    transform.Rotate(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
 
-        }
+        //}
     }
 }
