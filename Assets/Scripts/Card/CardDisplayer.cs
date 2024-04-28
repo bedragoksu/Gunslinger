@@ -3,48 +3,21 @@ using UnityEditor;
 using UnityEngine.UI;
 using TMPro;
 
-using FishNet.Object;
-using FishNet.Object.Synchronizing;
-using FishNet;
-using FishNet.Connection;
-using NeptunDigital;
-using Gunslinger.Controller;
-
 public class CardDisplayer : MonoBehaviour
 {
-
+    public Image background;
     public TextMeshProUGUI nameText;
-    public TextMeshProUGUI descriptionText;
     public Image picture;
     public Image symbol;
-    public CardObject card;
-    public Image background;
-    public TextMeshProUGUI range;
+    public TextMeshProUGUI descriptionText;
 
-    //public GunCard gun;
-
-    void Start()
+    public void DisplayCard(CardObject cardObject)
     {
-        //if (card is GunCard)
-        //{
-        //    GunCard gunCard = (GunCard)card;
-        //    range.text = gunCard.range.ToString();
-        //}
-        if (card != null)
-        {
-            nameText.text = card.name;
-            picture.sprite = card.picture;
-            symbol.sprite = card.symbol;
-            background.sprite = card.background;
-        }
-        
-    }
-    public void ChangeCard(CardObject cardObject)
-    {
+        background.sprite = cardObject.background;
         nameText.text = cardObject.cardName;
         picture.sprite = cardObject.picture;
         symbol.sprite = cardObject.symbol;
-        background.sprite = cardObject.background;
+        descriptionText.text = cardObject.description;
     }
 
 }
