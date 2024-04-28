@@ -210,7 +210,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5294451582369181646}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 483962b376e49cb46a24a7d97dbf9c05, type: 3}
   m_Name: 
@@ -222,11 +222,11 @@ MonoBehaviour:
   runningSpeed: 11.5
   jumpSpeed: 8
   gravity: 20
-  lookSpeed: 2
+  lookSpeed: 0
   lookXLimit: 45
   canMove: 1
-  cameraYOffset: 2
-  cameraZOffset: -3
+  cameraYOffset: 15.02
+  cameraZOffset: -7.6
 --- !u!114 &5199731734732856853
 MonoBehaviour:
   m_ObjectHideFlags: 0

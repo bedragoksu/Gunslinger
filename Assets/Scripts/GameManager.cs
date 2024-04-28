@@ -29,6 +29,7 @@ public class GameManager : NetworkBehaviour
     private bool _canStart = false;
 
     public GameObject CharacterDisplayer; // to assign character roles to canvas/life
+    public GameObject CharacterPositionController; // to assign new positions to characters
     private void Start()
     {
         UpdateGameState(GameState.Lobby);
@@ -129,6 +130,7 @@ public class GameManager : NetworkBehaviour
     {
         ScreenLog.Instance.SendEvent(TextType.Debug, $"DRAW CARD STATE");
         CharacterDisplayer.GetComponent<CharacterDisplayer>().roleOnChange();
+        CharacterPositionController.GetComponent<CharacterPositionController>().UpdateCharacterPositions();
         StartCoroutine(DrawCardRoutine());
     }
     private IEnumerator DrawCardRoutine()
