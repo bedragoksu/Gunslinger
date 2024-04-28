@@ -48,4 +48,18 @@ public class CharacterDisplayer : MonoBehaviour
             }
         }
     }
+
+    public void roleOnChange()
+    {
+        PlayerModel pl = new PlayerModel();
+        foreach (var p in GameObject.FindGameObjectsWithTag("Player"))
+        {
+            if (p.GetComponent<PlayerModel>().enabled)
+            {
+                pl = p.GetComponent<PlayerModel>();
+            }
+        }
+        var t = pl.PlayerRole.ToString();
+        identify.text = t;
+    }
 }

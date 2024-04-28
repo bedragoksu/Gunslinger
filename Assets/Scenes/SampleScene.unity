@@ -3574,7 +3574,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &787406949
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8161,6 +8161,7 @@ MonoBehaviour:
   _prc: {fileID: 307276242}
   _cc: {fileID: 348911315}
   _turnInt: 0
+  CharacterDisplayer: {fileID: 907288054}
 --- !u!114 &1671340381
 MonoBehaviour:
   m_ObjectHideFlags: 0
