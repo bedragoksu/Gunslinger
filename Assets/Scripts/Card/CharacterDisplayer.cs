@@ -9,27 +9,14 @@ public class CharacterDisplayer : MonoBehaviour
     public Image characterImage;
     public TextMeshProUGUI identify;
     public Image gunImage;
+    public Image handImage;
     public TextMeshProUGUI range;
-    public Character character;
+    public Image rangeImage;
     public GameObject bullet;
     public int bullets;
-    void Start()
+    void Awake()
     {
-        for (int i = 0; i < bullets; i++)
-        {
-            // Instantiate the prefab as a child of the current object
-            GameObject instantiatedPrefab = Instantiate(bullet, transform.position, Quaternion.identity, transform);
-
-            // Optionally, you can adjust the instantiated prefab's position and rotation relative to the parent
-            // You can modify these adjustments as needed based on your requirements
-            instantiatedPrefab.transform.localPosition = Vector3.zero;
-            instantiatedPrefab.transform.localRotation = Quaternion.identity;
-        }
-
-        characterImage.sprite = character.characterImage;
-        identify.text = character.identify;
-        gunImage.sprite = character.gunImage;
-        range.text = character.range.ToString();
+        bullets = 4;
     }
     public void addBullet()
     {
@@ -37,16 +24,6 @@ public class CharacterDisplayer : MonoBehaviour
 
         instantiatedPrefab.transform.localPosition = Vector3.zero;
         instantiatedPrefab.transform.localRotation = Quaternion.identity;
-    }
-    private void Update()
-    {
-        if (Input.anyKeyDown)
-        {
-            if (Input.GetKeyDown(KeyCode.Z))
-            {
-                addBullet();
-            }
-        }
     }
 
     public void roleOnChange()
@@ -60,6 +37,19 @@ public class CharacterDisplayer : MonoBehaviour
             }
         }
         var t = pl.PlayerRole.ToString();
+        if (t == "Sheriff")
+            bullets++;
+        identify.enabled = true;
         identify.text = t;
+        characterImage.enabled = true;
+        characterImage.sprite = Resources.Load<Sprite>(t);
+        gunImage.enabled = true;
+        gunImage.sprite = Resources.Load<Sprite>("Revolver");
+        handImage.enabled = true;
+        rangeImage.enabled = true;
+        range.enabled = true;
+        range.text = "1";
+        for (int i = 0; i < bullets; i++)
+            addBullet();
     }
 }
