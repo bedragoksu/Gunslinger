@@ -21,6 +21,7 @@ public class GameManager : NetworkBehaviour
     private static event Action<GameState> _onGameStateChanged;
 
     [SerializeField] private PlayerRolesController _prc;
+    [SerializeField] private CardsController _cc;
 
     private GameObject[] _turns;
     [SyncVar] private int _turnInt;
@@ -157,7 +158,9 @@ public class GameManager : NetworkBehaviour
     private IEnumerator InitializationRoutine()
     {
         yield return new WaitUntil(() => _prc.AssignRoles());  // bu fonksiyonu parçala
-        yield return new WaitForSecondsRealtime(1f); // bu bir f hiç olmadý ya :( neyse düzeltcez
+        yield return new WaitForSecondsRealtime(0.5f); // bu bir f hiç olmadý ya :( neyse düzeltcez
+        yield return new WaitUntil(() => _cc.DealCards());
+        yield return new WaitForSecondsRealtime(0.5f);
 
         // who has the turn: ...
         Debug.Log("assign turn int start");

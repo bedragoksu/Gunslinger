@@ -8159,6 +8159,7 @@ MonoBehaviour:
   DeputyNumber: 0
   CurrentGameState: 0
   _prc: {fileID: 307276242}
+  _cc: {fileID: 348911315}
   _turnInt: 0
 --- !u!114 &1671340381
 MonoBehaviour:
