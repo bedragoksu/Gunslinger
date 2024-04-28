@@ -28,6 +28,7 @@ public class GameManager : NetworkBehaviour
 
     private bool _canStart = false;
 
+    public GameObject CharacterDisplayer; // to assign character roles to canvas/life
     private void Start()
     {
         UpdateGameState(GameState.Lobby);
@@ -127,17 +128,7 @@ public class GameManager : NetworkBehaviour
     private void HandleDrawCard()
     {
         ScreenLog.Instance.SendEvent(TextType.Debug, $"DRAW CARD STATE");
-        PlayerModel pl = new PlayerModel();
-        foreach(var p in GameObject.FindGameObjectsWithTag("Player"))
-        {
-            if (p.GetComponent<PlayerModel>().enabled)
-            {
-                pl = p.GetComponent<PlayerModel>();
-            }
-        }
-        var t = pl.PlayerRole.ToString();
-        var tpro = GameObject.Find("role").GetComponent<TMP_Text>();
-        tpro.text = t;
+        CharacterDisplayer.GetComponent<CharacterDisplayer>().roleOnChange();
         StartCoroutine(DrawCardRoutine());
     }
     private IEnumerator DrawCardRoutine()
