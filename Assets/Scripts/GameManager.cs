@@ -17,7 +17,7 @@ public class GameManager : NetworkBehaviour
     [HideInInspector] public int OutlawNumber = 2;
     [HideInInspector] public int DeputyNumber = 0;
 
-    [HideInInspector] public GameState CurrentGameState;
+    [SyncVar] public GameState CurrentGameState; // unnecessary sync?
     private static event Action<GameState> _onGameStateChanged;
 
     [SerializeField] private PlayerRolesController _prc;
@@ -61,15 +61,21 @@ public class GameManager : NetworkBehaviour
         }
     }
 
+    
+    public void DiscardUIButton()
+    {
+        ScreenLog.Instance.SendEvent(TextType.Debug, "discard ui button");
+        AssignStateServer(GameState.DiscardCard);
+    }
+
     private bool b = false;
     private IEnumerator r()
     {
         nextplayer();
-        AssignState(GameState.PlayCard);
         yield return new WaitUntil(() => b);
         yield return new WaitForSeconds(0.5f);
         b = false;
-        AssignState(GameState.DrawCard);
+        AssignStateServer(GameState.DrawCard);
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -86,6 +92,7 @@ public class GameManager : NetworkBehaviour
         _turnInt++;
         _turnInt %= 4;
         ScreenLog.Instance.SendEvent(TextType.Debug, $"_turnInt= {_turnInt}");
+        AssignStateServer(GameState.PlayCard);
     }
 
     public enum GameState
@@ -114,9 +121,11 @@ public class GameManager : NetworkBehaviour
                 HandleDrawCard();
                 break;
             case GameState.PlayCard:
+                ScreenLog.Instance.SendEvent(TextType.Debug, "PLAY CARD STATE");
                 //HandlePlayCard();
                 break;
             case GameState.DiscardCard:
+                ScreenLog.Instance.SendEvent(TextType.Debug, "DISCARD CARD STATE");
                 //HandleDiscardCard();
                 break;
             case GameState.EndOfGame:
@@ -138,7 +147,7 @@ public class GameManager : NetworkBehaviour
         var currentPlayer = _turns[_turnInt];
         var end = GameObject.Find("CardsController").GetComponent<CardsController>().DrawCards(currentPlayer, 2);
         yield return new WaitUntil(() => end);
-        AssignState(GameState.PlayCard);
+        AssignStateServer(GameState.PlayCard);
     } 
     
     private void HandleInitialization()
@@ -160,7 +169,12 @@ public class GameManager : NetworkBehaviour
         yield return new WaitUntil(() => AssignTurns());
         
         //UpdateGameState(GameState.DrawCard);
-        AssignState(GameState.DrawCard);
+        AssignStateServer(GameState.DrawCard);
+    }
+    [ServerRpc(RequireOwnership = false)]
+    public void AssignStateServer(GameState newState)
+    {
+        AssignState(newState);
     }
     [ObserversRpc]
     public void AssignState(GameState newState)
@@ -214,4 +228,6 @@ public class GameManager : NetworkBehaviour
     {
         _turnInt = i;
     }
+
+    
 }
