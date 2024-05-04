@@ -30,6 +30,7 @@ public class GameManager : NetworkBehaviour
     private bool _canStart = false;
 
     public GameObject CharacterDisplayer; // to assign character roles to canvas/life
+    public GameObject CardDisplayer; // to make changes on cards to canvas
     public GameObject CharacterPositionController; // to assign new positions to characters
     private bool _isRoleAssinged = false;
 
@@ -169,6 +170,7 @@ public class GameManager : NetworkBehaviour
         if (!_isRoleAssinged)
         {
             CharacterDisplayer.GetComponent<CharacterDisplayer>().roleOnChange();
+            CardDisplayer.GetComponent<HandDisplay>().handCardOnChange();
             CharacterPositionController.GetComponent<CharacterPositionController>().UpdateCharacterPositions();
             _isRoleAssinged = true; 
         }
