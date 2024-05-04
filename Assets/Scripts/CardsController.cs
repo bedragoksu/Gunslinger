@@ -28,6 +28,7 @@ namespace Gunslinger.Controller
         [ObserversRpc]
         public void DrawCardsServer(GameObject player, int amount)
         {
+            ScreenLog.Instance.SendEvent(TextType.Debug, "DRAWING CARDS");
             for(int i=0; i < amount; i++)
             {
                 var pointer = player.GetComponent<CardManager>().CardOrder[CardPointer];

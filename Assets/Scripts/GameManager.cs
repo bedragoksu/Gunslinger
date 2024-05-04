@@ -151,6 +151,11 @@ public class GameManager : NetworkBehaviour
 
     private void HandlePlayCard()
     {
+        StartCoroutine(PlayRoutine());
+    }
+    private IEnumerator PlayRoutine()
+    {
+        yield return new WaitForSeconds(0.5f);
         ScreenLog.Instance.SendEvent(TextType.Debug, "PLAY CARD STATE");
         ScreenLog.Instance.SendEvent(TextType.Debug, $"turnint: {_turnInt}, {_thisPlayer.GetComponent<PlayerModel>().PlayerID}");
         if (_thisPlayer.GetComponent<PlayerModel>().PlayerID == _turnInt) //true
@@ -179,13 +184,14 @@ public class GameManager : NetworkBehaviour
     }
     private IEnumerator DrawCardRoutine()
     {
+        ScreenLog.Instance.SendEvent(TextType.Debug, $"DRAW CARD ROUTINE");
         var currentPlayer = _turns[_turnInt];
         var end = GameObject.Find("CardsController").GetComponent<CardsController>().DrawCards(currentPlayer, 2);
         yield return new WaitUntil(() => end);
         AssignStateServer(GameState.PlayCard);
     } 
     
-    private void HandleInitialization()
+    private void HandleInitialization() // bir kez cagiriliyor her client icin
     {
         _turns = GameObject.FindGameObjectsWithTag("Player");
         _discardButton = GameObject.Find("discard").GetComponent<Button>();
@@ -204,15 +210,15 @@ public class GameManager : NetworkBehaviour
     {
         yield return new WaitUntil(() => _prc.AssignRoles());  // bu fonksiyonu parçala
         yield return new WaitForSecondsRealtime(0.5f); // bu bir f hiç olmadý ya :( neyse düzeltcez
-        yield return new WaitUntil(() => _cc.DealCards());
-        yield return new WaitForSecondsRealtime(0.5f);
 
         // who has the turn: ...
-        Debug.Log("assign turn int start");
         yield return new WaitUntil(() => AssignTurns());
+        yield return new WaitForSecondsRealtime(0.5f);
+
+        yield return new WaitUntil(() => _cc.DealCards());
         
-        //UpdateGameState(GameState.DrawCard);
-        AssignStateServer(GameState.DrawCard);
+        UpdateGameState(GameState.DrawCard);
+        //AssignStateServer(GameState.DrawCard);
     }
     [ServerRpc(RequireOwnership = false)]
     public void AssignStateServer(GameState newState)
