@@ -6,6 +6,7 @@ using UnityEngine;
 public class HandDisplay : MonoBehaviour
 {
     public GameObject card;
+    public GameObject handPanel;
     public void addCard()
     {
         GameObject instantiatedPrefab = Instantiate(card, transform.position, Quaternion.identity, transform);
@@ -24,9 +25,10 @@ public class HandDisplay : MonoBehaviour
                 pl = p.GetComponent<PlayerModel>();
             }
         }
+        GameObject handPanel = GameObject.Find("HandPanel");
         foreach (var c in pl.openHand)
         {
-          //  c.RectTransform.SetAsLastSibling();
+            c.transform.SetParent(handPanel.transform);
         }
     }
 }
