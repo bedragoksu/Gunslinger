@@ -4,21 +4,26 @@ using UnityEngine;
 
 public class CharacterPositionController : MonoBehaviour
 {
+    [SerializeField] CharacterCanvasController _characterCanvasController;
+    public GameObject[] players;
     public void UpdateCharacterPositions()
     {
-        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        players = GameObject.FindGameObjectsWithTag("Player");
         Transform[] corners = CalculatePolygonCorners(Vector3.zero, players.Length, 5f);
         for (int i = 0; i < players.Length; i++)
         {
             players[i].transform.position = corners[i].position;
-
+            Debug.Log(players[i].GetComponent<PlayerModel>().PlayerName);
             Vector3 direction = (Vector3.zero - players[i].transform.position).normalized;
 
             Quaternion rotation = Quaternion.LookRotation(direction);
 
             players[i].transform.rotation = rotation;
-        }
+        }        
+        _characterCanvasController.UpdateCanvas(players);
     }
+
+
 
     Transform[] CalculatePolygonCorners(Vector3 origin, int numberOfEdges, float radius)
     {
