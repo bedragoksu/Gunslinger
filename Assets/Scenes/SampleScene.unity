@@ -7757,8 +7757,12 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5944478505647257100, guid: c3f7c570566afbc489354b64f1fdba75, type: 3}
+      propertyPath: _scenePathHash
+      value: 584410112
+      objectReference: {fileID: 0}
+    - target: {fileID: 5944478505647257100, guid: c3f7c570566afbc489354b64f1fdba75, type: 3}
       propertyPath: <SceneId>k__BackingField
-      value: 2510022320120871954
+      value: 2510022319636513841
       objectReference: {fileID: 0}
     - target: {fileID: 5944478505647257100, guid: c3f7c570566afbc489354b64f1fdba75, type: 3}
       propertyPath: _networkBehaviours.Array.size
