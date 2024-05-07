@@ -25,7 +25,7 @@ public class GameManager : NetworkBehaviour
     [SerializeField] private CardsController _cc;
 
     private GameObject[] _turns;
-    [SyncVar] private int _turnInt;
+    [SyncVar] private int _turnInt; public int GetTurnInt() { return _turnInt; }
 
     private bool _canStart = false;
 
@@ -180,6 +180,7 @@ public class GameManager : NetworkBehaviour
             Activate(_discardButton);
             // activate the open hands clickable
         }
+        _thisPlayer.GetComponent<PlayerModel>().cardchange();
     }
 
 
@@ -189,11 +190,12 @@ public class GameManager : NetworkBehaviour
         if (!_isRoleAssinged)
         {
             CharacterDisplayer.GetComponent<CharacterDisplayer>().roleOnChange();
-            CardDisplayer.GetComponent<HandDisplay>().handCardOnChange();
             CharacterPositionController.GetComponent<CharacterPositionController>().UpdateCharacterPositions();
-            _isRoleAssinged = true; 
+            _isRoleAssinged = true;
         }
-        
+        //CardDisplayer.GetComponent<HandDisplay>().handCardOnChange();
+
+
         StartCoroutine(DrawCardRoutine());
     }
     private IEnumerator DrawCardRoutine()

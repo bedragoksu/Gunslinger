@@ -17,7 +17,7 @@ public class PlayerModel : NetworkBehaviour
     public bool CanPlayMultipleBangs = false;
     public GunModel gun; // can change
     public CharacterModel character;
-    public List<GameObject> openHand = new List<GameObject>();
+    public List<GameObject> openHand;
     public int position;
 
     [SyncVar] public int magicNum = 0;
@@ -41,6 +41,7 @@ public class PlayerModel : NetworkBehaviour
 
         ScreenLog.Instance.SendEvent(TextType.Debug, $"onstartclienttt: {base.ObjectId}");
         counter= base.ObjectId;
+        openHand = new List<GameObject>();
 
         if (base.IsOwner)
         {
@@ -65,6 +66,17 @@ public class PlayerModel : NetworkBehaviour
         }
 
 
+    }
+
+    public void cardchange()
+    {
+        Debug.Log("CARD CHANGE");
+        GameObject handPanel = GameObject.Find("HandPanel");
+        foreach (var c in openHand)
+        {
+            Debug.Log("foreach");
+            c.transform.SetParent(handPanel.transform);
+        }
     }
 
     private PlayerModel _thisPlayer;
