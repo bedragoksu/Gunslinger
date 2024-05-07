@@ -9,7 +9,7 @@ public class Actions : MonoBehaviour
     {
         PlayerModel targetPlayer = target.GetComponent<PlayerModel>();
 
-        if (CalculateScope(target) >= 0)
+        if (CalculateScope(target) >= 0) // calculate distance instead of 0 // before calling bang action
         {
             targetPlayer.CurrentBulletPoint--;
 
@@ -116,12 +116,7 @@ public class Actions : MonoBehaviour
 
 
     // calculate distance (mustang + scope)
-    // multiple bangs
     // end of the game (player roles)
-
-
-    // in-game states (pull cards -> action -> discard cards)
-    // game states (start -> play -> end)
 
     // actions on the cards...
 }

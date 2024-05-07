@@ -32,15 +32,6 @@ public class CharacterCanvasController : MonoBehaviour
         }
 
     }
-    private void Update()
-    {
-        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-        if (players.Length > 0)
-        {
-            UpdateCanvas(players);
-        }
-
-    }
 
     private void createInstance(string text, Transform _unit, Transform mainCam)
     {
