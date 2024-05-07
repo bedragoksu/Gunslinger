@@ -38,6 +38,8 @@ public class GameManager : NetworkBehaviour
 
     private GameObject _thisPlayer;
 
+    private Camera _camera;
+
     private void Start()
     {
         UpdateGameState(GameState.Lobby);
@@ -62,11 +64,21 @@ public class GameManager : NetworkBehaviour
             {
                 ScreenLog.Instance.SendEvent(TextType.Debug, $"curr state: { CurrentGameState}");
             }
-            else if (Input.GetKeyDown(KeyCode.Tab))
+        }
+
+        if (Input.GetMouseButtonDown(0)) // bang icin lazim
+        {
+            if (_camera)
             {
-                StartCoroutine(r());
+                Vector3 mousePosition = Input.mousePosition;
+                Ray ray = _camera.ScreenPointToRay(mousePosition);
+                if (Physics.Raycast(ray, out RaycastHit hit))
+                {
+                    Debug.Log(hit.collider.gameObject.name);
+                }
             }
         }
+
     }
 
     // butonla alakali kisimlar burada buna script ac.!
@@ -98,8 +110,6 @@ public class GameManager : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     public void nextplayer()
     {
-        //_turnInt = ++_turnInt%4;
-        //ScreenLog.Instance.SendEvent(TextType.Debug, $"_turnInt= {_turnInt}");
         server();
         b = true;
     }
@@ -149,6 +159,12 @@ public class GameManager : NetworkBehaviour
         _onGameStateChanged?.Invoke(newState);
     }
 
+    private void HandleDiscardCard()
+    {
+        ScreenLog.Instance.SendEvent(TextType.Debug, "DISCARD CARD STATE");
+    }
+
+
     private void HandlePlayCard()
     {
         StartCoroutine(PlayRoutine());
@@ -162,13 +178,11 @@ public class GameManager : NetworkBehaviour
         {
             ScreenLog.Instance.SendEvent(TextType.Debug, "activa");
             Activate(_discardButton);
+            // activate the open hands clickable
         }
     }
 
-    private void HandleDiscardCard()
-    {
-        ScreenLog.Instance.SendEvent(TextType.Debug, "DISCARD CARD STATE");
-    }
+
     private void HandleDrawCard()
     {
         ScreenLog.Instance.SendEvent(TextType.Debug, $"DRAW CARD STATE");
@@ -190,6 +204,7 @@ public class GameManager : NetworkBehaviour
         yield return new WaitUntil(() => end);
         AssignStateServer(GameState.PlayCard);
     } 
+
     
     private void HandleInitialization() // bir kez cagiriliyor her client icin
     {
@@ -216,10 +231,21 @@ public class GameManager : NetworkBehaviour
         yield return new WaitForSecondsRealtime(0.5f);
 
         yield return new WaitUntil(() => _cc.DealCards());
+        _camera = Camera.main;
         
         UpdateGameState(GameState.DrawCard);
         //AssignStateServer(GameState.DrawCard);
     }
+    
+
+    private void HandleLobby()
+    {
+        ScreenLog.Instance.SendEvent(TextType.Debug, $"LOBBY STATE");
+        _canStart = true;
+        AssignTurnIndex(0);
+    }
+
+
     [ServerRpc(RequireOwnership = false)]
     public void AssignStateServer(GameState newState)
     {
@@ -229,23 +255,6 @@ public class GameManager : NetworkBehaviour
     public void AssignState(GameState newState)
     {
         UpdateGameState(newState);
-    }
-
-    private void HandleLobby()
-    {
-        ScreenLog.Instance.SendEvent(TextType.Debug, $"LOBBY STATE");
-        //MixTheCards();
-        _canStart = true;
-        AssignTurnIndex(0);
-    }
-
-    private void MixTheCards()
-    {
-        ScreenLog.Instance.SendEvent(TextType.Debug, "Mixing The Cards");
-
-        // mixing process, wait until
-
-        _canStart = true;
     }
 
     private bool AssignTurns()
@@ -260,7 +269,6 @@ public class GameManager : NetworkBehaviour
         }
         return true;
     }
-    
     [ObserversRpc]
     public void AssignTurnIndex(int i)
     {
