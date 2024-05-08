@@ -38,7 +38,7 @@ public class GameManager : NetworkBehaviour
 
     private GameObject _thisPlayer;
 
-    private Camera _camera;
+    
 
     private void Start()
     {
@@ -63,19 +63,6 @@ public class GameManager : NetworkBehaviour
             else if (Input.GetKeyDown(KeyCode.DownArrow))
             {
                 ScreenLog.Instance.SendEvent(TextType.Debug, $"curr state: { CurrentGameState}");
-            }
-        }
-
-        if (Input.GetMouseButtonDown(0)) // bang icin lazim
-        {
-            if (_camera)
-            {
-                Vector3 mousePosition = Input.mousePosition;
-                Ray ray = _camera.ScreenPointToRay(mousePosition);
-                if (Physics.Raycast(ray, out RaycastHit hit))
-                {
-                    Debug.Log(hit.collider.gameObject.name);
-                }
             }
         }
 
@@ -233,7 +220,7 @@ public class GameManager : NetworkBehaviour
         yield return new WaitForSecondsRealtime(0.5f);
 
         yield return new WaitUntil(() => _cc.DealCards());
-        _camera = Camera.main;
+        
         
         UpdateGameState(GameState.DrawCard);
         //AssignStateServer(GameState.DrawCard);
