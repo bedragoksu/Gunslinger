@@ -20,6 +20,8 @@ public class PlayerModel : NetworkBehaviour
     public List<GameObject> openHand;
     public int position;
 
+    public bool clicked = false;
+
     [SyncVar] public int magicNum = 0;
     public void ChangeMagicNum(int num) { 
         magicNum = num; 
