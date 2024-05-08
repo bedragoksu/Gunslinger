@@ -6,7 +6,7 @@ using UnityEngine;
 public class HandDisplay : MonoBehaviour
 {
     public GameObject card;
-    public void addCard()
+    public void AddCard()
     {
         GameObject instantiatedPrefab = Instantiate(card, transform.position, Quaternion.identity, transform);
 
