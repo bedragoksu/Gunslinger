@@ -11,6 +11,8 @@ public class CardSelect : MonoBehaviour
     private GameObject _thisPlayerObject;
     private PlayerModel _thisPlayerModel;
 
+    private GameObject _target;
+
     private Camera _camera;
 
 
@@ -43,6 +45,10 @@ public class CardSelect : MonoBehaviour
                 if (Physics.Raycast(ray, out RaycastHit hit))
                 {
                     Debug.Log(hit.collider.gameObject.name);
+                    if (hit.collider.gameObject.GetComponent<PlayerModel>())
+                    {
+                        _target = hit.collider.gameObject;
+                    }
                 }
             }
         }
@@ -50,6 +56,7 @@ public class CardSelect : MonoBehaviour
         if(_gameManager.GetTurnInt() == _thisPlayerModel.PlayerID && !_thisPlayerModel.clicked)
         {
             this.GetComponent<Button>().interactable = true;
+            _target = null;
         }
         else
         {
@@ -71,10 +78,21 @@ public class CardSelect : MonoBehaviour
         switch (cardName)
         {
             case "Bang":
-                Debug.Log("TIKLANDIIIII");
+                Debug.Log("BANG TIKLANDIIIII");
+                StartCoroutine(BangRoutine());
+                break;
+            case "Missed":
+                Debug.Log("MISSED TIKLANDII");
                 break;
         }
 
 
     }
+
+    private IEnumerator BangRoutine()
+    {
+        yield return new WaitUntil(() => _target != null);
+        Debug.Log($"bang to: {_target.name}");
+    }
+
 }
