@@ -40,6 +40,20 @@ namespace Gunslinger.Controller
             
         }
 
+        [ServerRpc(RequireOwnership =false)]
+        public void DiscardCardsServer(GameObject player, int i)
+        {
+            ScreenLog.Instance.SendEvent(TextType.Debug, "discard card server");
+            DiscardCards(player, i);
+        }
+        [ObserversRpc]
+        public void DiscardCards(GameObject player, int i)
+        {
+            ScreenLog.Instance.SendEvent(TextType.Debug, "discard card observer");
+            var playermodel = player.GetComponent<PlayerModel>();
+            playermodel.openHand.RemoveAt(i);
+        }
+
         public bool DealCards()
         {
             Players = GameObject.FindGameObjectsWithTag("Player");
@@ -96,6 +110,17 @@ namespace Gunslinger.Controller
                 counter++;
             }
             return parent.transform.GetChild(index).gameObject;
+        }
+
+        [ServerRpc(RequireOwnership =false)]
+        public void UpdateHealthServer(PlayerModel player, int amount)
+        {
+            UpdateHealth(player, amount);
+        }
+        [ObserversRpc]
+        public void UpdateHealth(PlayerModel player, int amount)
+        {
+            player.CurrentBulletPoint += amount; // max olup olmadigina bak !! bedra
         }
 
 

@@ -1,32 +1,48 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Gunslinger.Controller;
+using NeptunDigital;
 
 public class Actions : MonoBehaviour
 {
+    public CardsController cardsController;
+
     // Card Actions
-    public void BangAction(GameObject target) // Bang
+    public void BangAction(GameObject player, GameObject target, int playedCard) // Bang
     {
         PlayerModel targetPlayer = target.GetComponent<PlayerModel>();
+        Debug.Log($"target of bang: {targetPlayer.PlayerName}");
 
-        if (CalculateScope(target) >= 0) // calculate distance instead of 0 // before calling bang action
+        if (/*CalculateScope(target) >= 0*/ true) // calculate distance instead of 0 // before calling bang action
         {
-            targetPlayer.CurrentBulletPoint--;
-
-            foreach (var card in targetPlayer.openHand)
+            cardsController.UpdateHealthServer(targetPlayer, -1);
+            var hand = targetPlayer.openHand;
+            for (int i=0; i< hand.Count; i++)
             {
-                if (card.name.StartsWith("Missed")) // Karavana
+                if (hand[i].name.StartsWith("Missed"))
                 {
-                    DiscardCard(card);
+                    DiscardCard(target, i);
                     MissedAction(targetPlayer);
+                    DiscardCard(player, playedCard);
                     return;
                 }
             }
+            //foreach (var card in targetPlayer.openHand)
+            //{
+            //    if (card.name.StartsWith("Missed")) // Karavana
+            //    {
+            //        DiscardCard(target, card);
+            //        MissedAction(targetPlayer);
+            //        return;
+            //    }
+            //}
         }
     }
-    void MissedAction(PlayerModel player) // Karavana
+    void MissedAction(PlayerModel player) // Karavana // also discard card
     {
-        player.CurrentBulletPoint++;
+        cardsController.UpdateHealthServer(player, 1);
+        Debug.Log("target missed");
     }
     void BeerAction() // Bitki çayý
     {
@@ -89,9 +105,10 @@ public class Actions : MonoBehaviour
     {
 
     }
-    public void DiscardCard(GameObject card)
+    public void DiscardCard(GameObject player, int i)
     {
-
+        ScreenLog.Instance.SendEvent(TextType.Debug, "discard card");
+        cardsController.DiscardCardsServer(player, i);
     }
     public void ChangeWeapon(GunModel gun)
     {
