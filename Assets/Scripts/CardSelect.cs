@@ -79,7 +79,7 @@ public class CardSelect : MonoBehaviour
         {
             case "Bang":
                 Debug.Log("BANG TIKLANDIIIII");
-                StartCoroutine(BangRoutine());
+                StartCoroutine("BangRoutine", this.gameObject);
                 break;
             case "Missed":
                 Debug.Log("MISSED TIKLANDII");
@@ -89,10 +89,22 @@ public class CardSelect : MonoBehaviour
 
     }
 
-    private IEnumerator BangRoutine()
+    private IEnumerator BangRoutine(GameObject card)
     {
         yield return new WaitUntil(() => _target != null);
         Debug.Log($"bang to: {_target.name}");
+
+        int index = 0; // check to // bedra
+        var hand = _thisPlayerModel.openHand;
+        for (int i=0;i< hand.Count; i++)
+        {
+            if(hand[i] == card)
+            {
+                index = i;
+                break;
+            }
+        }
+        _actions.BangAction(_thisPlayerObject,_target, index);
     }
 
 }
