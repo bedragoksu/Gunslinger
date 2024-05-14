@@ -44,12 +44,12 @@ public class Actions : MonoBehaviour
         cardsController.UpdateHealthServer(player, 1);
         Debug.Log("target missed");
     }
-    void BeerAction() // Bitki çayý
+    void BeerAction(PlayerModel player) // Bitki çayý
     {
-        GetComponent<PlayerModel>().CurrentBulletPoint++;
-        if (GetComponent<PlayerModel>().CurrentBulletPoint > GetComponent<CharacterModel>().MaxBulletPoint)
+        var maxbullet = (player.PlayerRole == PlayerModel.TypeOfPlayer.Sheriff)? 5 : 4;
+        if (GetComponent<PlayerModel>().CurrentBulletPoint < maxbullet)
         {
-            GetComponent<PlayerModel>().CurrentBulletPoint = GetComponent<CharacterModel>().MaxBulletPoint;
+            cardsController.UpdateHealthServer(player, 1);
         }
     }
     void DrawAction() // Fýçý
@@ -62,11 +62,23 @@ public class Actions : MonoBehaviour
     }
     void SaloonAction() // Kahvehane
     {
-
+        var players = GameObject.FindGameObjectsWithTag("Player");
+        foreach(var pl in players)
+        {
+            cardsController.UpdateHealthServer(pl.GetComponent<PlayerModel>(), 1);
+        }
     }
-    void GatlingAction() // Makineli tüfek
+    void GatlingAction(GameObject player, int playedCard) // Makineli tüfek
     {
+        var players = GameObject.FindGameObjectsWithTag("Player");
 
+        foreach(var pl in players)
+        {
+            if(pl != player)
+            {
+                BangAction(player,pl,playedCard);
+            }
+        }
     }
 
     // General Functions
