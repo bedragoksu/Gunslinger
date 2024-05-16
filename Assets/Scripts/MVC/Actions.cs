@@ -60,13 +60,14 @@ public class Actions : MonoBehaviour
     {
 
     }
-    void SaloonAction() // Kahvehane
+    public void SaloonAction(GameObject player, int playedCard) // Kahvehane
     {
         var players = GameObject.FindGameObjectsWithTag("Player");
         foreach(var pl in players)
         {
             cardsController.UpdateHealthServer(pl.GetComponent<PlayerModel>(), 1);
         }
+        DiscardCard(player, playedCard);
     }
     void GatlingAction(GameObject player, int playedCard) // Makineli tüfek
     {
