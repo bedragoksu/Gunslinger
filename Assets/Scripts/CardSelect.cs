@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -68,7 +69,7 @@ public class CardSelect : MonoBehaviour
         }
 
     }
-    public void OnClick()
+    public void OnClick() // discard islemlerini burada yapabilirsin
     {
         var cardName = this.GetComponent<CardDisplayer>().nameText.text;
         _camera = Camera.main;
@@ -84,6 +85,11 @@ public class CardSelect : MonoBehaviour
             case "Missed":
                 Debug.Log("MISSED TIKLANDII");
                 break;
+            case "Saloon":
+                Debug.Log("KAHVEHNE TIKLANDIII");
+                var index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
+                _actions.SaloonAction(_thisPlayerObject, index);
+                break;
         }
 
 
@@ -94,17 +100,25 @@ public class CardSelect : MonoBehaviour
         yield return new WaitUntil(() => _target != null);
         Debug.Log($"bang to: {_target.name}");
 
-        int index = 0; // check to // bedra
-        var hand = _thisPlayerModel.openHand;
-        for (int i=0;i< hand.Count; i++)
+        int index = FindIndexInOpenHand(_thisPlayerModel, card); // check to // bedra
+        // slm ben züb, ayçayla bilgisayarýnýzý çaldýk. çok eðleniyoruz. pc böyle mi býrakýlýr ajsfasjfgasakj
+        // ehehe salak bilgisayarýnýn þifresi yok???
+        //artýk gelinbizi polise þikayet edecekler
+        
+        _actions.BangAction(_thisPlayerObject,_target, index);
+    }
+
+    private int FindIndexInOpenHand(PlayerModel player, GameObject card)
+    {
+        var hand = player.openHand;
+        for (int i = 0; i < hand.Count; i++)
         {
-            if(hand[i] == card)
+            if (hand[i] == card)
             {
-                index = i;
-                break;
+                return i;
             }
         }
-        _actions.BangAction(_thisPlayerObject,_target, index);
+        return 0;
     }
 
 }

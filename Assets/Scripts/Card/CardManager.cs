@@ -16,7 +16,7 @@ public class CardManager : NetworkBehaviour
     public GameObject[] CardObjects;
     public List<int> CardOrder;
 
-    private int _cardNum = 37;
+    private int _cardNum = 62;
     private int _cardCounter = 0;
     public GameObject[] Players;
 
@@ -51,6 +51,26 @@ public class CardManager : NetworkBehaviour
                         createCards(sampleCard, 25); break;
                     case "Missed":
                         createCards(sampleCard, 12); break;
+                    case "Gatling":
+                        createCards(sampleCard, 1); break;
+                    case "CatBalou":
+                        createCards(sampleCard, 4); break;
+                    case "Panic":
+                        createCards(sampleCard, 4); break;
+                    case "WellsFargo":
+                        createCards(sampleCard, 1); break;
+                    case "Stagecoach":
+                        createCards(sampleCard, 2); break;
+                    case "Saloon":
+                        createCards(sampleCard, 1); break;
+                    case "Beer":
+                        createCards(sampleCard, 6); break;
+                    case "Mustang":
+                        createCards(sampleCard, 2); break;
+                    case "Scope":
+                        createCards(sampleCard, 1); break;
+                    case "Barrel":
+                        createCards(sampleCard, 2); break;
 
                 }
             }
