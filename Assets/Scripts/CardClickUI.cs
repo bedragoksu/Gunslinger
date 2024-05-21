@@ -6,9 +6,15 @@ public class CardClickUI : MonoBehaviour
 {
     public GameObject selectedCard;
 
+    private AudioSource audioSource;
 
+    private void Start()
+    {
+        audioSource = GetComponent<AudioSource>();        
+    }
     public void OnSelectCard(GameObject card)
     {
+        audioSource.Play();
         if (selectedCard != null && selectedCard != card)
         {
             CardUIManager cardUIManager = selectedCard.GetComponent<CardUIManager>();
