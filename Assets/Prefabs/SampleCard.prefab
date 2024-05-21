@@ -554,6 +554,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e671104b43f40334d8e67d1840a5d8e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hoverScale: {x: 1.2, y: 1.2, z: 1.2}
+  scaleDuration: 0.2
 --- !u!1 &5349520711386902839
 GameObject:
   m_ObjectHideFlags: 0
