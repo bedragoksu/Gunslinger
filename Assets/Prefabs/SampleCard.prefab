@@ -555,7 +555,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hoverScale: {x: 1.2, y: 1.2, z: 1.2}
-  scaleDuration: 0.2
+  duration: 0.2
+  isSelected: 0
 --- !u!1 &5349520711386902839
 GameObject:
   m_ObjectHideFlags: 0
