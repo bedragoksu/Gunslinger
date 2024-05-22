@@ -52,13 +52,26 @@ namespace Gunslinger.Controller
         {
             ScreenLog.Instance.SendEvent(TextType.Debug, "discard card observer");
             var playermodel = player.GetComponent<PlayerModel>();
+
+            if(player == gameManager._thisPlayer)
+            {
+                foreach (Transform c in GameObject.Find("HandPanel").transform)
+                {
+                    c.SetParent(GameObject.Find("DeckPanel").transform);
+                }
+            }
+
             playermodel.openHand.RemoveAt(i);
 
-            if(gameManager._thisPlayer == player)
+            if (player == gameManager._thisPlayer)
             {
-                var c = GameObject.Find("HandPanel").transform.GetChild(i-1);
-                c.SetParent(GameObject.Find("DeckPanel").transform);
+                foreach (var c in gameManager._thisPlayer.GetComponent<PlayerModel>().openHand)
+                {
+                    Debug.Log("foreach");
+                    c.transform.SetParent(GameObject.Find("HandPanel").transform);
+                }
             }
+            
             
             discard = true;
         }
