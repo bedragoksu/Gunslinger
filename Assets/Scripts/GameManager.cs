@@ -36,7 +36,7 @@ public class GameManager : NetworkBehaviour
 
     private Button _discardButton;
 
-    private GameObject _thisPlayer;
+    public GameObject _thisPlayer;
 
     
 
