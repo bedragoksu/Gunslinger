@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Gunslinger.Controller;
 using NeptunDigital;
+using System;
 
 public class Actions : MonoBehaviour
 {
@@ -24,10 +25,10 @@ public class Actions : MonoBehaviour
                 {
                     DiscardCard(target, i);
                     MissedAction(targetPlayer);
-                    DiscardCard(player, playedCard);
-                    return;
+                    break;
                 }
             }
+            DiscardCard(player, playedCard);
             //foreach (var card in targetPlayer.openHand)
             //{
             //    if (card.name.StartsWith("Missed")) // Karavana
@@ -44,13 +45,14 @@ public class Actions : MonoBehaviour
         cardsController.UpdateHealthServer(player, 1);
         Debug.Log("target missed");
     }
-    void BeerAction(PlayerModel player) // Bitki çayý
+    public void BeerAction(PlayerModel player, int playedCard) // Bitki çayý
     {
         var maxbullet = (player.PlayerRole == PlayerModel.TypeOfPlayer.Sheriff)? 5 : 4;
         if (GetComponent<PlayerModel>().CurrentBulletPoint < maxbullet)
         {
             cardsController.UpdateHealthServer(player, 1);
         }
+        DiscardCard(player.gameObject, playedCard);
     }
     void DrawAction() // Fýçý
     {
@@ -121,7 +123,19 @@ public class Actions : MonoBehaviour
     public void DiscardCard(GameObject player, int i)
     {
         ScreenLog.Instance.SendEvent(TextType.Debug, "discard card");
+        StartCoroutine("DiscardCardRoutine", Tuple.Create(player, i));
+        
+    }
+
+    IEnumerator DiscardCardRoutine(Tuple<GameObject, int> tuple)
+    {
+        var player = tuple.Item1;
+        var i = tuple.Item2;
         cardsController.DiscardCardsServer(player, i);
+        yield return new WaitUntil(() => cardsController.discard);
+        yield return new WaitForSeconds(1f);
+        player.GetComponent<PlayerModel>().cardchange(false);
+        cardsController.discard = false;
     }
     public void ChangeWeapon(GunModel gun)
     {

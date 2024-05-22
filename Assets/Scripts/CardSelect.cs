@@ -75,6 +75,7 @@ public class CardSelect : MonoBehaviour
         _camera = Camera.main;
         //Debug.Log(cardName);
         _thisPlayerModel.clicked = true;
+        int index = 0;
 
         switch (cardName)
         {
@@ -87,11 +88,16 @@ public class CardSelect : MonoBehaviour
                 break;
             case "Saloon":
                 Debug.Log("KAHVEHNE TIKLANDIII");
-                var index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
+                index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
                 _actions.SaloonAction(_thisPlayerObject, index);
                 break;
-        }
+            case "Beer":
+                Debug.Log("BEER KARTI TIKLANDI");
+                index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
+                _actions.BeerAction(_thisPlayerModel, index);
+                break;
 
+        }
 
     }
 
