@@ -167,7 +167,7 @@ public class GameManager : NetworkBehaviour
             Activate(_discardButton);
             // activate the open hands clickable
         }
-        _thisPlayer.GetComponent<PlayerModel>().cardchange();
+        _thisPlayer.GetComponent<PlayerModel>().cardchange(true);
     }
 
 

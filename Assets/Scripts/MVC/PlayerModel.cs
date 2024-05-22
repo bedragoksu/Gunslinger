@@ -70,14 +70,27 @@ public class PlayerModel : NetworkBehaviour
 
     }
 
-    public void cardchange()
+    public void cardchange(bool b)
     {
         Debug.Log("CARD CHANGE");
         GameObject handPanel = GameObject.Find("HandPanel");
-        foreach (var c in openHand)
+        GameObject deckPanel = GameObject.Find("DeckPanel");
+
+        Transform handPanelTransform = handPanel.transform;
+        Transform deckPanelTransform = deckPanel.transform;
+
+        foreach (Transform c in handPanelTransform)
         {
-            Debug.Log("foreach");
-            c.transform.SetParent(handPanel.transform);
+            c.SetParent(deckPanelTransform);
+        }
+
+        if (b)
+        {
+            foreach (var c in openHand)
+            {
+                Debug.Log("foreach");
+                c.transform.SetParent(handPanelTransform);
+            }
         }
     }
 

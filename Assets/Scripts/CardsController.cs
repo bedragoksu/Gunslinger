@@ -40,6 +40,7 @@ namespace Gunslinger.Controller
             
         }
 
+        [HideInInspector] public bool discard = false; 
         [ServerRpc(RequireOwnership =false)]
         public void DiscardCardsServer(GameObject player, int i)
         {
@@ -52,6 +53,7 @@ namespace Gunslinger.Controller
             ScreenLog.Instance.SendEvent(TextType.Debug, "discard card observer");
             var playermodel = player.GetComponent<PlayerModel>();
             playermodel.openHand.RemoveAt(i);
+            discard = true;
         }
 
         public bool DealCards()
