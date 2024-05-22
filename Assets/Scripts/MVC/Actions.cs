@@ -28,7 +28,7 @@ public class Actions : MonoBehaviour
                     break;
                 }
             }
-            DiscardCard(player, playedCard);
+            
             //foreach (var card in targetPlayer.openHand)
             //{
             //    if (card.name.StartsWith("Missed")) // Karavana
@@ -54,6 +54,23 @@ public class Actions : MonoBehaviour
         }
         DiscardCard(player.gameObject, playedCard);
     }
+
+    public void WellsFargoAction(PlayerModel player, int playedCard)
+    {
+        var end = GameObject.Find("CardsController").GetComponent<CardsController>().DrawCards(player.gameObject, 3);
+        DiscardCard(player.gameObject, playedCard);
+    }
+    public void StagecoachAction(PlayerModel player, int playedCard)
+    {
+        var end = GameObject.Find("CardsController").GetComponent<CardsController>().DrawCards(player.gameObject, 2);
+        DiscardCard(player.gameObject, playedCard);
+    }
+
+    public void CatBalouAction() // Emrivaki
+    {
+
+    }
+
     void DrawAction() // Fýçý
     {
 
@@ -71,7 +88,7 @@ public class Actions : MonoBehaviour
         }
         DiscardCard(player, playedCard);
     }
-    void GatlingAction(GameObject player, int playedCard) // Makineli tüfek
+    public void GatlingAction(GameObject player, int playedCard) // Makineli tüfek
     {
         var players = GameObject.FindGameObjectsWithTag("Player");
 
@@ -82,6 +99,7 @@ public class Actions : MonoBehaviour
                 BangAction(player,pl,playedCard);
             }
         }
+        DiscardCard(player, playedCard);
     }
 
     // General Functions

@@ -96,6 +96,21 @@ public class CardSelect : MonoBehaviour
                 index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
                 _actions.BeerAction(_thisPlayerModel, index);
                 break;
+            case "Wells Fargo":
+                Debug.Log("WELLS FARGO TIKLANDII");
+                index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
+                _actions.WellsFargoAction(_thisPlayerModel, index);
+                break;
+            case "Stage coach":
+                Debug.Log("WELLS FARGO TIKLANDII");
+                index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
+                _actions.StagecoachAction(_thisPlayerModel, index);
+                break;
+            case "Gatling":
+                Debug.Log("WELLS FARGO TIKLANDII");
+                index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
+                _actions.GatlingAction(_thisPlayerObject, index);
+                break;
 
         }
 
@@ -112,6 +127,7 @@ public class CardSelect : MonoBehaviour
         //artýk gelinbizi polise þikayet edecekler
         
         _actions.BangAction(_thisPlayerObject,_target, index);
+        _actions.DiscardCard(_thisPlayerObject, index);
     }
 
     private int FindIndexInOpenHand(PlayerModel player, GameObject card)

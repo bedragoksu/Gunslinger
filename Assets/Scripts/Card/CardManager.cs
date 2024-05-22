@@ -47,29 +47,29 @@ public class CardManager : NetworkBehaviour
                 GameObject sampleCard = createSampleCard(card);
                 switch (card.cardName)
                 {
-                    case "Bang":
-                        createCards(sampleCard, 25); break;
-                    case "Missed":
+                    case "Bang": // ok
+                        createCards(sampleCard, 5); break;
+                    case "Missed": // ok
                         createCards(sampleCard, 12); break;
-                    case "Gatling":
-                        createCards(sampleCard, 1); break;
-                    case "CatBalou":
+                    case "Gatling": // ok
+                        createCards(sampleCard, 21); break;
+                    case "Cat Balou": // tt
                         createCards(sampleCard, 4); break;
-                    case "Panic":
+                    case "Panic": // tt
                         createCards(sampleCard, 4); break;
-                    case "WellsFargo":
+                    case "Wells Fargo": // ok
                         createCards(sampleCard, 1); break;
-                    case "Stagecoach":
+                    case "Stage coach": // ok
                         createCards(sampleCard, 2); break;
-                    case "Saloon":
+                    case "Saloon": // ok
                         createCards(sampleCard, 1); break;
-                    case "Beer":
+                    case "Beer": // ok
                         createCards(sampleCard, 6); break;
-                    case "Mustang":
+                    case "Mustang": // tt // onune ac
                         createCards(sampleCard, 2); break;
-                    case "Scope":
+                    case "Scope": // tt
                         createCards(sampleCard, 1); break;
-                    case "Barrel":
+                    case "Barrel": // tt
                         createCards(sampleCard, 2); break;
 
                 }
