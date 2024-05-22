@@ -48,11 +48,11 @@ public class CardManager : NetworkBehaviour
                 switch (card.cardName)
                 {
                     case "Bang": // ok
-                        createCards(sampleCard, 5); break;
+                        createCards(sampleCard, 25); break;
                     case "Missed": // ok
                         createCards(sampleCard, 12); break;
                     case "Gatling": // ok
-                        createCards(sampleCard, 21); break;
+                        createCards(sampleCard, 1); break;
                     case "Cat Balou": // tt
                         createCards(sampleCard, 4); break;
                     case "Panic": // tt
