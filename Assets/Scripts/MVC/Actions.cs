@@ -132,9 +132,11 @@ public class Actions : MonoBehaviour
         var player = tuple.Item1;
         var i = tuple.Item2;
         cardsController.DiscardCardsServer(player, i);
+        //var c = GameObject.Find("HandPanel").transform.GetChild(i);
+        //c.SetParent(GameObject.Find("DeckPanel").transform);
         yield return new WaitUntil(() => cardsController.discard);
         yield return new WaitForSeconds(1f);
-        player.GetComponent<PlayerModel>().cardchange(false);
+        //player.GetComponent<PlayerModel>().cardchange(true);
         cardsController.discard = false;
     }
     public void ChangeWeapon(GunModel gun)
