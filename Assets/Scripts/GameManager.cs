@@ -69,16 +69,36 @@ public class GameManager : NetworkBehaviour
     }
 
     // butonla alakali kisimlar burada buna script ac.!
-    public void DiscardUIButton()
+    public void DiscardUIButton(GameObject ButtonsObj)
     {
         ScreenLog.Instance.SendEvent(TextType.Debug, "discard ui button");
+
+        Button[] buttons = ButtonsObj.GetComponentsInChildren<Button>();
+        buttons[0].interactable = false;
+
+        var pl = _thisPlayer.GetComponent<PlayerModel>();
+        if (pl.openHand.Count <= pl.CurrentBulletPoint)
+        {
+            buttons[1].interactable = true;
+        }
+        
         AssignStateServer(GameState.DiscardCard);
     }
     public void NextUIButton()
     {
         ScreenLog.Instance.SendEvent(TextType.Debug, "next ui button");
         StartCoroutine(r());
+
         AssignStateServer(GameState.DrawCard);
+    }
+    public void ActivateNextButton()
+    {
+        var pl = _thisPlayer.GetComponent<PlayerModel>();
+        if (pl.openHand.Count <= pl.CurrentBulletPoint)
+        {
+            Button[] buttons = GameObject.Find("Buttons").GetComponentsInChildren<Button>();
+            buttons[1].interactable = true;
+        }
     }
     public void Activate(Button button)
     {
@@ -104,7 +124,7 @@ public class GameManager : NetworkBehaviour
     public void server()
     {
         _turnInt++;
-        _turnInt %= 4;
+        _turnInt %= _turns.Length; // 4
         ScreenLog.Instance.SendEvent(TextType.Debug, $"_turnInt= {_turnInt}");
     }
 

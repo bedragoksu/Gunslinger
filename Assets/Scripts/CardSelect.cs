@@ -10,7 +10,7 @@ public class CardSelect : MonoBehaviour
     private GameManager _gameManager;
 
     private GameObject _thisPlayerObject;
-    private PlayerModel _thisPlayerModel;
+    [HideInInspector]public PlayerModel _thisPlayerModel; //private bedra
 
     private GameObject _target;
 
@@ -77,40 +77,50 @@ public class CardSelect : MonoBehaviour
         _thisPlayerModel.clicked = true;
         int index = 0;
 
-        switch (cardName)
+        if(_gameManager.CurrentGameState == GameManager.GameState.PlayCard)
         {
-            case "Bang":
-                Debug.Log("BANG TIKLANDIIIII");
-                StartCoroutine("BangRoutine", this.gameObject);
-                break;
-            case "Missed":
-                Debug.Log("MISSED TIKLANDII");
-                break;
-            case "Saloon":
-                Debug.Log("KAHVEHNE TIKLANDIII");
-                index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
-                _actions.SaloonAction(_thisPlayerObject, index);
-                break;
-            case "Beer":
-                Debug.Log("BEER KARTI TIKLANDI");
-                index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
-                _actions.BeerAction(_thisPlayerModel, index);
-                break;
-            case "Wells Fargo":
-                Debug.Log("WELLS FARGO TIKLANDII");
-                index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
-                _actions.WellsFargoAction(_thisPlayerModel, index);
-                break;
-            case "Stage coach":
-                Debug.Log("WELLS FARGO TIKLANDII");
-                index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
-                _actions.StagecoachAction(_thisPlayerModel, index);
-                break;
-            case "Gatling":
-                Debug.Log("WELLS FARGO TIKLANDII");
-                index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
-                _actions.GatlingAction(_thisPlayerObject, index);
-                break;
+            switch (cardName)
+            {
+                case "Bang":
+                    Debug.Log("BANG TIKLANDIIIII");
+                    StartCoroutine("BangRoutine", this.gameObject);
+                    break;
+                case "Missed":
+                    Debug.Log("MISSED TIKLANDII");
+                    break;
+                case "Saloon":
+                    Debug.Log("KAHVEHNE TIKLANDIII");
+                    index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
+                    _actions.SaloonAction(_thisPlayerObject, index);
+                    break;
+                case "Beer":
+                    Debug.Log("BEER KARTI TIKLANDI");
+                    index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
+                    _actions.BeerAction(_thisPlayerModel, index);
+                    break;
+                case "Wells Fargo":
+                    Debug.Log("WELLS FARGO TIKLANDII");
+                    index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
+                    _actions.WellsFargoAction(_thisPlayerModel, index);
+                    break;
+                case "Stage coach":
+                    Debug.Log("WELLS FARGO TIKLANDII");
+                    index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
+                    _actions.StagecoachAction(_thisPlayerModel, index);
+                    break;
+                case "Gatling":
+                    Debug.Log("WELLS FARGO TIKLANDII");
+                    index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
+                    _actions.GatlingAction(_thisPlayerObject, index);
+                    break;
+
+            }
+        }
+        if (_gameManager.CurrentGameState == GameManager.GameState.DiscardCard)
+        {
+            index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
+            _actions.DiscardCard(_thisPlayerObject, index);
+            _gameManager.ActivateNextButton();
 
         }
 
@@ -127,6 +137,7 @@ public class CardSelect : MonoBehaviour
         //artýk gelinbizi polise þikayet edecekler
         
         _actions.BangAction(_thisPlayerObject,_target, index);
+        yield return new WaitForSeconds(0.3f);
         _actions.DiscardCard(_thisPlayerObject, index);
     }
 
