@@ -4,6 +4,7 @@ using UnityEngine;
 using Gunslinger.Controller;
 using NeptunDigital;
 using System;
+using UnityEngine.UI;
 
 public class Actions : MonoBehaviour
 {
@@ -142,7 +143,11 @@ public class Actions : MonoBehaviour
     {
         ScreenLog.Instance.SendEvent(TextType.Debug, "discard card");
         StartCoroutine("DiscardCardRoutine", Tuple.Create(player, i));
-        
+
+
+        GameObject.Find("GameManager").GetComponent<GameManager>()._thisPlayer.GetComponent<PlayerModel>().clicked = false; // yuh bedra
+
+
     }
 
     IEnumerator DiscardCardRoutine(Tuple<GameObject, int> tuple)
