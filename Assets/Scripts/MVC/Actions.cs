@@ -5,6 +5,7 @@ using Gunslinger.Controller;
 using NeptunDigital;
 using System;
 using UnityEngine.UI;
+using System.Xml.Linq;
 
 public class Actions : MonoBehaviour
 {
@@ -146,7 +147,7 @@ public class Actions : MonoBehaviour
 
 
         GameObject.Find("GameManager").GetComponent<GameManager>()._thisPlayer.GetComponent<PlayerModel>().clicked = false; // yuh bedra
-
+        GameObject.Find("GameManager").GetComponent<GameManager>().PlayerInfoStack.GetComponent<PlayerInfoControllerUI>().UpdateStackCanvas();
 
     }
 

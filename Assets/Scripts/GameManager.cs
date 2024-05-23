@@ -189,6 +189,7 @@ public class GameManager : NetworkBehaviour
             // activate the open hands clickable
         }
         _thisPlayer.GetComponent<PlayerModel>().cardchange(true);
+        PlayerInfoStack.GetComponent<PlayerInfoControllerUI>().UpdateStackCanvas();
     }
 
 
@@ -199,13 +200,13 @@ public class GameManager : NetworkBehaviour
         {
             CharacterDisplayer.GetComponent<CharacterDisplayer>().roleOnChange();
             CharacterPositionController.GetComponent<CharacterPositionController>().UpdateCharacterPositions();
+            PlayerInfoStack.GetComponent<PlayerInfoControllerUI>().InitializeStackCanvas();
             _isRoleAssinged = true;
         }
         //CardDisplayer.GetComponent<HandDisplay>().handCardOnChange();
 
 
         StartCoroutine(DrawCardRoutine());
-        PlayerInfoStack.GetComponent<PlayerInfoControllerUI>().UpdateStackCanvas();
     }
     private IEnumerator DrawCardRoutine()
     {
@@ -229,7 +230,6 @@ public class GameManager : NetworkBehaviour
                 _thisPlayer = pl;
             }
         }
-        PlayerInfoStack.GetComponent<PlayerInfoControllerUI>().InitializeStackCanvas();
         StartCoroutine(InitializationRoutine());
     }
     private IEnumerator InitializationRoutine()

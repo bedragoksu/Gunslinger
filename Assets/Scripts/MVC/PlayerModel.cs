@@ -82,6 +82,7 @@ public class PlayerModel : NetworkBehaviour
         foreach (Transform c in handPanelTransform)
         {
             c.SetParent(deckPanelTransform);
+            c.gameObject.SetActive(false);
         }
 
         if (b)
@@ -89,6 +90,7 @@ public class PlayerModel : NetworkBehaviour
             foreach (var c in openHand)
             {
                 Debug.Log("foreach");
+                c.gameObject.SetActive(true);
                 c.transform.SetParent(handPanelTransform);
             }
         }
