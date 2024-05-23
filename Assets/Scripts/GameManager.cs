@@ -32,6 +32,7 @@ public class GameManager : NetworkBehaviour
     public GameObject CharacterDisplayer; // to assign character roles to canvas/life
     public GameObject CardDisplayer; // to make changes on cards to canvas
     public GameObject CharacterPositionController; // to assign new positions to characters
+    public GameObject PlayerInfoStack; // to initialize stack ui
     private bool _isRoleAssinged = false;
 
     private Button _discardButton;
@@ -184,6 +185,7 @@ public class GameManager : NetworkBehaviour
 
 
         StartCoroutine(DrawCardRoutine());
+        PlayerInfoStack.GetComponent<PlayerInfoControllerUI>().UpdateStackCanvas();
     }
     private IEnumerator DrawCardRoutine()
     {
@@ -207,7 +209,7 @@ public class GameManager : NetworkBehaviour
                 _thisPlayer = pl;
             }
         }
-
+        PlayerInfoStack.GetComponent<PlayerInfoControllerUI>().InitializeStackCanvas();
         StartCoroutine(InitializationRoutine());
     }
     private IEnumerator InitializationRoutine()
