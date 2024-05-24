@@ -3,6 +3,8 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 using DG.Tweening;
+using static UnityEngine.GraphicsBuffer;
+using System;
 
 public class CardUIManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
@@ -16,6 +18,11 @@ public class CardUIManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     // Original scale
     private Vector3 originalScale;
+
+    private GameManager _gameManager;
+    private GameObject[] _players;
+    private GameObject _thisPlayer;
+    private int _thisPlayerIndex;
 
     private void Start()
     {
@@ -46,16 +53,16 @@ public class CardUIManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     }
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (!isSelected) { 
-        GameObject parent = transform.parent.gameObject;
-        if (parent != null && parent.name == "HandPanel")
-        {
-            parent.GetComponent<CardClickUI>().OnSelectCard(gameObject);
-        }
+        if (isCurrentPlayer() && !isSelected) { 
+            GameObject parent = transform.parent.gameObject;
+            if (parent != null && parent.name == "HandPanel")
+            {
+                parent.GetComponent<CardClickUI>().OnSelectCard(gameObject);
+            }
         }
     }
 
-        public void ToHoverScale()
+    public void ToHoverScale()
     {
         transform.DOScale(hoverScale, duration);
     }
@@ -95,5 +102,19 @@ public class CardUIManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         {
             backgroundImage.DOColor(Color.white, duration);
         }
+    }
+
+    private bool isCurrentPlayer()
+    {
+        if (_players == null)
+        {
+            _players = GameObject.FindGameObjectsWithTag("Player");
+            _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+            _thisPlayer = _gameManager._thisPlayer;
+            _thisPlayerIndex = Array.IndexOf(_players, _thisPlayer);
+        }
+        Debug.Log(_thisPlayerIndex);
+        Debug.Log(_gameManager.GetTurnInt());
+        return _thisPlayerIndex == _gameManager.GetTurnInt();
     }
 }
