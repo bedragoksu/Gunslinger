@@ -40,4 +40,25 @@ public class CardClickUI : MonoBehaviour
         selectedCard = card;
 
     }
+
+    public void makeAllOfTheCardsGray()
+    {
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            GameObject child = transform.GetChild(i).gameObject;
+            CardUIManager cardUIManager = child.GetComponent<CardUIManager>();
+
+            cardUIManager.ToGray();
+        }
+    }
+    public void makeAllOfTheCardsWhite()
+    {
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            GameObject child = transform.GetChild(i).gameObject;
+            CardUIManager cardUIManager = child.GetComponent<CardUIManager>();
+
+            cardUIManager.ToWhite();
+        }
+    }
 }
