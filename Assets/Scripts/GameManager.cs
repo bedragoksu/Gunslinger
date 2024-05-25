@@ -97,7 +97,7 @@ public class GameManager : NetworkBehaviour
     public void ActivateNextButton()
     {
         var pl = _thisPlayer.GetComponent<PlayerModel>();
-        if (pl.openHand.Count <= pl.CurrentBulletPoint)
+        if (pl.openHand.Count == pl.CurrentBulletPoint+1)
         {
             Button[] buttons = GameObject.Find("Buttons").GetComponentsInChildren<Button>();
             buttons[1].interactable = true;

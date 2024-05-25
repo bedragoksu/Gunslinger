@@ -114,6 +114,27 @@ namespace Gunslinger.Controller
                 }
             }
 
+            var stack = GameObject.Find("PlayerInfoStack").transform;
+            foreach(Transform info in stack)
+            {
+                if(info.gameObject.name == playermodel.PlayerName)
+                {
+                    if (o.name.StartsWith("Mustang"))
+                    {
+                        var m = info.Find("Mustang").gameObject;
+                        m.SetActive(true);
+                        Debug.Log(m.activeSelf);
+                    }
+                    else if (o.name.StartsWith("Scope"))
+                    {
+                        info.Find("Scope").gameObject.SetActive(true);
+                    }
+                    else if (o.name.StartsWith("Barrel"))
+                    {
+                        info.Find("Barrel").gameObject.SetActive(true);
+                    }
+                }
+            }
 
             move = true;
         }
