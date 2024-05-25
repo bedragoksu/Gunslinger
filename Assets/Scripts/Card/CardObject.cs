@@ -90,13 +90,13 @@ public class CardObject : MonoBehaviour
                 card.cardName = cardName;
                 card.picture = _cardSprites[1];
                 card.background = _backgroundSprites[_backgroundIndex];
-                card.symbol = _symbolSprites[0];
+                card.symbol = _symbolSprites[3];
                 break;
             case "gatling":
                 card.cardName = cardName;
                 card.picture = _cardSprites[2];
                 card.background = _backgroundSprites[_backgroundIndex];
-                card.symbol = _symbolSprites[0];
+                card.symbol = _symbolSprites[2];
                 break;
             case "cat balou":
                 card.cardName = cardName;
@@ -108,49 +108,49 @@ public class CardObject : MonoBehaviour
                 card.cardName = cardName;
                 card.picture = _cardSprites[4];
                 card.background = _backgroundSprites[_backgroundIndex];
-                card.symbol = _symbolSprites[0];
+                card.symbol = _symbolSprites[2];
                 break;
             case "wells fargo":
                 card.cardName = cardName;
                 card.picture = _cardSprites[5];
                 card.background = _backgroundSprites[_backgroundIndex];
-                card.symbol = _symbolSprites[0];
+                card.symbol = _symbolSprites[2];
                 break;
             case "stage coach":
                 card.cardName = cardName;
                 card.picture = _cardSprites[6];
                 card.background = _backgroundSprites[_backgroundIndex];
-                card.symbol = _symbolSprites[0];
+                card.symbol = _symbolSprites[3];
                 break;
             case "saloon":
                 card.cardName = cardName;
                 card.picture = _cardSprites[7];
                 card.background = _backgroundSprites[_backgroundIndex];
-                card.symbol = _symbolSprites[0];
+                card.symbol = _symbolSprites[2];
                 break;
             case "beer":
                 card.cardName = cardName;
                 card.picture = _cardSprites[8];
                 card.background = _backgroundSprites[_backgroundIndex];
-                card.symbol = _symbolSprites[0];
+                card.symbol = _symbolSprites[2];
                 break;
             case "mustang":
                 card.cardName = cardName;
                 card.picture = _cardSprites[9];
                 card.background = _backgroundSprites[_backgroundIndex];
-                card.symbol = _symbolSprites[0];
+                card.symbol = _symbolSprites[2];
                 break;
             case "scope":
                 card.cardName = cardName;
                 card.picture = _cardSprites[10];
                 card.background = _backgroundSprites[_backgroundIndex];
-                card.symbol = _symbolSprites[0];
+                card.symbol = _symbolSprites[3];
                 break;
             case "barrel":
                 card.cardName = cardName;
                 card.picture = _cardSprites[11];
                 card.background = _backgroundSprites[_backgroundIndex];
-                card.symbol = _symbolSprites[0];
+                card.symbol = _symbolSprites[3];
                 break;
 
         }

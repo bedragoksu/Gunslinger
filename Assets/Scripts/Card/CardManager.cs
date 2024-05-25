@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using FishNet.Object;
 using UnityEngine;
+using UnityEngine.UI;
 using FishNet.Managing;
 using Gunslinger.Controller;
 using System.CodeDom.Compiler;
@@ -19,18 +20,26 @@ public class CardManager : NetworkBehaviour
     private int _cardNum = 62;
     private int _cardCounter = 0;
     public GameObject[] Players;
-
+    private Sprite[] _symbolSprites;
+    private int _symbolCount = 0;
     private void Start()
     {
         // sampleCardObject = GameObject.Find("SampleCard");
         //_parentObject = GameObject.Find("DeckPanel");
         //Cards = GameObject.Find("CardManager").GetComponent<CardObject>().cards;
-
+        
     }
 
     public override void OnStartClient()
     {
         base.OnStartClient();
+        _symbolSprites = new Sprite[]
+                {
+                    Resources.Load<Sprite>("diamonds"), // karo
+                    Resources.Load<Sprite>("clubs"), // sinek
+                    Resources.Load<Sprite>("hearts"), // kupa
+                    Resources.Load<Sprite>("spades"), // maça
+                };
         //if (!base.IsOwner)
         //{
         //    gameObject.GetComponent<CardManager>().enabled = false;
@@ -73,8 +82,9 @@ public class CardManager : NetworkBehaviour
                         createCards(sampleCard, 2); break;
 
                 }
+                _symbolCount = 0;
             }
-
+            
             CardOrder = ShuffleList(CardOrder);
         }
         //if (IsOwner && !IsServer)
@@ -109,18 +119,64 @@ public class CardManager : NetworkBehaviour
     {
         string cardname = sampleCard.name;
         sampleCard.name += "_1";
-
+        
         for (int i = 1; i < numberOfCards; i++)
         {
             //GameObject newCard = Instantiate(sampleCard, parentTransform); // Ebeveyni belirt
             GameObject newCard = Instantiate(sampleCard, _parentObject.transform);
 
             newCard.name = cardname + "_" + (i + 1);
-
+            AssignSymbol(newCard, i);
             CardOrder.Add(_cardCounter);
             CardObjects[_cardCounter++] = newCard;
         }
+        AssignSymbol(sampleCard, 0);
 
+    }
+    private void AssignSymbol(GameObject card, int num)
+    {
+        GameObject symbol = card.transform.Find("Symbol").gameObject;
+        Image symbolImage = symbol.GetComponent<Image>();
+        //Resources.Load<Sprite>("diamonds"), // karo
+        //    Resources.Load<Sprite>("clubs"), // sinek
+        //    Resources.Load<Sprite>("hearts"), // kupa
+        //    Resources.Load<Sprite>("spades"), // maça
+        if (card.name.StartsWith("Missed"))
+        {
+            if (num == 0 || num == 1)
+            {
+                symbolImage.sprite = _symbolSprites[1];
+            }
+        }
+        else if (card.name.StartsWith("Panic"))
+        {
+            if (num == 0)
+            {
+                symbolImage.sprite = _symbolSprites[0];
+            }
+        }
+        else if (card.name.StartsWith("Cat"))
+        {
+            if (num == 0)
+            {
+                symbolImage.sprite = _symbolSprites[2];
+            }
+        }
+        else if (card.name.StartsWith("Bang"))
+        {
+            if (num == 0)
+            {
+                symbolImage.sprite = _symbolSprites[3];
+            }
+            else if (num == 1 || num == 2 || num == 3 || num == 4 || num == 5 || num == 6 || num == 7 || num == 8)
+            {
+                symbolImage.sprite = _symbolSprites[1];
+            }
+            else if (num == 9 || num == 10 || num == 11)
+            {
+                symbolImage.sprite = _symbolSprites[2];
+            }
+        }
     }
 
     public List<int> ShuffleList(List<int> list)
