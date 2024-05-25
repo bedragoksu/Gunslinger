@@ -207,7 +207,18 @@ namespace Gunslinger.Controller
         [ObserversRpc]
         public void UpdateHealth(PlayerModel player, int amount)
         {
-            player.CurrentBulletPoint += amount; // max olup olmadigina bak !! bedra
+            player.CurrentBulletPoint += amount;// max olup olmadigina bak !! bedra
+
+            int maxpoint = 0;
+            if (player.PlayerRole == PlayerModel.TypeOfPlayer.Sheriff)
+            {
+                 maxpoint = 5;
+            }
+            else
+            {
+                maxpoint = 4;
+            }
+            if(player.CurrentBulletPoint > maxpoint) player.CurrentBulletPoint = maxpoint;
         }
 
 

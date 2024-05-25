@@ -127,6 +127,16 @@ public class CardSelect : MonoBehaviour
                     Debug.Log("BARREL TIKLANDII");
                     index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
                     _actions.MustangAction(_thisPlayerObject, index);
+                    break; 
+                case "Cat Balou": // herhangi bir oyuncunun open handi
+                    Debug.Log("EMRÝVAKÝ TIKLANDII");
+                    index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
+                    StartCoroutine("CatBalouRoutine", index);
+                    break;
+                case "Panic": // 1 mesafedeki oyuncunun open handi
+                    Debug.Log("PANÝK TIKLANDII");
+                    index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
+                    _actions.PanicAction(_thisPlayerObject, index);
                     break;
 
             }
@@ -140,7 +150,14 @@ public class CardSelect : MonoBehaviour
 
     }
 
-  
+    private IEnumerator CatBalouRoutine(int index)
+    {
+        yield return new WaitUntil(() => _target != null);
+        _actions.CatBalouAction(_thisPlayerObject, index, _target);
+        yield return new WaitForSeconds(0.3f);
+        _actions.DiscardCard(_thisPlayerObject, index);
+        _target = null;
+    }
 
     private IEnumerator BangRoutine(GameObject card)
     {
@@ -155,6 +172,7 @@ public class CardSelect : MonoBehaviour
         _actions.BangAction(_thisPlayerObject,_target, index);
         yield return new WaitForSeconds(0.3f);
         _actions.DiscardCard(_thisPlayerObject, index);
+        _target = null;
     }
 
     private int FindIndexInOpenHand(PlayerModel player, GameObject card)
