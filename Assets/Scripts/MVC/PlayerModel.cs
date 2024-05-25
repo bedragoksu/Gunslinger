@@ -18,6 +18,7 @@ public class PlayerModel : NetworkBehaviour
     public GunModel gun; // can change
     public CharacterModel character;
     public List<GameObject> openHand;
+    public List<GameObject> stackHand;
     public int position;
 
     public bool clicked = false;

@@ -60,7 +60,7 @@ namespace Gunslinger.Controller
                     c.SetParent(GameObject.Find("DeckPanel").transform);
                 }
             }
-
+            playermodel.openHand[i].SetActive(false);
             playermodel.openHand.RemoveAt(i);
 
             if (player == gameManager._thisPlayer)
@@ -75,6 +75,50 @@ namespace Gunslinger.Controller
             
             discard = true;
         }
+
+        [HideInInspector] public bool move = false;
+        [ServerRpc(RequireOwnership = false)]
+        public void MoveToStackServer(GameObject player, int i)
+        {
+            ScreenLog.Instance.SendEvent(TextType.Debug, "move to stack server");
+            MoveToStack(player, i);
+        }
+        [ObserversRpc]
+        public void MoveToStack(GameObject player, int i)
+        {
+            ScreenLog.Instance.SendEvent(TextType.Debug, "move to stack observer");
+            var playermodel = player.GetComponent<PlayerModel>();
+
+            if (player == gameManager._thisPlayer)
+            {
+                foreach (Transform c in GameObject.Find("HandPanel").transform)
+                {
+                    c.SetParent(GameObject.Find("DeckPanel").transform);
+                }
+            }
+
+            var o = playermodel.openHand[i];
+            //stack panele at bedra
+            o.SetActive(false);
+            o.transform.SetParent(GameObject.Find("StackHandPanel").transform);
+            playermodel.stackHand.Add(o);
+
+            playermodel.openHand.RemoveAt(i);
+
+            if (player == gameManager._thisPlayer)
+            {
+                foreach (var c in gameManager._thisPlayer.GetComponent<PlayerModel>().openHand)
+                {
+                    Debug.Log("foreach");
+                    c.transform.SetParent(GameObject.Find("HandPanel").transform);
+                }
+            }
+
+
+            move = true;
+        }
+
+
 
         public bool DealCards()
         {
