@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using NeptunDigital;
+using static GameManager;
+using System;
 
 public class CharacterDisplayer : MonoBehaviour
 {
@@ -13,22 +16,41 @@ public class CharacterDisplayer : MonoBehaviour
     public TextMeshProUGUI range;
     public Image rangeImage;
     public GameObject bullet;
-    public int bullets;
-    void Awake()
-    {
-        bullets = 4;
-    }
-    public void addBullet()
-    {
-        GameObject instantiatedPrefab = Instantiate(bullet, transform.position, Quaternion.identity, transform);
+    private PlayerModel pl;
 
-        instantiatedPrefab.transform.localPosition = Vector3.zero;
-        instantiatedPrefab.transform.localRotation = Quaternion.identity;
+    private void addBullet(int num)
+    {
+
+
+        int count = 0;
+        foreach(Transform child in transform)
+        {
+            if(!child.gameObject.activeSelf)
+            {
+                count++;
+                child.gameObject.SetActive(true);
+            }
+            if (count == num) break;
+        }
+
+    }
+    private void removeBullet(int num)
+    {
+        int count = 0;
+        foreach (Transform child in transform)
+        {
+            if (child.gameObject.activeSelf)
+            {
+                count++;
+                child.gameObject.SetActive(false);
+            }
+            if (count == num) break;
+        }
     }
 
     public void roleOnChange()
     {
-        PlayerModel pl = new PlayerModel();
+        pl = new PlayerModel();
         foreach (var p in GameObject.FindGameObjectsWithTag("Player"))
         {
             if (p.GetComponent<PlayerModel>().enabled)
@@ -37,8 +59,6 @@ public class CharacterDisplayer : MonoBehaviour
             }
         }
         var t = pl.PlayerRole.ToString();
-        if (t == "Sheriff")
-            bullets++;
         identify.enabled = true;
         identify.text = t;
         characterImage.enabled = true;
@@ -49,9 +69,54 @@ public class CharacterDisplayer : MonoBehaviour
         rangeImage.enabled = true;
         range.enabled = true;
         range.text = "1";
-        for (int i = 0; i < bullets; i++)
-            addBullet();
+        for (int i = 0; i < pl.CurrentBulletPoint; i++)
+            CreateBullet();
 
 
+    }
+
+    private void CreateBullet()
+    {
+        GameObject instantiatedPrefab = Instantiate(bullet, transform.position, Quaternion.identity, transform);
+
+        instantiatedPrefab.transform.localPosition = Vector3.zero;
+        instantiatedPrefab.transform.localRotation = Quaternion.identity;
+    }
+
+    public void UpdateBullets()
+    {
+        var numberOfChildren = getActiveChildren();
+        if (numberOfChildren == pl.CurrentBulletPoint ) {
+            return;
+        }
+        else if (numberOfChildren < pl.CurrentBulletPoint)
+        {
+            addBullet(pl.CurrentBulletPoint - numberOfChildren);
+        }
+        else if (numberOfChildren > pl.CurrentBulletPoint)
+        {
+            removeBullet(numberOfChildren - pl.CurrentBulletPoint);
+        }
+    }
+    private int getActiveChildren()
+    {
+        int num = 0;
+        foreach (Transform child in transform)
+        {
+            if (child.gameObject.activeSelf)
+                num++;
+        }
+        return num;
+    }
+    private void Update()
+    {
+        if (Input.anyKeyDown)
+        {
+            if (Input.GetKeyDown(KeyCode.Z))
+            {
+                UpdateBullets();
+            }
+            
+        }
     }
 }
