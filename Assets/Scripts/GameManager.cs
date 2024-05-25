@@ -77,13 +77,15 @@ public class GameManager : NetworkBehaviour
         Button[] buttons = ButtonsObj.GetComponentsInChildren<Button>();
         buttons[0].interactable = false;
 
+        AssignStateServer(GameState.DiscardCard);
+
         var pl = _thisPlayer.GetComponent<PlayerModel>();
         if (pl.openHand.Count <= pl.CurrentBulletPoint)
         {
             buttons[1].interactable = true;
         }
         
-        AssignStateServer(GameState.DiscardCard);
+        
     }
     public void NextUIButton()
     {

@@ -113,6 +113,16 @@ public class CardSelect : MonoBehaviour
                     index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
                     _actions.GatlingAction(_thisPlayerObject, index);
                     break;
+                case "Mustang":
+                    Debug.Log("MUSTANG TIKLANDII");
+                    index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
+                    _actions.MustangAction(_thisPlayerObject, index);
+                    break;
+                case "Scope":
+                    Debug.Log("SCOPE TIKLANDII");
+                    index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
+                    _actions.MustangAction(_thisPlayerObject, index);
+                    break;
 
             }
         }
@@ -124,6 +134,13 @@ public class CardSelect : MonoBehaviour
 
         }
 
+    }
+
+    IEnumerator enumerator(int index)
+    {
+        _actions.DiscardCard(_thisPlayerObject, index);
+        yield return new WaitForSeconds(0.5f);
+        _gameManager.ActivateNextButton();
     }
 
     private IEnumerator BangRoutine(GameObject card)

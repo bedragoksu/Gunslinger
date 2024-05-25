@@ -104,8 +104,13 @@ public class Actions : MonoBehaviour
         DiscardCard(player, playedCard);
     }
 
+    public void MustangAction(GameObject player, int playedCard) // Makineli tüfek
+    {
+        MoveToStackHand(player, playedCard);
+    }
+
     // General Functions
-    public int CalculateDistance(GameObject target)
+    public int CalculateDistance(GameObject target) // bedra
     {
         PlayerModel thisPlayer = GetComponent<PlayerModel>();
         PlayerModel targetPlayer = target.GetComponent<PlayerModel>();
@@ -136,10 +141,26 @@ public class Actions : MonoBehaviour
 
         return (thisPlayer.gun.ScopeLevel - CalculateDistance(target)); // if >=0 can if <0 cannot
     }
-    public void PullCard(GameObject card)
+    public void MoveToStackHand(GameObject player, int i)
     {
+        StartCoroutine("MoveToStackRoutine", Tuple.Create(player, i));
 
+        GameObject.Find("GameManager").GetComponent<GameManager>()._thisPlayer.GetComponent<PlayerModel>().clicked = false; // yuh bedra
+        GameObject.Find("GameManager").GetComponent<GameManager>().PlayerInfoStack.GetComponent<PlayerInfoControllerUI>().UpdateStackCanvas();
     }
+    IEnumerator MoveToStackRoutine(Tuple<GameObject, int> tuple)
+    {
+        var player = tuple.Item1;
+        var i = tuple.Item2;
+        cardsController.MoveToStackServer(player, i);
+        //var c = GameObject.Find("HandPanel").transform.GetChild(i);
+        //c.SetParent(GameObject.Find("DeckPanel").transform);
+        yield return new WaitUntil(() => cardsController.move);
+        yield return new WaitForSeconds(1f);
+        //player.GetComponent<PlayerModel>().cardchange(true);
+        cardsController.move = false;
+    }
+
     public void DiscardCard(GameObject player, int i)
     {
         ScreenLog.Instance.SendEvent(TextType.Debug, "discard card");
