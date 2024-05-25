@@ -68,16 +68,21 @@ public class Actions : MonoBehaviour
         DiscardCard(player.gameObject, playedCard);
     }
 
-    public void CatBalouAction() // Emrivaki
+    public void CatBalouAction(GameObject player, int playedCard, GameObject target) // Emrivaki
+    {
+        // target'in elinden random bir karti iskartaya cikar
+        var targetmodel = target.GetComponent<PlayerModel>();
+        var i = UnityEngine.Random.Range(0, targetmodel.openHand.Count);
+        DiscardCard(target, i);
+    }
+    
+    
+    public void PanicAction(GameObject player, int playedCard) // Panik
     {
 
     }
 
     void DrawAction() // Fýçý
-    {
-
-    }
-    void PanicAction() // Panik
     {
 
     }
@@ -103,6 +108,7 @@ public class Actions : MonoBehaviour
         }
         DiscardCard(player, playedCard);
     }
+
 
     public void MustangAction(GameObject player, int playedCard) // Makineli tüfek
     {

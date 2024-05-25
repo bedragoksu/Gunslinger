@@ -112,28 +112,12 @@ public class PlayerModel : NetworkBehaviour
             ScreenLog.Instance.SendEvent(TextType.Debug, $"card order: {_thisPlayer.GetComponentInParent<CardManager>().CardOrder[0]}");
             ScreenLog.Instance.SendEvent(TextType.Debug, $"card order: {_thisPlayer.GetComponentInParent<CardManager>().Cards[0]}");
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha5))
-        {
-            foreach(var player in Players)
-            {
-                AssignMagicNumServer(player.GetComponent<PlayerModel>(), 5);
-            }
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha6))
-        {
-            foreach (var player in Players)
-            {
-                AssignMagicNumServer(player.GetComponent<PlayerModel>(), 6);
-            }
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha7))
-        {
-            foreach (var player in Players)
-            {
-                AssignMagicNumServer(player.GetComponent<PlayerModel>(), 7);
-            }
-        }
+        
+
+
     }
+
+
 
     [ServerRpc]
     public void AssignPlayerModelServer(PlayerModel player, int playerID, string name)
