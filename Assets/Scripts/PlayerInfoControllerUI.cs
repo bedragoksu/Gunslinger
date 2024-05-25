@@ -17,16 +17,19 @@ public class PlayerInfoControllerUI : MonoBehaviour
         _thisPlayer = _gameManager._thisPlayer;
         foreach (var player in _players)
         {
-            if (player != _thisPlayer) {
+            if (true) // player != _thisPlayer
+            { 
 
                 GameObject instantiatedObject = 
                     Instantiate(_playerInfoPrefab, _playerInfoPrefab.transform.position, _playerInfoPrefab.transform.rotation);
                 
                 instantiatedObject.transform.SetParent(gameObject.transform, false);
+                
 
                 GameObject nameText = instantiatedObject.transform.Find("Name/TextName").gameObject;
                 PlayerModel playerModel = player.GetComponent<PlayerModel>();
                 nameText.GetComponent<TextMeshProUGUI>().text = playerModel.PlayerName;
+                instantiatedObject.name = playerModel.PlayerName;
 
                 changeNumberOfCards(instantiatedObject, player);
                 _playersInfoStack.Add(instantiatedObject);

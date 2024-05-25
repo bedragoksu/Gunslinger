@@ -123,25 +123,24 @@ public class CardSelect : MonoBehaviour
                     index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
                     _actions.MustangAction(_thisPlayerObject, index);
                     break;
+                case "Barrel":
+                    Debug.Log("BARREL TIKLANDII");
+                    index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
+                    _actions.MustangAction(_thisPlayerObject, index);
+                    break;
 
             }
         }
         if (_gameManager.CurrentGameState == GameManager.GameState.DiscardCard)
         {
+            _gameManager.ActivateNextButton();
             index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
             _actions.DiscardCard(_thisPlayerObject, index);
-            _gameManager.ActivateNextButton();
-
         }
 
     }
 
-    IEnumerator enumerator(int index)
-    {
-        _actions.DiscardCard(_thisPlayerObject, index);
-        yield return new WaitForSeconds(0.5f);
-        _gameManager.ActivateNextButton();
-    }
+  
 
     private IEnumerator BangRoutine(GameObject card)
     {
