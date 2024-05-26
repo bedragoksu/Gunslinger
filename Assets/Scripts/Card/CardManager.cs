@@ -62,7 +62,7 @@ public class CardManager : NetworkBehaviour
                         createCards(sampleCard, 12); break;
                     case "Gatling": // ok
                         createCards(sampleCard, 1); break;
-                    case "Cat Balou": // tt
+                    case "Cat Balou": // ok
                         createCards(sampleCard, 4); break;
                     case "Panic": // tt
                         createCards(sampleCard, 4); break;
@@ -74,11 +74,11 @@ public class CardManager : NetworkBehaviour
                         createCards(sampleCard, 1); break;
                     case "Beer": // ok
                         createCards(sampleCard, 6); break;
-                    case "Mustang": // tt // onune ac
+                    case "Mustang": // ok // onune ac
                         createCards(sampleCard, 2); break;
-                    case "Scope": // tt
+                    case "Scope": // ok
                         createCards(sampleCard, 1); break;
-                    case "Barrel": // tt
+                    case "Barrel": // ok
                         createCards(sampleCard, 2); break;
 
                 }

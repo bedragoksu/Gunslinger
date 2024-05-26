@@ -42,7 +42,7 @@ public class PlayerInfoControllerUI : MonoBehaviour
         int count = 0;
         for (int i = 0; i < _players.Length; i++) { 
             var player = _players[i];
-            if (player != _thisPlayer)
+            if (true) // player != _thisPlayer
             {
                 changeNumberOfCards(_playersInfoStack[count], player);
                 count++;
