@@ -20,7 +20,7 @@ public class CharacterPositionController : MonoBehaviour
 
             players[i].transform.rotation = rotation;
         }        
-        _characterCanvasController.UpdateCanvas(players);
+        _characterCanvasController.UpdateCanvas();
     }
 
 
