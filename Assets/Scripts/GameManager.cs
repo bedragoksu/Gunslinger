@@ -36,6 +36,14 @@ public class GameManager : NetworkBehaviour
     private bool _isRoleAssinged = false;
 
     private Button _discardButton;
+    public void OpenCloseDiscardButton(bool open)
+    {
+        _discardButton.interactable = open;
+    }
+    public bool IsActiveButton()
+    {
+        return _discardButton.interactable;
+    }
 
     public GameObject _thisPlayer;
 
@@ -187,7 +195,8 @@ public class GameManager : NetworkBehaviour
         if (_thisPlayer.GetComponent<PlayerModel>().PlayerID == _turnInt) //true
         {
             ScreenLog.Instance.SendEvent(TextType.Debug, "activa");
-            Activate(_discardButton);
+            //Activate(_discardButton);
+            OpenCloseDiscardButton(true);
             // activate the open hands clickable
         }
         _thisPlayer.GetComponent<PlayerModel>().cardchange(true);
@@ -288,5 +297,20 @@ public class GameManager : NetworkBehaviour
         _turnInt = i;
     }
 
-    
+
+    public void DrawTheCard(GameObject player, GameObject card)
+    {
+        DrawTheCardServer(player, card);
+    }
+    [ServerRpc(RequireOwnership = false)]
+    public void DrawTheCardServer(GameObject player, GameObject card)
+    {
+        DrawTheCardObserver(player, card);
+    }
+    [ObserversRpc]
+    public void DrawTheCardObserver(GameObject player, GameObject card)
+    {
+        player.GetComponent<PlayerModel>().openHand.Add(card);
+    }
+
 }

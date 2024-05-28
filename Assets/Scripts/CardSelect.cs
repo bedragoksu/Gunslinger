@@ -13,6 +13,7 @@ public class CardSelect : MonoBehaviour
     [HideInInspector]public PlayerModel _thisPlayerModel; //private bedra
 
     private GameObject _target;
+    private int _distanceBetweenTarget = -1;
 
     private Camera _camera;
 
@@ -48,7 +49,11 @@ public class CardSelect : MonoBehaviour
                     Debug.Log(hit.collider.gameObject.name);
                     if (hit.collider.gameObject.GetComponent<PlayerModel>())
                     {
-                        _target = hit.collider.gameObject;
+                        if (hit.collider.gameObject != _thisPlayerObject)
+                        {
+                            _target = hit.collider.gameObject;
+                            _distanceBetweenTarget = _actions.CalculateDistance(_thisPlayerObject, _target);
+                        }
                     }
                 }
             }
@@ -136,7 +141,7 @@ public class CardSelect : MonoBehaviour
                 case "Panic": // 1 mesafedeki oyuncunun open handi
                     Debug.Log("PANÝK TIKLANDII");
                     index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
-                    _actions.PanicAction(_thisPlayerObject, index);
+                    StartCoroutine("PanicRoutine", index);
                     break;
 
             }
@@ -150,18 +155,45 @@ public class CardSelect : MonoBehaviour
 
     }
 
+    private IEnumerator PanicRoutine(int index)
+    {
+        var before = _gameManager.IsActiveButton();
+        _gameManager.OpenCloseDiscardButton(false);
+        yield return new WaitUntil(() => _target != null);
+        yield return new WaitUntil(() => _distanceBetweenTarget == 1);
+        _gameManager.OpenCloseDiscardButton(before);
+
+        var name = _actions.PanicAction(_thisPlayerObject, index, _target);
+
+        yield return new WaitUntil(() => name);
+        yield return new WaitForSeconds(1f);
+        //_actions.DiscardCard(_thisPlayerObject, index);
+        _target = null;
+        _distanceBetweenTarget = -1;
+
+        
+    }
     private IEnumerator CatBalouRoutine(int index)
     {
+        var before = _gameManager.IsActiveButton();
+        _gameManager.OpenCloseDiscardButton(false);
         yield return new WaitUntil(() => _target != null);
-        _actions.CatBalouAction(_thisPlayerObject, index, _target);
+        _gameManager.OpenCloseDiscardButton(before);
+
+        _actions.CatBalouAction( _target);
         yield return new WaitForSeconds(0.3f);
         _actions.DiscardCard(_thisPlayerObject, index);
         _target = null;
+        _distanceBetweenTarget = -1;
     }
 
     private IEnumerator BangRoutine(GameObject card)
     {
+        var before = _gameManager.IsActiveButton();
+        _gameManager.OpenCloseDiscardButton(false);
         yield return new WaitUntil(() => _target != null);
+        yield return new WaitUntil(() => _actions.CalculateScopeCanHit(_thisPlayerObject, _target));
+        _gameManager.OpenCloseDiscardButton(before);
         Debug.Log($"bang to: {_target.name}");
 
         int index = FindIndexInOpenHand(_thisPlayerModel, card); // check to // bedra
@@ -173,6 +205,7 @@ public class CardSelect : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
         _actions.DiscardCard(_thisPlayerObject, index);
         _target = null;
+        _distanceBetweenTarget = -1;
     }
 
     private int FindIndexInOpenHand(PlayerModel player, GameObject card)
