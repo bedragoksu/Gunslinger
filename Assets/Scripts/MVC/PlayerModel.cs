@@ -21,6 +21,8 @@ public class PlayerModel : NetworkBehaviour
     public List<GameObject> stackHand;
     public int position;
 
+    public bool IsAlive = true;
+
     public bool clicked = false;
 
     [SyncVar] public int magicNum = 0;

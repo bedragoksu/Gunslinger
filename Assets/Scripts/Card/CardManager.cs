@@ -57,7 +57,7 @@ public class CardManager : NetworkBehaviour
                 switch (card.cardName)
                 {
                     case "Bang": // ok
-                        createCards(sampleCard, 25); break;
+                        createCards(sampleCard, 15); break;
                     case "Missed": // ok
                         createCards(sampleCard, 12); break;
                     case "Gatling": // ok
@@ -65,7 +65,7 @@ public class CardManager : NetworkBehaviour
                     case "Cat Balou": // ok
                         createCards(sampleCard, 4); break;
                     case "Panic": // tt
-                        createCards(sampleCard, 4); break;
+                        createCards(sampleCard, 14); break;
                     case "Wells Fargo": // ok
                         createCards(sampleCard, 1); break;
                     case "Stage coach": // ok

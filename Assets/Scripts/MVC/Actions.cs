@@ -68,7 +68,7 @@ public class Actions : MonoBehaviour
         DiscardCard(player.gameObject, playedCard);
     }
 
-    public void CatBalouAction(GameObject player, int playedCard, GameObject target) // Emrivaki
+    public void CatBalouAction( GameObject target) // Emrivaki
     {
         // target'in elinden random bir karti iskartaya cikar
         var targetmodel = target.GetComponent<PlayerModel>();
@@ -77,10 +77,39 @@ public class Actions : MonoBehaviour
     }
     
     
-    public void PanicAction(GameObject player, int playedCard) // Panik
+    public bool PanicAction(GameObject player,int playedCard ,GameObject target) // Panik
     {
+        var targetmodel = target.GetComponent<PlayerModel>();
+        var i = UnityEngine.Random.Range(0, targetmodel.openHand.Count);
+        var card = targetmodel.openHand[i];
+        DiscardCard(target, i);
+        DiscardCard(player, playedCard);
 
+        // deck'in altindaki o card draw the card icine atilmali
+        var t = GameObject.Find("DeckPanel").transform;
+        //var t2 = t.Find(card.name);
+        //var deckCard = t2.gameObject;
+        //deckCard.SetActive(true);
+        //GameObject.Find("GameManager").GetComponent<GameManager>().DrawTheCard(player, deckCard);
+
+        int indexOfDeck = 0;
+        for(int j=0; j<69; j++) // 69 = cardNum bedra
+        {
+            if(t.GetChild(j).name == card.name)
+            {
+                indexOfDeck = j;
+                break;
+            }
+        }
+        cardsController.DrawTheCardServer(player, indexOfDeck);
+        //var handpanel = GameObject.Find("HandPanel").transform;
+        //t.GetChild(indexOfDeck).transform.SetParent(handpanel);
+        
+        return true;
     }
+
+    
+
 
     void DrawAction() // Fýçý
     {
@@ -116,22 +145,24 @@ public class Actions : MonoBehaviour
     }
 
     // General Functions
-    public int CalculateDistance(GameObject target) // bedra
+    public int CalculateDistance(GameObject thisObj, GameObject target) // bedra
     {
-        PlayerModel thisPlayer = GetComponent<PlayerModel>();
+        PlayerModel thisPlayer = thisObj.GetComponent<PlayerModel>();
         PlayerModel targetPlayer = target.GetComponent<PlayerModel>();
 
-        int dist = Mathf.Abs(targetPlayer.position - thisPlayer.position);
+        int dist = GetCircularDistance(thisObj, target);
 
-        foreach (var card in thisPlayer.openHand)
+
+
+        foreach (var card in thisPlayer.stackHand)
         {
-            if (card.name.StartsWith("Appaloosa")) // Dürbün
+            if (card.name.StartsWith("Scope")) // Dürbün
             {
                 dist--;
             }
         }
 
-        foreach (var card in targetPlayer.openHand)
+        foreach (var card in targetPlayer.stackHand)
         {
             if (card.name.StartsWith("Mustang")) // Mustang
             {
@@ -141,11 +172,49 @@ public class Actions : MonoBehaviour
 
         return dist;
     }
-    public int CalculateScope(GameObject target)
-    {
-        PlayerModel thisPlayer = GetComponent<PlayerModel>();
 
-        return (thisPlayer.gun.ScopeLevel - CalculateDistance(target)); // if >=0 can if <0 cannot
+    public int GetCircularDistance(GameObject player, GameObject target)
+    {
+        int dist = 0;
+        int indexA = 0;
+        int indexB = 0;
+
+        PlayerModel plModel = player.GetComponent<PlayerModel>();
+        PlayerModel targetModel = target.GetComponent<PlayerModel>();
+
+        var playerList = GameObject.FindGameObjectsWithTag("Player");
+        List<GameObject> aliveList = new List<GameObject>();
+
+
+        foreach(var pl in playerList)
+        {
+            if (pl.GetComponent<PlayerModel>().IsAlive) aliveList.Add(pl);
+        }
+
+        for(int i=0; i< aliveList.Count;i++)
+        {
+            var model = playerList[i].GetComponent<PlayerModel>();
+            if (model.PlayerName == plModel.PlayerName)
+            {
+                indexA = i;
+            }else if (model.PlayerName == targetModel.PlayerName)
+            {
+                indexB = i;
+            }
+        }
+
+        int directDistance = Mathf.Abs(indexA - indexB);
+        int circularDistance = aliveList.Count - directDistance;
+
+        dist = Mathf.Min(directDistance, circularDistance);
+        return dist;
+    }
+    public bool CalculateScopeCanHit(GameObject thisPlayer,GameObject target)
+    {
+        int scopeLevel = 1; // player'in infosundan cek
+        int d = scopeLevel - CalculateDistance(thisPlayer, target);
+
+        return (d>=0); // if >=0 can if <0 cannot
     }
     public void MoveToStackHand(GameObject player, int i)
     {

@@ -19,6 +19,10 @@ namespace Gunslinger.Controller
         private GameObject[] Players;
         private GameObject _deck;
 
+
+
+        
+
         public bool DrawCards(GameObject player,int amount)
         {
             DrawCardsServer(player,amount);
@@ -38,6 +42,21 @@ namespace Gunslinger.Controller
                 CardPointer++; // herkes icin guncelle
             }
             
+        }
+
+
+        [ServerRpc(RequireOwnership =false)]
+        public void DrawTheCardServer(GameObject player, int index)
+        {
+            DrawTheCardObs(player, index);
+
+        }
+        [ObserversRpc]
+        public void DrawTheCardObs(GameObject player, int index)
+        {
+            var child = GetChildOfDeck(index, _deck);
+            child.SetActive(true);
+            player.GetComponent<PlayerModel>().openHand.Add(child);
         }
 
         [HideInInspector] public bool discard = false; 
