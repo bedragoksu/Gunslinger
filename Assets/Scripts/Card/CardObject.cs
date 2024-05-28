@@ -17,13 +17,13 @@ public class CardObject : MonoBehaviour
     [HideInInspector] public string description;
     [HideInInspector] public Sprite background;
     [HideInInspector] public Sprite symbol;
-    private static int numberOfCardGenres = 12;
+    private static int numberOfCardGenres = 17;
     //private static string[] _brownCardNames = new string[] { "Bang", "Missed" };
     private static string[] _brownCardNames = new string[] { "Bang", "Missed", "Beer", "Cat Balou", "Gatling", "Panic", "Saloon", "Stage Coach", "Wells Fargo" };
     //private static string[] _blueCardNames = new string[] {  };
 
 
-    private static string[] _blueCardNames = new string[] { "Barrel", "Mustang", "Scope" };
+    private static string[] _blueCardNames = new string[] { "Barrel", "Mustang", "Scope", "Volcanic", "Remington", "Rev. Carabine", "Schofield", "Winchester" };
     [HideInInspector] public CardObject[] cards;
 
     private int _backgroundIndex = 0;
@@ -59,7 +59,12 @@ public class CardObject : MonoBehaviour
             Resources.Load<Sprite>("Beer"),
             Resources.Load<Sprite>("Mustang"),
             Resources.Load<Sprite>("Scope"),
-            Resources.Load<Sprite>("Barrel")
+            Resources.Load<Sprite>("Barrel"),
+            Resources.Load<Sprite>("Volcanic"),
+            Resources.Load<Sprite>("Remington"),
+            Resources.Load<Sprite>("Rev. Carabine"),
+            Resources.Load<Sprite>("Schofield"),
+            Resources.Load<Sprite>("Winchester")
         };
         _backgroundSprites = new Sprite[]
         {
@@ -152,8 +157,45 @@ public class CardObject : MonoBehaviour
                 card.background = _backgroundSprites[_backgroundIndex];
                 card.symbol = _symbolSprites[3];
                 break;
+            case "volcanic":
+                card.cardName = cardName;
+                card.picture = _cardSprites[12];
+                card.background = _backgroundSprites[_backgroundIndex];
+                card.symbol = _symbolSprites[3];
+                card.description = "1";
+                break;
+            case "remington":
+                card.cardName = cardName;
+                card.picture = _cardSprites[13];
+                card.background = _backgroundSprites[_backgroundIndex];
+                card.symbol = _symbolSprites[1];
+                card.description = "3";
+                break;
+            case "rev. carabine":
+                card.cardName = cardName;
+                card.picture = _cardSprites[14];
+                card.background = _backgroundSprites[_backgroundIndex];
+                card.symbol = _symbolSprites[1];
+                card.description = "4";
+                break;
+            case "schofield":
+                card.cardName = cardName;
+                card.picture = _cardSprites[15];
+                card.background = _backgroundSprites[_backgroundIndex];
+                card.symbol = _symbolSprites[1];
+                card.description = "2";
+                break;
+            case "winchester":
+                card.cardName = cardName;
+                card.picture = _cardSprites[16];
+                card.background = _backgroundSprites[_backgroundIndex];
+                card.symbol = _symbolSprites[3];
+                card.description = "5";
+                break;
+
+                //{ "Barrel", "Mustang", "Scope", "Volcanic" 12, "Remington" 13, "Rev. Carabine" 14, "Schofield" 15, "Winchester" 16 };
 
         }
-        return card;
+return card;
     }
 }

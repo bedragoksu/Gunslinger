@@ -17,7 +17,7 @@ public class CardManager : NetworkBehaviour
     public GameObject[] CardObjects;
     public List<int> CardOrder;
 
-    private int _cardNum = 62;
+    private int _cardNum = 69;
     private int _cardCounter = 0;
     public GameObject[] Players;
     private Sprite[] _symbolSprites;
@@ -80,6 +80,18 @@ public class CardManager : NetworkBehaviour
                         createCards(sampleCard, 1); break;
                     case "Barrel": // ok
                         createCards(sampleCard, 2); break;
+                    case "Volcanic":
+                        createCards(sampleCard, 2); break;
+                    case "Remington":
+                        createCards(sampleCard, 1); break;
+                    case "Rev. Carabine":
+                        createCards(sampleCard, 1); break;
+                    case "Schofield":
+                        createCards(sampleCard, 3); break;
+                    case "Winchester":
+                        createCards(sampleCard, 1); break;
+                        //{ "Barrel", "Mustang", "Scope", "Volcanic" 12, "Remington" 13, "Rev. Carabine" 14, "Schofield" 15, "Winchester" 16 };
+
 
                 }
                 _symbolCount = 0;
