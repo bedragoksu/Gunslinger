@@ -12,25 +12,27 @@ public class Actions : MonoBehaviour
     public CardsController cardsController;
 
     // Card Actions
-    public void BangAction(GameObject player, GameObject target, int playedCard) // Bang
+    public void BangAction(GameObject player, GameObject target) // Bang
     {
         PlayerModel targetPlayer = target.GetComponent<PlayerModel>();
         Debug.Log($"target of bang: {targetPlayer.PlayerName}");
 
         if (/*CalculateScope(target) >= 0*/ true) // calculate distance instead of 0 // before calling bang action
         {
-            cardsController.UpdateHealthServer(targetPlayer, -1);
+            bool hasMissed = false;
             var hand = targetPlayer.openHand;
             for (int i=0; i< hand.Count; i++)
             {
                 if (hand[i].name.StartsWith("Missed"))
                 {
                     DiscardCard(target, i);
-                    MissedAction(targetPlayer);
+                    hasMissed = true;
+                    //MissedAction(targetPlayer);
                     break;
                 }
             }
             
+            if(!hasMissed) cardsController.UpdateHealthServer(targetPlayer, -1);
             //foreach (var card in targetPlayer.openHand)
             //{
             //    if (card.name.StartsWith("Missed")) // Karavana
@@ -42,7 +44,7 @@ public class Actions : MonoBehaviour
             //}
         }
     }
-    void MissedAction(PlayerModel player) // Karavana // also discard card
+    void MissedAction(PlayerModel player) // Karavana // also discard card 
     {
         cardsController.UpdateHealthServer(player, 1);
         Debug.Log("target missed");
@@ -82,15 +84,11 @@ public class Actions : MonoBehaviour
         var targetmodel = target.GetComponent<PlayerModel>();
         var i = UnityEngine.Random.Range(0, targetmodel.openHand.Count);
         var card = targetmodel.openHand[i];
-        DiscardCard(target, i);
-        DiscardCard(player, playedCard);
+        DiscardCard(target, i); // target'in elinden random bir kart silindi.
+        DiscardCard(player, playedCard); // panic karti silindi.
 
         // deck'in altindaki o card draw the card icine atilmali
         var t = GameObject.Find("DeckPanel").transform;
-        //var t2 = t.Find(card.name);
-        //var deckCard = t2.gameObject;
-        //deckCard.SetActive(true);
-        //GameObject.Find("GameManager").GetComponent<GameManager>().DrawTheCard(player, deckCard);
 
         int indexOfDeck = 0;
         for(int j=0; j<69; j++) // 69 = cardNum bedra
@@ -132,7 +130,7 @@ public class Actions : MonoBehaviour
         {
             if(pl != player)
             {
-                BangAction(player,pl,playedCard);
+                BangAction(player,pl); // bedra playedInt?
             }
         }
         DiscardCard(player, playedCard);

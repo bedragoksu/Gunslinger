@@ -134,8 +134,12 @@ public class GameManager : NetworkBehaviour
     [ObserversRpc]
     public void server()
     {
-        _turnInt++;
-        _turnInt %= _turns.Length; // 4
+        do
+        {
+            _turnInt++;
+            _turnInt %= _turns.Length;
+        } while (!_turns[_turnInt].GetComponent<PlayerModel>().IsAlive);
+        
         ScreenLog.Instance.SendEvent(TextType.Debug, $"_turnInt= {_turnInt}");
     }
 
@@ -207,7 +211,7 @@ public class GameManager : NetworkBehaviour
     private void HandleDrawCard()
     {
         ScreenLog.Instance.SendEvent(TextType.Debug, $"DRAW CARD STATE");
-        if (!_isRoleAssinged)
+        if (!_isRoleAssinged) // canvas duzeni icin
         {
             CharacterDisplayer.GetComponent<CharacterDisplayer>().roleOnChange();
             CharacterPositionController.GetComponent<CharacterPositionController>().UpdateCharacterPositions();

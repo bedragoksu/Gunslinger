@@ -99,19 +99,6 @@ public class CardManager : NetworkBehaviour
             
             CardOrder = ShuffleList(CardOrder);
         }
-        //if (IsOwner && !IsServer)
-        //{
-        //    Players = GameObject.FindGameObjectsWithTag("Player");
-        //    if (Players.Length != 0)
-        //    {
-        //        CardObjects = Players[0].GetComponent<CardManager>().CardObjects;
-        //        Debug.Log(Players[0].GetComponent<CardManager>().CardObjects);
-        //        CardOrder = Players[0].GetComponent<CardManager>().CardOrder;
-        //        GenerateCards();
-        //    }
-
-        //}
-
 
     }
 
@@ -134,7 +121,6 @@ public class CardManager : NetworkBehaviour
         
         for (int i = 1; i < numberOfCards; i++)
         {
-            //GameObject newCard = Instantiate(sampleCard, parentTransform); // Ebeveyni belirt
             GameObject newCard = Instantiate(sampleCard, _parentObject.transform);
 
             newCard.name = cardname + "_" + (i + 1);
@@ -149,10 +135,7 @@ public class CardManager : NetworkBehaviour
     {
         GameObject symbol = card.transform.Find("Symbol").gameObject;
         Image symbolImage = symbol.GetComponent<Image>();
-        //Resources.Load<Sprite>("diamonds"), // karo
-        //    Resources.Load<Sprite>("clubs"), // sinek
-        //    Resources.Load<Sprite>("hearts"), // kupa
-        //    Resources.Load<Sprite>("spades"), // maça
+        
         if (card.name.StartsWith("Missed"))
         {
             if (num == 0 || num == 1)
@@ -207,10 +190,6 @@ public class CardManager : NetworkBehaviour
     {
         Debug.Log(CardObjects);
         Debug.Log(CardOrder);
-        //for (int i = 0; i < CardObjects.Length; i++)
-        //{
-        //    GameObject newCard = Instantiate(CardObjects[CardOrder[i]], _parentObject.transform);
-        //}
     }
 
 

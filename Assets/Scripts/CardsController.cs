@@ -219,7 +219,7 @@ namespace Gunslinger.Controller
         }
 
         [ServerRpc(RequireOwnership =false)]
-        public void UpdateHealthServer(PlayerModel player, int amount)
+        public void UpdateHealthServer(PlayerModel player, int amount) // 0 ve max burada kontrol et
         {
             UpdateHealth(player, amount);
         }

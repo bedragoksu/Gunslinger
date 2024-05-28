@@ -63,6 +63,7 @@ public class CardSelect : MonoBehaviour
         {
             this.GetComponent<Button>().interactable = true;
             _target = null;
+            _distanceBetweenTarget = -1;
         }
         else
         {
@@ -108,13 +109,13 @@ public class CardSelect : MonoBehaviour
                     index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
                     _actions.WellsFargoAction(_thisPlayerModel, index);
                     break;
-                case "Stage coach":
-                    Debug.Log("WELLS FARGO TIKLANDII");
+                case "Stage Coach":
+                    Debug.Log("Stage Coach TIKLANDII");
                     index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
                     _actions.StagecoachAction(_thisPlayerModel, index);
                     break;
                 case "Gatling":
-                    Debug.Log("WELLS FARGO TIKLANDII");
+                    Debug.Log("GATLING TIKLANDII");
                     index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
                     _actions.GatlingAction(_thisPlayerObject, index);
                     break;
@@ -167,12 +168,12 @@ public class CardSelect : MonoBehaviour
 
         yield return new WaitUntil(() => name);
         yield return new WaitForSeconds(1f);
-        //_actions.DiscardCard(_thisPlayerObject, index);
+        
         _target = null;
         _distanceBetweenTarget = -1;
 
-        
     }
+
     private IEnumerator CatBalouRoutine(int index)
     {
         var before = _gameManager.IsActiveButton();
@@ -192,7 +193,7 @@ public class CardSelect : MonoBehaviour
         var before = _gameManager.IsActiveButton();
         _gameManager.OpenCloseDiscardButton(false);
         yield return new WaitUntil(() => _target != null);
-        yield return new WaitUntil(() => _actions.CalculateScopeCanHit(_thisPlayerObject, _target));
+        yield return new WaitUntil(() => _actions.CalculateScopeCanHit(_thisPlayerObject, _target)); // bedra ya vurabilecegi kimse yoksa ama bang dediyse.
         _gameManager.OpenCloseDiscardButton(before);
         Debug.Log($"bang to: {_target.name}");
 
@@ -201,7 +202,7 @@ public class CardSelect : MonoBehaviour
         // ehehe salak bilgisayarýnýn þifresi yok???
         //artýk gelinbizi polise þikayet edecekler
         
-        _actions.BangAction(_thisPlayerObject,_target, index);
+        _actions.BangAction(_thisPlayerObject,_target);
         yield return new WaitForSeconds(0.3f);
         _actions.DiscardCard(_thisPlayerObject, index);
         _target = null;
