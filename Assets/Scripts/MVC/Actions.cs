@@ -78,6 +78,7 @@ public class Actions : MonoBehaviour
     }
 
 
+
     private IEnumerator CheckTheNextCard(GameObject player)
     {
         // next card to (TheNextCard) panel
@@ -94,7 +95,10 @@ public class Actions : MonoBehaviour
 
     }
 
-
+    public void AddingGunToPlayer(GameObject player, int rangeAmount, GameObject theCard, bool multipleBangs, string cardName)
+    {
+        cardsController.AddGunServer(player, rangeAmount, theCard, multipleBangs, cardName);
+    }
 
     void MissedAction(PlayerModel player) // Karavana // also discard card 
     {
@@ -261,7 +265,7 @@ public class Actions : MonoBehaviour
     }
     public bool CalculateScopeCanHit(GameObject thisPlayer,GameObject target)
     {
-        int scopeLevel = 1; // player'in infosundan cek
+        int scopeLevel = thisPlayer.GetComponent<PlayerModel>().Range; // player'in infosundan cek
         int d = scopeLevel - CalculateDistance(thisPlayer, target);
 
         return (d>=0); // if >=0 can if <0 cannot

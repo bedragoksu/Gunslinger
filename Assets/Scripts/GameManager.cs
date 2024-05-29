@@ -98,6 +98,8 @@ public class GameManager : NetworkBehaviour
     public void NextUIButton()
     {
         ScreenLog.Instance.SendEvent(TextType.Debug, "next ui button");
+
+        _turns[_turnInt].GetComponent<PlayerModel>().PlayedBang = false;
         StartCoroutine(r());
 
         AssignStateServer(GameState.DrawCard);

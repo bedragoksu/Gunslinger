@@ -14,7 +14,10 @@ public class PlayerModel : NetworkBehaviour
     public string PlayerName;
     public int CurrentBulletPoint = 4;
     [SyncVar] public TypeOfPlayer PlayerRole;
+
     public bool CanPlayMultipleBangs = false;
+    public bool PlayedBang = false;
+
     public GunModel gun; // can change
     public CharacterModel character;
     public List<GameObject> openHand;
@@ -22,6 +25,8 @@ public class PlayerModel : NetworkBehaviour
     public int position;
 
     public bool IsAlive = true;
+    public int Range = 1;
+    public bool hasGun = false;
 
     public bool clicked = false;
 
