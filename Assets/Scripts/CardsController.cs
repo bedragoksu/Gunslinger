@@ -23,6 +23,54 @@ namespace Gunslinger.Controller
 
         private bool saved = false;
 
+        [ServerRpc(RequireOwnership =false)]
+        public void AddGunServer(GameObject player, int rangeAmount, GameObject theCard, bool multipleBangs, string cardName)
+        {
+            AddGun(player, rangeAmount, theCard, multipleBangs, cardName);
+        }
+        [ObserversRpc]
+        private void AddGun(GameObject player, int rangeAmount, GameObject theCard, bool multipleBangs, string cardName)
+        {
+            PlayerModel plModel = player.GetComponent<PlayerModel>();
+            plModel.CanPlayMultipleBangs = false;
+
+            if (plModel.hasGun) // silahi sil
+            {
+                // stackhandden discard kart yap
+                // stackten deck'e at
+                GameObject foundItem = plModel.stackHand.Find(item => item.name.StartsWith("Volcanic") ||
+                                                                        item.name.StartsWith("Remington") ||
+                                                                        item.name.StartsWith("Rev. Carabine") ||
+                                                                        item.name.StartsWith("Schofield") ||
+                                                                        item.name.StartsWith("Winchester"));
+                foundItem.transform.SetParent(GameObject.Find("DeckPanel").transform);
+            }
+
+            plModel.openHand.Remove(theCard);
+            plModel.stackHand.Add(theCard);
+
+            GameObject cardfrompanel = null;
+            GameObject handpanel = GameObject.Find("HandPanel");
+            for (int i = 0; i< handpanel.transform.childCount; i++)
+            {
+                if (handpanel.transform.GetChild(i).gameObject.name.StartsWith(cardName))
+                {
+                    cardfrompanel = handpanel.transform.GetChild(i).gameObject;
+                    break;
+                }
+            }
+            
+            if(cardfrompanel)
+            {
+                cardfrompanel.transform.SetParent(GameObject.Find("StackHandPanel").transform);
+                cardfrompanel.SetActive(false);
+            }
+            plModel.Range = rangeAmount;
+            plModel.hasGun = true;
+            plModel.CanPlayMultipleBangs = multipleBangs;
+        }
+
+
         public bool CheckNext(GameObject player)
         {
             CheckTheNextCardServer(player); // bedra, need coroutine?
@@ -52,8 +100,6 @@ namespace Gunslinger.Controller
             }
 
             CardPointer++;
-
-            
         }
 
 

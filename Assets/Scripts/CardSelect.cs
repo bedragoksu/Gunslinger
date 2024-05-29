@@ -89,7 +89,11 @@ public class CardSelect : MonoBehaviour
             {
                 case "Bang":
                     Debug.Log("BANG TIKLANDIIIII");
-                    StartCoroutine("BangRoutine", this.gameObject);
+                    if(_thisPlayerModel.CanPlayMultipleBangs || !_thisPlayerModel.PlayedBang)
+                    {
+                        _thisPlayerModel.PlayedBang = true;
+                        StartCoroutine("BangRoutine", this.gameObject);
+                    }
                     break;
                 //case "Missed":
                 //    Debug.Log("MISSED TIKLANDII");
@@ -143,6 +147,21 @@ public class CardSelect : MonoBehaviour
                     Debug.Log("PANÝK TIKLANDII");
                     index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
                     StartCoroutine("PanicRoutine", index);
+                    break;
+                case "Volcanic":
+                    _actions.AddingGunToPlayer(_thisPlayerObject, 1,this.gameObject, true, "Volcanic");
+                    break;
+                case "Remington":
+                    _actions.AddingGunToPlayer(_thisPlayerObject, 3, this.gameObject,false, "Remington");
+                    break;
+                case "Rev. Carabine":
+                    _actions.AddingGunToPlayer(_thisPlayerObject, 4, this.gameObject,false, "Rev. Carabine");
+                    break;
+                case "Schofield":
+                    _actions.AddingGunToPlayer(_thisPlayerObject, 2, this.gameObject, false, "Schofield");
+                    break;
+                case "Winchester":
+                    _actions.AddingGunToPlayer(_thisPlayerObject, 5, this.gameObject, false, "Winchester");
                     break;
 
             }

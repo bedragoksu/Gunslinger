@@ -79,11 +79,11 @@ public class CardManager : NetworkBehaviour
                     case "Scope": // ok
                         createCards(sampleCard, 1); break;
                     case "Barrel": // ok
-                        createCards(sampleCard, 12); break;
+                        createCards(sampleCard, 2); break;
                     case "Volcanic":
                         createCards(sampleCard, 2); break;
                     case "Remington":
-                        createCards(sampleCard, 1); break;
+                        createCards(sampleCard, 11); break;
                     case "Rev. Carabine":
                         createCards(sampleCard, 1); break;
                     case "Schofield":
