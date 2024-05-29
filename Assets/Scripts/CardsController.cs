@@ -4,6 +4,7 @@ using NeptunDigital;
 using System.Collections.Generic;
 using UnityEngine;
 using FishNet.Object.Synchronizing;
+using UnityEngine.UI;
 
 namespace Gunslinger.Controller
 {
@@ -20,8 +21,58 @@ namespace Gunslinger.Controller
         private GameObject _deck;
 
 
+        private bool saved = false;
 
-        
+        public bool CheckNext(GameObject player)
+        {
+            CheckTheNextCardServer(player); // bedra, need coroutine?
+            return saved;
+        }
+
+        [ServerRpc(RequireOwnership =false)]
+        private void CheckTheNextCardServer(GameObject player)
+        {
+            CheckTheNextCard(player);
+        }
+        [ObserversRpc]
+        private void CheckTheNextCard(GameObject player)
+        {
+            saved = false;
+
+            var pointer = player.GetComponent<CardManager>().CardOrder[CardPointer];
+            var child = GetChildOfDeck(pointer, _deck);
+            child.SetActive(true);
+            child.transform.SetParent(GameObject.Find("TheNextCard").transform);
+            child.transform.localPosition = new Vector3(0f,0f,0f);
+
+            // change saved
+            if(child.transform.Find("Symbol").GetComponent<Image>().sprite.name == "hearts")
+            {
+                saved = true;
+            }
+
+            CardPointer++;
+
+            
+        }
+
+
+        [ServerRpc(RequireOwnership = false)]
+        public void CloseTheNextCardServer()
+        {
+            CloseTheNextCard();
+        }
+        [ObserversRpc]
+        private void CloseTheNextCard()
+        {
+            var par = GameObject.Find("TheNextCard").transform;
+            var deck = GameObject.Find("DeckPanel").transform;
+            foreach (Transform c in par)
+            {
+                c.SetParent(deck);
+            }
+        }
+
 
         public bool DrawCards(GameObject player,int amount)
         {
@@ -226,7 +277,7 @@ namespace Gunslinger.Controller
         [ObserversRpc]
         public void UpdateHealth(PlayerModel player, int amount)
         {
-            player.CurrentBulletPoint += amount;// max olup olmadigina bak !! bedra
+            player.CurrentBulletPoint += amount;// can 0 olmasi durumu/ dead !! bedra
 
             int maxpoint = 0;
             if (player.PlayerRole == PlayerModel.TypeOfPlayer.Sheriff)
@@ -238,6 +289,12 @@ namespace Gunslinger.Controller
                 maxpoint = 4;
             }
             if(player.CurrentBulletPoint > maxpoint) player.CurrentBulletPoint = maxpoint;
+
+            if(player.CurrentBulletPoint <= 0) // dead zort womp womp
+            {
+                player.IsAlive = false;
+            }
+
         }
 
 
