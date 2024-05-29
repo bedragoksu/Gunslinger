@@ -91,9 +91,9 @@ public class CardSelect : MonoBehaviour
                     Debug.Log("BANG TIKLANDIIIII");
                     StartCoroutine("BangRoutine", this.gameObject);
                     break;
-                case "Missed":
-                    Debug.Log("MISSED TIKLANDII");
-                    break;
+                //case "Missed":
+                //    Debug.Log("MISSED TIKLANDII");
+                //    break;
                 case "Saloon":
                     Debug.Log("KAHVEHNE TIKLANDIII");
                     index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);

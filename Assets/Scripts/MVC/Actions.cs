@@ -12,18 +12,39 @@ public class Actions : MonoBehaviour
     public CardsController cardsController;
 
     // Card Actions
+
+    bool barrelSaved = false;
     public void BangAction(GameObject player, GameObject target) // Bang
     {
         PlayerModel targetPlayer = target.GetComponent<PlayerModel>();
         Debug.Log($"target of bang: {targetPlayer.PlayerName}");
 
-        if (/*CalculateScope(target) >= 0*/ true) // calculate distance instead of 0 // before calling bang action
+        bool hasBarrel = false;
+        foreach(var stack in targetPlayer.stackHand)
+        {
+            if (stack.name.StartsWith("Barrel"))
+            {
+                hasBarrel = true;
+                break;
+            }
+        }
+
+        barrelSaved = false;
+        if (hasBarrel)
+        {
+            // look out for the next card
+            StartCoroutine("CheckTheNextCard", target);
+        }
+
+
+        if (!barrelSaved)
         {
             bool hasMissed = false;
             var hand = targetPlayer.openHand;
             for (int i=0; i< hand.Count; i++)
             {
-                if (hand[i].name.StartsWith("Missed"))
+                var name = hand[i].name;
+                if (name.StartsWith("Missed"))
                 {
                     DiscardCard(target, i);
                     hasMissed = true;
@@ -32,18 +53,49 @@ public class Actions : MonoBehaviour
                 }
             }
             
-            if(!hasMissed) cardsController.UpdateHealthServer(targetPlayer, -1);
-            //foreach (var card in targetPlayer.openHand)
-            //{
-            //    if (card.name.StartsWith("Missed")) // Karavana
-            //    {
-            //        DiscardCard(target, card);
-            //        MissedAction(targetPlayer);
-            //        return;
-            //    }
-            //}
+            //bitki cayi
+            if(!hasMissed)
+            {
+                var hasBeer = false;
+                if(targetPlayer.CurrentBulletPoint == 1)
+                {
+                    for (int i = 0; i < hand.Count; i++)
+                    {
+                        var name = hand[i].name;
+                        if (name.StartsWith("Beer"))
+                        {
+                            DiscardCard(target, i);
+                            hasBeer = true;
+                            //MissedAction(targetPlayer);
+                            break;
+                        }
+                    }
+                }
+                if (!hasBeer) { cardsController.UpdateHealthServer(targetPlayer, -1); }
+            }
+            
         }
     }
+
+
+    private IEnumerator CheckTheNextCard(GameObject player)
+    {
+        // next card to (TheNextCard) panel
+        var b = cardsController.CheckNext(player);
+
+        // wait for 2 seconds
+        yield return new WaitForSeconds(2f);
+
+        // if it has heart then barrelSaved = true otherwise false
+        barrelSaved = b;
+
+        // next card to deck
+        cardsController.CloseTheNextCardServer();
+
+    }
+
+
+
     void MissedAction(PlayerModel player) // Karavana // also discard card 
     {
         cardsController.UpdateHealthServer(player, 1);
@@ -52,7 +104,7 @@ public class Actions : MonoBehaviour
     public void BeerAction(PlayerModel player, int playedCard) // Bitki çayý
     {
         var maxbullet = (player.PlayerRole == PlayerModel.TypeOfPlayer.Sheriff)? 5 : 4;
-        if (GetComponent<PlayerModel>().CurrentBulletPoint < maxbullet)
+        if (player.CurrentBulletPoint < maxbullet)
         {
             cardsController.UpdateHealthServer(player, 1);
         }
