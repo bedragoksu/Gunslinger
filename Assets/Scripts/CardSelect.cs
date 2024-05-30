@@ -86,6 +86,8 @@ public class CardSelect : MonoBehaviour
         //Debug.Log(cardName);
         _thisPlayerModel.clicked = true;
         int index = 0;
+        _target = null;
+        _distanceBetweenTarget = -1;
 
         if(_gameManager.CurrentGameState == GameManager.GameState.PlayCard)
         {
