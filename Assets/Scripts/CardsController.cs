@@ -352,13 +352,44 @@ namespace Gunslinger.Controller
             }
             if(player.CurrentBulletPoint > maxpoint) player.CurrentBulletPoint = maxpoint;
 
-            if(player.CurrentBulletPoint <= 0) // dead zort womp womp
+            if(player.CurrentBulletPoint <= 0) // dead 
             {
                 player.IsAlive = false;
+
+
+                var currentAlives = GetAlivePlayers();
+                bool lastSheriff = true;
+                foreach(var a in currentAlives)
+                {
+                    if(a.PlayerRole == PlayerModel.TypeOfPlayer.Outlaw || a.PlayerRole == PlayerModel.TypeOfPlayer.Renegade)
+                    {
+                        lastSheriff = false;
+                    }
+                }
+
+                if(player.PlayerRole == PlayerModel.TypeOfPlayer.Sheriff || lastSheriff)
+                {
+                    gameManager.UpdateGameState(GameManager.GameState.EndOfGame);
+                }
+
+
             }
 
         }
 
+        public List<PlayerModel> GetAlivePlayers()
+        {
+            var playerList = GameObject.FindGameObjectsWithTag("Player");
+            List<PlayerModel> aliveList = new List<PlayerModel>();
+
+
+            foreach (var pl in playerList)
+            {
+                if (pl.GetComponent<PlayerModel>().IsAlive) aliveList.Add(pl.GetComponent<PlayerModel>());
+            }
+
+            return aliveList;
+        }
 
     }
 }
