@@ -177,17 +177,58 @@ public class GameManager : NetworkBehaviour
                 HandleDiscardCard();
                 break;
             case GameState.EndOfGame:
-                //HandleEndOfGame();
+                HandleEndOfGame();
                 break;
         }
         _onGameStateChanged?.Invoke(newState);
+    }
+
+    private void HandleEndOfGame()
+    {
+        List<PlayerModel> alivePlayers = _cc.GetAlivePlayers();
+        bool sheriff = false;
+        bool deputy = false;
+        bool outlaw = false;
+        bool renegade = false;
+
+        foreach(var a in alivePlayers)
+        {
+            switch (a.PlayerRole)
+            {
+                case PlayerModel.TypeOfPlayer.Sheriff:
+                    sheriff = true;
+                    break;
+                case PlayerModel.TypeOfPlayer.Deputy:
+                    deputy = true;
+                    break;
+                case PlayerModel.TypeOfPlayer.Outlaw:
+                    outlaw = true;
+                    break;
+                case PlayerModel.TypeOfPlayer.Renegade:
+                    renegade = true;
+                    break;
+            }
+        }
+
+        if (outlaw)
+        {
+            // haydutlar kazandi
+        }else if (sheriff)
+        {
+            // aynasizlar ve serif kazandi
+        }else if (renegade)
+        {
+            // hain kazandi
+        }
+
+        // beklet ve finito
+        
     }
 
     private void HandleDiscardCard()
     {
         ScreenLog.Instance.SendEvent(TextType.Debug, "DISCARD CARD STATE");
     }
-
 
     private void HandlePlayCard()
     {

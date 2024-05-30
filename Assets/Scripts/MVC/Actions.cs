@@ -236,18 +236,12 @@ public class Actions : MonoBehaviour
         PlayerModel plModel = player.GetComponent<PlayerModel>();
         PlayerModel targetModel = target.GetComponent<PlayerModel>();
 
-        var playerList = GameObject.FindGameObjectsWithTag("Player");
-        List<GameObject> aliveList = new List<GameObject>();
+        List<PlayerModel> aliveList = cardsController.GetAlivePlayers();
 
-
-        foreach(var pl in playerList)
-        {
-            if (pl.GetComponent<PlayerModel>().IsAlive) aliveList.Add(pl);
-        }
 
         for(int i=0; i< aliveList.Count;i++)
         {
-            var model = playerList[i].GetComponent<PlayerModel>();
+            var model = aliveList[i];
             if (model.PlayerName == plModel.PlayerName)
             {
                 indexA = i;
@@ -270,6 +264,8 @@ public class Actions : MonoBehaviour
 
         return (d>=0); // if >=0 can if <0 cannot
     }
+
+    
     public void MoveToStackHand(GameObject player, int i)
     {
         StartCoroutine("MoveToStackRoutine", Tuple.Create(player, i));
