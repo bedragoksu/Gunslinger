@@ -46,8 +46,24 @@ namespace Gunslinger.Controller
                 foundItem.transform.SetParent(GameObject.Find("DeckPanel").transform);
             }
 
-            plModel.openHand.Remove(theCard);
-            plModel.stackHand.Add(theCard);
+            GameObject cardObj = null;
+            foreach(var c in plModel.openHand)
+            {
+                if (c.name.StartsWith(cardName))
+                {
+                    plModel.openHand.Remove(c);
+                    cardObj = c;
+                }
+            }
+
+            if (cardObj) 
+            {
+                plModel.stackHand.Add(cardObj);
+            }
+            else
+            {
+                plModel.stackHand.Add(theCard);
+            }
 
             GameObject cardfrompanel = null;
             GameObject handpanel = GameObject.Find("HandPanel");

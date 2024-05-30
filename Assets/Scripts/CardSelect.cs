@@ -51,28 +51,32 @@ public class CardSelect : MonoBehaviour
                     {
                         if (hit.collider.gameObject != _thisPlayerObject)
                         {
-                            _target = hit.collider.gameObject;
-                            _distanceBetweenTarget = _actions.CalculateDistance(_thisPlayerObject, _target);
+                            if (hit.collider.gameObject.GetComponent<PlayerModel>().IsAlive)
+                            {
+                                _target = hit.collider.gameObject;
+                                _distanceBetweenTarget = _actions.CalculateDistance(_thisPlayerObject, _target);
+                            }
+                            
                         }
                     }
                 }
             }
         }
 
-        if(_gameManager.GetTurnInt() == _thisPlayerModel.PlayerID && !_thisPlayerModel.clicked)
-        {
-            this.GetComponent<Button>().interactable = true;
-            _target = null;
-            _distanceBetweenTarget = -1;
-        }
-        else
-        {
-            this.GetComponent<Button>().interactable = false;
-            if(_gameManager.GetTurnInt() != _thisPlayerModel.PlayerID)
-            {
-                _thisPlayerModel.clicked = false;
-            }
-        }
+        //if(_gameManager.GetTurnInt() == _thisPlayerModel.PlayerID && !_thisPlayerModel.clicked)
+        //{
+        //    this.GetComponent<Button>().interactable = true;
+        //    _target = null;
+        //    _distanceBetweenTarget = -1;
+        //}
+        //else
+        //{
+        //    this.GetComponent<Button>().interactable = false;
+        //    if(_gameManager.GetTurnInt() != _thisPlayerModel.PlayerID)
+        //    {
+        //        _thisPlayerModel.clicked = false;
+        //    }
+        //}
 
     }
     public void OnClick() // discard islemlerini burada yapabilirsin
@@ -89,10 +93,13 @@ public class CardSelect : MonoBehaviour
             {
                 case "Bang":
                     Debug.Log("BANG TIKLANDIIIII");
-                    if(_thisPlayerModel.CanPlayMultipleBangs || !_thisPlayerModel.PlayedBang)
+                    if (CanHitAnyone(_thisPlayerObject))
                     {
-                        _thisPlayerModel.PlayedBang = true;
-                        StartCoroutine("BangRoutine", this.gameObject);
+                        if (_thisPlayerModel.CanPlayMultipleBangs || !_thisPlayerModel.PlayedBang)
+                        {
+                            _thisPlayerModel.PlayedBang = true;
+                            StartCoroutine("BangRoutine", this.gameObject);
+                        }
                     }
                     break;
                 //case "Missed":
@@ -172,7 +179,23 @@ public class CardSelect : MonoBehaviour
             index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
             _actions.DiscardCard(_thisPlayerObject, index);
         }
+        //_thisPlayerModel.clicked = false;
+    }
 
+    // kimseye vuramýyorsak??
+    private bool CanHitAnyone(GameObject player)
+    {
+        var plList = GameObject.FindGameObjectsWithTag("Player");
+
+        foreach(var pl in plList)
+        {
+            if(pl != player && pl.GetComponent<PlayerModel>().IsAlive)
+            {
+                if (_actions.CalculateScopeCanHit(player, pl)) return true;
+            }
+        }
+
+        return false;
     }
 
     private IEnumerator PanicRoutine(int index)
