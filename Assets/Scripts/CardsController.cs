@@ -35,7 +35,7 @@ namespace Gunslinger.Controller
             PlayerModel plModel = player.GetComponent<PlayerModel>();
             plModel.CanPlayMultipleBangs = false;
 
-            if (plModel.hasGun) // silahi sil
+            if (false) // silahi sil //plModel.hasGun
             {
                 // stackhandden discard kart yap
                 // stackten deck'e at

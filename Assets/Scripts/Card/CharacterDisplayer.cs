@@ -73,8 +73,10 @@ public class CharacterDisplayer : MonoBehaviour
             CreateBullet();
 
 
-    }
+        b = true;
 
+    }
+    bool b = false;
     private void CreateBullet()
     {
         GameObject instantiatedPrefab = Instantiate(bullet, transform.position, Quaternion.identity, transform);
@@ -110,6 +112,6 @@ public class CharacterDisplayer : MonoBehaviour
     }
     private void Update()
     {
-        UpdateBullets();
+        if(b) UpdateBullets();
     }
 }

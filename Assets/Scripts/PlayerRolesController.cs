@@ -83,7 +83,7 @@ namespace Gunslinger.Controller
             // assign roles to players
             foreach (var player in Players)
             {
-                var randomint = 0; // Random.Range(0, possiblePlayerTypes.Count)
+                var randomint = Random.Range(0, possiblePlayerTypes.Count); // 0
                 var type = possiblePlayerTypes[randomint];
                 possiblePlayerTypes.RemoveAt(randomint);
                 ScreenLog.Instance.SendEvent(TextType.Debug, $"player stuff: {player} {type}");
