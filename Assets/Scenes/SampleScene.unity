@@ -1457,6 +1457,7 @@ MonoBehaviour:
   _networkManager: {fileID: 1744729131}
   gameManager: {fileID: 1671340380}
   prc: {fileID: 307276242}
+  characterDisplayer: {fileID: 907288057}
   CardPointer: 17
   discard: 0
   move: 0
@@ -9563,6 +9564,7 @@ MonoBehaviour:
   CurrentGameState: 0
   _prc: {fileID: 307276242}
   _cc: {fileID: 348911315}
+  _ccc: {fileID: 956483203}
   _turnInt: 0
   CharacterDisplayer: {fileID: 907288054}
   CardDisplayer: {fileID: 779978525}

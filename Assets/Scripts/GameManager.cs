@@ -23,6 +23,7 @@ public class GameManager : NetworkBehaviour
 
     [SerializeField] private PlayerRolesController _prc;
     [SerializeField] private CardsController _cc;
+    [SerializeField] private CharacterCanvasController _ccc;
 
     private GameObject[] _turns;
     [SyncVar] private int _turnInt; public int GetTurnInt() { return _turnInt; }
@@ -92,8 +93,8 @@ public class GameManager : NetworkBehaviour
         {
             buttons[1].interactable = true;
         }
-        
-        
+
+        _ccc.UpdateCanvas();
     }
     public void NextUIButton()
     {
@@ -248,6 +249,7 @@ public class GameManager : NetworkBehaviour
         }
         _thisPlayer.GetComponent<PlayerModel>().cardchange(true);
         PlayerInfoStack.GetComponent<PlayerInfoControllerUI>().UpdateStackCanvas();
+        _ccc.UpdateCanvas();
     }
 
 
@@ -262,7 +264,7 @@ public class GameManager : NetworkBehaviour
             _isRoleAssinged = true;
         }
         //CardDisplayer.GetComponent<HandDisplay>().handCardOnChange();
-
+        _ccc.UpdateCanvas();
 
         StartCoroutine(DrawCardRoutine());
     }
