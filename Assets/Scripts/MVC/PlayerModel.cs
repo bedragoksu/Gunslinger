@@ -53,6 +53,7 @@ public class PlayerModel : NetworkBehaviour
         counter= base.ObjectId;
         openHand = new List<GameObject>();
 
+
         if (base.IsOwner)
         {
             PlayerModel player = GetComponent<PlayerModel>();
@@ -74,9 +75,27 @@ public class PlayerModel : NetworkBehaviour
         {
             GetComponent<PlayerModel>().enabled = false;
         }
-
-
     }
+
+    //public override void OnStopClient()
+    //{
+    //    base.OnStopClient();
+        
+    //    ScreenLog.Instance.SendEvent(TextType.Debug, $"IM GOING BYEEE: {PlayerName}");
+    //    CloneThePlayer();
+    //}
+
+    //[ServerRpc(RequireOwnership = false)]
+    //public void CloneThePlayer()
+    //{
+    //    clone();
+    //}
+    //[ObserversRpc]
+    //public void clone()
+    //{
+    //    GameObject cloned = Instantiate(gameObject, gameObject.transform.position, gameObject.transform.rotation);
+    //    ServerManager.Spawn(cloned);
+    //}
 
     public void cardchange(bool b)
     {
@@ -151,6 +170,18 @@ public class PlayerModel : NetworkBehaviour
     public void AssignMagicNum(PlayerModel player, int magicNum)
     {
         player.ChangeMagicNum(magicNum);
+    }
+
+
+
+    public override void OnStopClient()
+    {
+        base.OnStopClient();
+
+        GameObject g = Instantiate(gameObject, gameObject.transform.position, gameObject.transform.rotation);
+        g.name = "bbbbbbbbbbbbbbbbbbbbb";
+        g.SetActive(true);
+        ServerManager.Spawn(g);
     }
 
 }
