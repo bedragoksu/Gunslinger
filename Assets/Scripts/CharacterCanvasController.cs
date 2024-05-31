@@ -73,15 +73,8 @@ public class CharacterCanvasController : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.anyKeyDown)
-        {
-            if (Input.GetKeyDown(KeyCode.Q))
-            {
-                UpdateCanvas();
-            }
+        UpdateCanvas();
 
-        }
-        
     }
 
 }

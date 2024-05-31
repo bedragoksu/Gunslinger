@@ -110,13 +110,6 @@ public class CharacterDisplayer : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.anyKeyDown)
-        {
-            if (Input.GetKeyDown(KeyCode.Z))
-            {
-                UpdateBullets();
-            }
-            
-        }
+        UpdateBullets();
     }
 }
