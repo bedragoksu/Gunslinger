@@ -16,7 +16,8 @@ namespace Gunslinger.Controller
         public CharacterDisplayer characterDisplayer;
 
         [SyncVar]public int CardPointer = 17; // bu sayi simdilik kalsin, assignroles parcalaninca pointer deðerinden alinacak
-                                     // pointer cards lengthinden sonra 0'lanmalý
+                                              // pointer cards lengthinden sonra 0'lanmalý
+        private int _cardNum = 69;
 
         private GameObject[] Players;
         private GameObject _deck;
@@ -35,7 +36,7 @@ namespace Gunslinger.Controller
             PlayerModel plModel = player.GetComponent<PlayerModel>();
             plModel.CanPlayMultipleBangs = false;
 
-            if (false) // silahi sil //plModel.hasGun
+            if (plModel.hasGun) // silahi sil //
             {
                 // stackhandden discard kart yap
                 // stackten deck'e at
@@ -71,22 +72,7 @@ namespace Gunslinger.Controller
                 plModel.stackHand.Add(theCard);
             }
 
-            GameObject cardfrompanel = null;
-            GameObject handpanel = GameObject.Find("HandPanel");
-            for (int i = 0; i< handpanel.transform.childCount; i++)
-            {
-                if (handpanel.transform.GetChild(i).gameObject.name.StartsWith(cardName))
-                {
-                    cardfrompanel = handpanel.transform.GetChild(i).gameObject;
-                    break;
-                }
-            }
             
-            if(cardfrompanel)
-            {
-                cardfrompanel.transform.SetParent(GameObject.Find("StackHandPanel").transform);
-                cardfrompanel.SetActive(false);
-            }
             plModel.Range = rangeAmount;
             plModel.hasGun = true;
             plModel.CanPlayMultipleBangs = multipleBangs;
@@ -108,7 +94,7 @@ namespace Gunslinger.Controller
         private void CheckTheNextCard(GameObject player)
         {
             saved = false;
-
+            if (CardPointer == _cardNum) CardPointer = 0;
             var pointer = player.GetComponent<CardManager>().CardOrder[CardPointer];
             var child = GetChildOfDeck(pointer, _deck);
             child.SetActive(true);
@@ -154,6 +140,7 @@ namespace Gunslinger.Controller
             ScreenLog.Instance.SendEvent(TextType.Debug, "DRAWING CARDS");
             for(int i=0; i < amount; i++)
             {
+                if (CardPointer == _cardNum) CardPointer = 0;
                 var pointer = player.GetComponent<CardManager>().CardOrder[CardPointer];
                 var child = GetChildOfDeck(pointer,_deck);
                 child.SetActive(true);
@@ -224,6 +211,9 @@ namespace Gunslinger.Controller
         [ObserversRpc]
         public void MoveToStack(GameObject player, int i)
         {
+
+            // birer tane mustang scope vs olabilir bedra
+
             ScreenLog.Instance.SendEvent(TextType.Debug, "move to stack observer");
             var playermodel = player.GetComponent<PlayerModel>();
 

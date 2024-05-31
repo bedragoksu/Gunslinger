@@ -98,6 +98,22 @@ public class Actions : MonoBehaviour
     public void AddingGunToPlayer(GameObject player, int rangeAmount, GameObject theCard, bool multipleBangs, string cardName)
     {
         cardsController.AddGunServer(player, rangeAmount, theCard, multipleBangs, cardName);
+        GameObject cardfrompanel = null;
+        GameObject handpanel = GameObject.Find("HandPanel");
+        for (int i = 0; i < handpanel.transform.childCount; i++)
+        {
+            if (handpanel.transform.GetChild(i).gameObject.name.StartsWith(cardName))
+            {
+                cardfrompanel = handpanel.transform.GetChild(i).gameObject;
+                break;
+            }
+        }
+
+        if (cardfrompanel)
+        {
+            cardfrompanel.transform.SetParent(GameObject.Find("StackHandPanel").transform);
+            cardfrompanel.SetActive(false);
+        }
     }
 
     void MissedAction(PlayerModel player) // Karavana // also discard card 
