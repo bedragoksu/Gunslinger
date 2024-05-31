@@ -13,6 +13,7 @@ namespace Gunslinger.Controller
         [SerializeField] private NetworkManager _networkManager;
         public GameManager gameManager;
         public PlayerRolesController prc;
+        public CharacterDisplayer characterDisplayer;
 
         [SyncVar]public int CardPointer = 17; // bu sayi simdilik kalsin, assignroles parcalaninca pointer deðerinden alinacak
                                      // pointer cards lengthinden sonra 0'lanmalý
@@ -43,7 +44,8 @@ namespace Gunslinger.Controller
                                                                         item.name.StartsWith("Rev. Carabine") ||
                                                                         item.name.StartsWith("Schofield") ||
                                                                         item.name.StartsWith("Winchester"));
-                foundItem.transform.SetParent(GameObject.Find("DeckPanel").transform);
+                if(foundItem) foundItem.transform.SetParent(GameObject.Find("DeckPanel").transform);
+
             }
 
             GameObject cardObj = null;
@@ -51,17 +53,21 @@ namespace Gunslinger.Controller
             {
                 if (c.name.StartsWith(cardName))
                 {
-                    plModel.openHand.Remove(c);
+                    
                     cardObj = c;
+                    break;
                 }
             }
+            
 
             if (cardObj) 
             {
+                plModel.openHand.Remove(cardObj);
                 plModel.stackHand.Add(cardObj);
             }
             else
             {
+                plModel.openHand.Remove(theCard);
                 plModel.stackHand.Add(theCard);
             }
 
@@ -352,7 +358,9 @@ namespace Gunslinger.Controller
             }
             if(player.CurrentBulletPoint > maxpoint) player.CurrentBulletPoint = maxpoint;
 
-            if(player.CurrentBulletPoint <= 0) // dead 
+            characterDisplayer.UpdateBullets();
+
+            if (player.CurrentBulletPoint <= 0) // dead 
             {
                 player.IsAlive = false;
 
