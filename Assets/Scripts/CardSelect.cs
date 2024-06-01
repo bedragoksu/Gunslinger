@@ -187,7 +187,7 @@ public class CardSelect : MonoBehaviour
     // kimseye vuramýyorsak??
     private bool CanHitAnyone(GameObject player)
     {
-        var plList = GameObject.FindGameObjectsWithTag("Player");
+        var plList = _gameManager._turns;
 
         foreach(var pl in plList)
         {
@@ -237,7 +237,7 @@ public class CardSelect : MonoBehaviour
         var before = _gameManager.IsActiveButton();
         _gameManager.OpenCloseDiscardButton(false);
         yield return new WaitUntil(() => _target != null);
-        yield return new WaitUntil(() => _actions.CalculateScopeCanHit(_thisPlayerObject, _target)); // bedra ya vurabilecegi kimse yoksa ama bang dediyse.
+        yield return new WaitUntil(() => _actions.CalculateScopeCanHit(_thisPlayerObject, _target));
         _gameManager.OpenCloseDiscardButton(before);
         Debug.Log($"bang to: {_target.name}");
 

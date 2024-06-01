@@ -151,7 +151,7 @@ MonoBehaviour:
   _isNetworked: 1
   _isGlobal: 0
   _initializeOrder: 0
-  _defaultDespawnType: 0
+  _defaultDespawnType: 1
   NetworkObserver: {fileID: 0}
   <PrefabId>k__BackingField: 2
   <SpawnableCollectionId>k__BackingField: 0
@@ -301,11 +301,18 @@ MonoBehaviour:
   CurrentBulletPoint: 0
   PlayerRole: 0
   CanPlayMultipleBangs: 0
+  PlayedBang: 0
   gun: {fileID: 0}
   character: {fileID: 0}
   openHand: []
+  stackHand: []
   position: 0
+  IsAlive: 1
+  Range: 1
+  hasGun: 0
+  clicked: 0
   magicNum: 0
+  gameObj: {fileID: 5294451582369181646}
 --- !u!114 &-387489480983930929
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -326,7 +333,6 @@ MonoBehaviour:
   _parentObject: {fileID: 0}
   CardObjects: []
   CardOrder: 
-  Players: []
 --- !u!1 &5294491858687964962
 GameObject:
   m_ObjectHideFlags: 0

@@ -19,7 +19,6 @@ namespace Gunslinger.Controller
                                               // pointer cards lengthinden sonra 0'lanmalý
         private int _cardNum = 69;
 
-        private GameObject[] Players;
         private GameObject _deck;
 
 
@@ -242,7 +241,7 @@ namespace Gunslinger.Controller
                 }
             }
 
-            var stack = GameObject.Find("PlayerInfoStack").transform;
+            var stack = GameObject.Find("PlayerInfoStack").transform; // fatih
             foreach(Transform info in stack)
             {
                 if(info.gameObject.name == playermodel.PlayerName)
@@ -271,7 +270,7 @@ namespace Gunslinger.Controller
 
         public bool DealCards()
         {
-            Players = GameObject.FindGameObjectsWithTag("Player");
+            var Players = gameManager._turns;
             _deck = GameObject.Find("DeckPanel");
             var servercardmanager = Players[0].GetComponent<CardManager>();
             int counter = 0;
@@ -377,7 +376,7 @@ namespace Gunslinger.Controller
 
         public List<PlayerModel> GetAlivePlayers()
         {
-            var playerList = GameObject.FindGameObjectsWithTag("Player");
+            var playerList = gameManager._turns;
             List<PlayerModel> aliveList = new List<PlayerModel>();
 
 

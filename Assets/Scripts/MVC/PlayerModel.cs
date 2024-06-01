@@ -125,25 +125,6 @@ public class PlayerModel : NetworkBehaviour
 
     private PlayerModel _thisPlayer;
 
-    private void Update()
-    {
-        var Players = GameObject.FindGameObjectsWithTag("Player");
-        if (Input.GetKeyDown(KeyCode.N))
-        {
-            ScreenLog.Instance.SendEvent(TextType.Debug, $"player id: {_thisPlayer.PlayerID}");
-            ScreenLog.Instance.SendEvent(TextType.Debug, $"player type: {_thisPlayer.PlayerRole}");
-            ScreenLog.Instance.SendEvent(TextType.Debug, $"player name: {_thisPlayer.PlayerName}");
-            ScreenLog.Instance.SendEvent(TextType.Debug, $"magic number: {_thisPlayer.magicNum}");
-
-            ScreenLog.Instance.SendEvent(TextType.Debug, $"card order: {_thisPlayer.GetComponentInParent<CardManager>().CardOrder[0]}");
-            ScreenLog.Instance.SendEvent(TextType.Debug, $"card order: {_thisPlayer.GetComponentInParent<CardManager>().Cards[0]}");
-        }
-        
-
-
-    }
-
-
 
     [ServerRpc]
     public void AssignPlayerModelServer(PlayerModel player, int playerID, string name)
@@ -173,15 +154,47 @@ public class PlayerModel : NetworkBehaviour
     }
 
 
-
-    public override void OnStopClient()
+    public GameObject gameObj;
+    public override void OnStopClient() // bedra turnsdeki doðru yere koy yeni agentý
     {
         base.OnStopClient();
 
-        GameObject g = Instantiate(gameObject, gameObject.transform.position, gameObject.transform.rotation);
-        g.name = "bbbbbbbbbbbbbbbbbbbbb";
-        g.SetActive(true);
-        ServerManager.Spawn(g);
+        //GameObject g = Instantiate(gameObj, gameObject.transform.position, gameObject.transform.rotation);
+
+        //g.GetComponent<PlayerModel>().PlayerName = "xxagentxx";
+        //var gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        //gameManager._turns[PlayerID] = g;
+
+        //ServerManager.Spawn(g);
+        //g.SetActive(true);
+
+        //sts();
+
     }
+
+    //[ServerRpc (RequireOwnership = false)]
+    //public void sts()
+    //{
+    //    st();
+    //}
+    //[ObserversRpc]
+    //public void st()
+    //{
+    //    gameObject.SetActive(true);
+    //    PlayerName = "xxx";
+    //}
+
+    //[ServerRpc(RequireOwnership =false)]
+    //public void SpawnAgentServer(GameObject g)
+    //{
+    //    SpawnAgent(g);
+    //}
+    //[ObserversRpc]
+    //public void SpawnAgent(GameObject g)
+    //{
+    //    g.GetComponent<PlayerModel>().PlayerName = "xxagentxx";
+    //    var gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+    //    gameManager._turns[PlayerID] = g;
+    //}
 
 }

@@ -19,7 +19,7 @@ public class CardManager : NetworkBehaviour
 
     private int _cardNum = 69;
     private int _cardCounter = 0;
-    public GameObject[] Players;
+    
     private Sprite[] _symbolSprites;
     private int _symbolCount = 0;
     private void Start()

@@ -10,6 +10,7 @@ using System.Xml.Linq;
 public class Actions : MonoBehaviour
 {
     public CardsController cardsController;
+    public GameManager gameManager;
 
     // Card Actions
 
@@ -116,12 +117,7 @@ public class Actions : MonoBehaviour
         }
     }
 
-    void MissedAction(PlayerModel player) // Karavana // also discard card 
-    {
-        cardsController.UpdateHealthServer(player, 1);
-        Debug.Log("target missed");
-    }
-    public void BeerAction(PlayerModel player, int playedCard) // Bitki çayý
+    public void BeerAction(PlayerModel player, int playedCard) // Bitki çayý // bedra 2 kere ayni sey
     {
         var maxbullet = (player.PlayerRole == PlayerModel.TypeOfPlayer.Sheriff)? 5 : 4;
         if (player.CurrentBulletPoint < maxbullet)
@@ -131,14 +127,14 @@ public class Actions : MonoBehaviour
         DiscardCard(player.gameObject, playedCard);
     }
 
-    public void WellsFargoAction(PlayerModel player, int playedCard)
+    public void WellsFargoAction(PlayerModel player, int playedCard) // bedra
     {
-        var end = GameObject.Find("CardsController").GetComponent<CardsController>().DrawCards(player.gameObject, 3);
+        cardsController.DrawCards(player.gameObject, 3);
         DiscardCard(player.gameObject, playedCard);
     }
     public void StagecoachAction(PlayerModel player, int playedCard)
     {
-        var end = GameObject.Find("CardsController").GetComponent<CardsController>().DrawCards(player.gameObject, 2);
+        cardsController.DrawCards(player.gameObject, 2);
         DiscardCard(player.gameObject, playedCard);
     }
 
@@ -178,16 +174,10 @@ public class Actions : MonoBehaviour
         return true;
     }
 
-    
-
-
-    void DrawAction() // Fýçý
-    {
-
-    }
+   
     public void SaloonAction(GameObject player, int playedCard) // Kahvehane
     {
-        var players = GameObject.FindGameObjectsWithTag("Player");
+        var players = gameManager._turns;
         foreach(var pl in players)
         {
             cardsController.UpdateHealthServer(pl.GetComponent<PlayerModel>(), 1);
@@ -196,7 +186,7 @@ public class Actions : MonoBehaviour
     }
     public void GatlingAction(GameObject player, int playedCard) // Makineli tüfek
     {
-        var players = GameObject.FindGameObjectsWithTag("Player");
+        var players = gameManager._turns;
 
         foreach(var pl in players)
         {
@@ -286,8 +276,8 @@ public class Actions : MonoBehaviour
     {
         StartCoroutine("MoveToStackRoutine", Tuple.Create(player, i));
 
-        GameObject.Find("GameManager").GetComponent<GameManager>()._thisPlayer.GetComponent<PlayerModel>().clicked = false; // yuh bedra
-        GameObject.Find("GameManager").GetComponent<GameManager>().PlayerInfoStack.GetComponent<PlayerInfoControllerUI>().UpdateStackCanvas();
+        gameManager._thisPlayer.GetComponent<PlayerModel>().clicked = false;
+        gameManager.PlayerInfoStack.GetComponent<PlayerInfoControllerUI>().UpdateStackCanvas();
     }
     IEnumerator MoveToStackRoutine(Tuple<GameObject, int> tuple)
     {
@@ -308,8 +298,8 @@ public class Actions : MonoBehaviour
         StartCoroutine("DiscardCardRoutine", Tuple.Create(player, i));
 
 
-        GameObject.Find("GameManager").GetComponent<GameManager>()._thisPlayer.GetComponent<PlayerModel>().clicked = false; // yuh bedra
-        GameObject.Find("GameManager").GetComponent<GameManager>().PlayerInfoStack.GetComponent<PlayerInfoControllerUI>().UpdateStackCanvas();
+        gameManager._thisPlayer.GetComponent<PlayerModel>().clicked = false;
+        gameManager.PlayerInfoStack.GetComponent<PlayerInfoControllerUI>().UpdateStackCanvas();
 
     }
 
@@ -325,20 +315,7 @@ public class Actions : MonoBehaviour
         //player.GetComponent<PlayerModel>().cardchange(true);
         cardsController.discard = false;
     }
-    public void ChangeWeapon(GunModel gun)
-    {
-        PlayerModel thisPlayer = GetComponent<PlayerModel>();
 
-        thisPlayer.gun = gun;
-    }
-    public bool CheckBullet(GameObject player)
-    {
-        if (player.GetComponent<PlayerModel>().CurrentBulletPoint > 0)
-        {
-            return true;
-        }
-        return false;
-    }
 
     // increase/decrease bullet points
     // pull card
