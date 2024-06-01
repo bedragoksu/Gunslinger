@@ -25,7 +25,7 @@ public class GameManager : NetworkBehaviour
     [SerializeField] private CardsController _cc;
     [SerializeField] private CharacterCanvasController _ccc;
 
-    private GameObject[] _turns;
+    public GameObject[] _turns;
     [SyncVar] private int _turnInt; public int GetTurnInt() { return _turnInt; }
 
     private bool _canStart = false;
@@ -62,9 +62,9 @@ public class GameManager : NetworkBehaviour
         {
             if (Input.GetKeyDown(KeyCode.B) && _canStart && IsServer)
             {
-                var len =_prc.PlayersUpdate();
-                
-                if (len >= 4 && len <= 7)
+                _turns = GameObject.FindGameObjectsWithTag("Player");
+
+                if (_turns.Length >= 4 && _turns.Length <= 7)
                 {
                     _canStart = false;
                     AssignStateServer(GameState.Initialization);

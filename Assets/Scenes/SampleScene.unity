@@ -3546,6 +3546,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cardsController: {fileID: 348911315}
+  gameManager: {fileID: 1671340380}
 --- !u!4 &732951924
 Transform:
   m_ObjectHideFlags: 0
@@ -9565,6 +9566,7 @@ MonoBehaviour:
   _prc: {fileID: 307276242}
   _cc: {fileID: 348911315}
   _ccc: {fileID: 956483203}
+  _turns: []
   _turnInt: 0
   CharacterDisplayer: {fileID: 907288054}
   CardDisplayer: {fileID: 779978525}

@@ -10,7 +10,7 @@ namespace Gunslinger.Controller
     {
         [SerializeField] private NetworkManager _networkManager;
 
-        public List<Transform> Playerlist { get; private set; } //assign game manager to this value, at gamemanagerscript, when game started
+        //public List<Transform> Playerlist { get; private set; } //assign game manager to this value, at gamemanagerscript, when game started
         public GameObject[] Players { get; private set; } //assign game manager to this value, at gamemanagerscript, when game started
         // also needed for turn queue
 
@@ -22,21 +22,21 @@ namespace Gunslinger.Controller
         void Start()
         {
 
-            Playerlist = new List<Transform>();
-            Players = GameObject.FindGameObjectsWithTag("Player");
-            foreach (GameObject p in Players)
-            {
-                Playerlist.Add(p.transform);
-            }
+            //Playerlist = new List<Transform>();
+            //Players = GameObject.FindGameObjectsWithTag("Player");
+            //foreach (GameObject p in Players)
+            //{
+            //    Playerlist.Add(p.transform);
+            //}
         }
 
 
-        public override void OnStartClient()
-        {
-            base.OnStartClient();
-            Playerlist.Clear();
-            Players = GameObject.FindGameObjectsWithTag("Player");
-        }
+        //public override void OnStartClient()
+        //{
+        //    base.OnStartClient();
+        //    Playerlist.Clear();
+        //    Players = GameObject.FindGameObjectsWithTag("Player");
+        //}
 
 
 
@@ -52,6 +52,7 @@ namespace Gunslinger.Controller
         public bool AssignRoles()
         {
             Debug.Log("we can start");
+            Players = gameManager._turns;
 
             possiblePlayerTypes.Add(PlayerModel.TypeOfPlayer.Sheriff);
             possiblePlayerTypes.Add(PlayerModel.TypeOfPlayer.Renegade);
@@ -97,18 +98,18 @@ namespace Gunslinger.Controller
         }
 
 
-        public int PlayersUpdate()
-        {
-            Playerlist.Clear();
-            Players = GameObject.FindGameObjectsWithTag("Player");
-            foreach (var p in Players)
-            {
-                Playerlist.Add(p.transform);
-            }
-            ScreenLog.Instance.SendEvent(TextType.Debug, $"player num: {Players.Length}");
+        //public int PlayersUpdate()
+        //{
+        //    Playerlist.Clear();
+        //    Players = GameObject.FindGameObjectsWithTag("Player");
+        //    foreach (var p in Players)
+        //    {
+        //        Playerlist.Add(p.transform);
+        //    }
+        //    ScreenLog.Instance.SendEvent(TextType.Debug, $"player num: {Players.Length}");
 
-            return Players.Length;
-        }
+        //    return Players.Length;
+        //}
 
         [ObserversRpc]
         public void AssignRolesServer(GameObject player, PlayerModel.TypeOfPlayer type, int id, string name)
