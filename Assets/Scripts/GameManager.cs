@@ -36,6 +36,9 @@ public class GameManager : NetworkBehaviour
     public GameObject PlayerInfoStack; // to initialize stack ui
     private bool _isRoleAssinged = false;
 
+    public bool SomeoneDestroyed = false;
+    public GameObject g;
+
     private Button _discardButton;
     public void OpenCloseDiscardButton(bool open)
     {
@@ -76,6 +79,62 @@ public class GameManager : NetworkBehaviour
             }
         }
 
+
+        if (SomeoneDestroyed)
+        {
+            SomeoneDestroyed = false;
+
+            GameObject des = null;
+
+            foreach(GameObject t in _turns)
+            {
+                if (!t.activeSelf)
+                {
+                    des = t;
+                    break;
+                }
+                
+            }
+
+            if (des)
+            {
+                //AgentUpdateServer(des);
+                string oldName = g.GetComponent<PlayerModel>().PlayerName;
+                g.GetComponent<PlayerModel>().PlayerName = "";
+                ServerManager.Spawn(g);
+
+                foreach (var p in GameObject.FindGameObjectsWithTag("Player"))
+                {
+                    if(p.GetComponent<PlayerModel>().PlayerName == "")
+                    {
+                        AgentUpdateServer(p, g.GetComponent<PlayerModel>().PlayerRole);
+                        break;
+                    }
+                }
+
+                g.GetComponent<PlayerModel>().PlayerName = oldName;
+                //AgentUpdateServer(des);
+
+                //var players = GameObject.FindGameObjectsWithTag("Player");
+                //foreach (var p in players)
+                //{
+                //    ScreenLog.Instance.SendEvent(TextType.Debug, $"{p.GetComponent<PlayerModel>().PlayerName}");
+                //}
+                //ScreenLog.Instance.SendEvent(TextType.Debug, $"destroyed: {des.GetComponent<PlayerModel>().PlayerName}");
+            }
+        }
+
+    }
+
+    [ServerRpc (RequireOwnership = false)]
+    public void AgentUpdateServer(GameObject des, PlayerModel.TypeOfPlayer role)
+    {
+        AgentUpdate(des, role);
+    }
+    [ObserversRpc]
+    public void AgentUpdate(GameObject des, PlayerModel.TypeOfPlayer role)
+    {
+        des.GetComponent<PlayerModel>().PlayerRole = role;
     }
 
     // butonla alakali kisimlar burada buna script ac.!
