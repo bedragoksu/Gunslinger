@@ -33,6 +33,7 @@ public class CardManager : NetworkBehaviour
     public override void OnStartClient()
     {
         base.OnStartClient();
+        _cardCounter = 0;
         _symbolSprites = new Sprite[]
                 {
                     Resources.Load<Sprite>("diamonds"), // karo

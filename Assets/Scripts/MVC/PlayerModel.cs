@@ -170,6 +170,16 @@ public class PlayerModel : NetworkBehaviour
 
         //sts();
 
+        if (base.IsServer)
+        {
+            GameObject.Find("GameManager").GetComponent<GameManager>().g = Instantiate(gameObject, gameObject.transform.position, gameObject.transform.rotation);
+            GameObject.Find("GameManager").GetComponent<GameManager>().SomeoneDestroyed = true;
+
+            //GameObject g = Instantiate(gameObject, gameObject.transform.position, gameObject.transform.rotation);
+            //ServerManager.Spawn(g);
+        }
+
+
     }
 
     //[ServerRpc (RequireOwnership = false)]
