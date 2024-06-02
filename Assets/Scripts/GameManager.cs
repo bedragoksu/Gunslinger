@@ -180,8 +180,6 @@ public class GameManager : NetworkBehaviour
                     break;
                 }
             }
-
-            
         }
 
         targetModel.stackHand = new List<GameObject>();
@@ -364,16 +362,32 @@ public class GameManager : NetworkBehaviour
         yield return new WaitForSeconds(0.5f);
         ScreenLog.Instance.SendEvent(TextType.Debug, "PLAY CARD STATE");
         ScreenLog.Instance.SendEvent(TextType.Debug, $"turnint: {_turnInt}, {_thisPlayer.GetComponent<PlayerModel>().PlayerID}");
-        if (_thisPlayer.GetComponent<PlayerModel>().PlayerID == _turnInt) //true
+
+        if (_turns[_turnInt].GetComponent<PlayerModel>().IsAgent)
         {
-            ScreenLog.Instance.SendEvent(TextType.Debug, "activa");
-            //Activate(_discardButton);
-            OpenCloseDiscardButton(true);
-            // activate the open hands clickable
+            ScreenLog.Instance.SendEvent(TextType.Debug, "AGENT PLAY TURN");
+            if (IsServer)
+            {
+                ScreenLog.Instance.SendEvent(TextType.Debug, "AGENT PLAY TURN ONLY SERVER"); // bedra sena fatih agent burada karar verecek
+            }
         }
-        _thisPlayer.GetComponent<PlayerModel>().cardchange(true);
-        PlayerInfoStack.GetComponent<PlayerInfoControllerUI>().UpdateStackCanvas();
-        _ccc.UpdateCanvas();
+        else
+        {
+
+            if (_thisPlayer.GetComponent<PlayerModel>().PlayerID == _turnInt) //true
+            {
+                ScreenLog.Instance.SendEvent(TextType.Debug, "activa");
+                //Activate(_discardButton);
+                OpenCloseDiscardButton(true);
+                // activate the open hands clickable
+            }
+            _thisPlayer.GetComponent<PlayerModel>().cardchange(true);
+            PlayerInfoStack.GetComponent<PlayerInfoControllerUI>().UpdateStackCanvas();
+            _ccc.UpdateCanvas();
+        }
+
+
+
     }
 
 
