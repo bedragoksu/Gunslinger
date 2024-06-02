@@ -24,6 +24,7 @@ public class PlayerModel : NetworkBehaviour
     public List<GameObject> stackHand;
     public int position;
 
+    public bool IsAgent = false;
     public bool IsAlive = true;
     public int Range = 1;
     public bool hasGun = false;
@@ -80,7 +81,7 @@ public class PlayerModel : NetworkBehaviour
     //public override void OnStopClient()
     //{
     //    base.OnStopClient();
-        
+
     //    ScreenLog.Instance.SendEvent(TextType.Debug, $"IM GOING BYEEE: {PlayerName}");
     //    CloneThePlayer();
     //}
@@ -96,6 +97,7 @@ public class PlayerModel : NetworkBehaviour
     //    GameObject cloned = Instantiate(gameObject, gameObject.transform.position, gameObject.transform.rotation);
     //    ServerManager.Spawn(cloned);
     //}
+
 
     public void cardchange(bool b)
     {
@@ -172,8 +174,16 @@ public class PlayerModel : NetworkBehaviour
 
         if (base.IsServer)
         {
-            GameObject.Find("GameManager").GetComponent<GameManager>().g = Instantiate(gameObject, gameObject.transform.position, gameObject.transform.rotation);
-            GameObject.Find("GameManager").GetComponent<GameManager>().SomeoneDestroyed = true;
+
+            GameManager gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+            Debug.Log("PLAYERS COUNT ON STOP1 " + GameObject.FindGameObjectsWithTag("Player").Length.ToString());
+            gameManager.oldPlayers = GameObject.FindGameObjectsWithTag("Player");
+
+
+            gameManager.g = Instantiate(gameObject, gameObject.transform.position, gameObject.transform.rotation);
+
+            gameManager.GetComponent<GameManager>().SomeoneDestroyed = true;
+            Debug.Log("PLAYERS COUNT ON STOP2 " + GameObject.FindGameObjectsWithTag("Player").Length.ToString());
 
             //GameObject g = Instantiate(gameObject, gameObject.transform.position, gameObject.transform.rotation);
             //ServerManager.Spawn(g);

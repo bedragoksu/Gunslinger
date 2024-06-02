@@ -8,6 +8,7 @@ using Gunslinger.Controller;
 using FishNet.Object.Synchronizing;
 using TMPro;
 using UnityEngine.UI;
+using System.Reflection;
 
 public class GameManager : NetworkBehaviour
 {
@@ -38,6 +39,8 @@ public class GameManager : NetworkBehaviour
 
     public bool SomeoneDestroyed = false;
     public GameObject g;
+    public GameObject[] oldPlayers;
+    public GameObject[] newPlayers;
 
     private Button _discardButton;
     public void OpenCloseDiscardButton(bool open)
@@ -50,8 +53,8 @@ public class GameManager : NetworkBehaviour
     }
 
     public GameObject _thisPlayer;
+    public GameObject destroyedPlayer = null;
 
-    
 
     private void Start()
     {
@@ -100,19 +103,36 @@ public class GameManager : NetworkBehaviour
             {
                 //AgentUpdateServer(des);
                 string oldName = g.GetComponent<PlayerModel>().PlayerName;
-                g.GetComponent<PlayerModel>().PlayerName = "";
                 ServerManager.Spawn(g);
+
+                Debug.Log("PLAYERS COUNT " + GameObject.FindGameObjectsWithTag("Player").Length.ToString());
+                newPlayers = GameObject.FindGameObjectsWithTag("Player");
+
+                destroyedPlayer = _turns[g.GetComponent<PlayerModel>().PlayerID];
+                _turns[g.GetComponent<PlayerModel>().PlayerID] = g;
+
+                List<string> newOpenHand = new List<string>();
+                foreach(var c in destroyedPlayer.GetComponent<PlayerModel>().openHand)
+                {
+                    newOpenHand.Add(c.name);
+                }
+
+                List<string> newStackHand = new List<string>();
+                foreach (var c in destroyedPlayer.GetComponent<PlayerModel>().stackHand)
+                {
+                    newStackHand.Add(c.name);
+                }
 
                 foreach (var p in GameObject.FindGameObjectsWithTag("Player"))
                 {
-                    if(p.GetComponent<PlayerModel>().PlayerName == "")
+                    if (p.GetComponent<PlayerModel>().PlayerName == oldName)
                     {
-                        AgentUpdateServer(p, g.GetComponent<PlayerModel>().PlayerRole);
+                        AgentUpdateServer(p, g.GetComponent<PlayerModel>().PlayerRole, newOpenHand, newStackHand);
                         break;
                     }
                 }
 
-                g.GetComponent<PlayerModel>().PlayerName = oldName;
+                //g.GetComponent<PlayerModel>().PlayerName = oldName;
                 //AgentUpdateServer(des);
 
                 //var players = GameObject.FindGameObjectsWithTag("Player");
@@ -126,15 +146,60 @@ public class GameManager : NetworkBehaviour
 
     }
 
+    
+
     [ServerRpc (RequireOwnership = false)]
-    public void AgentUpdateServer(GameObject des, PlayerModel.TypeOfPlayer role)
+    public void AgentUpdateServer(GameObject des, PlayerModel.TypeOfPlayer role,  List<string> openhand, List<string> stackhand)
     {
-        AgentUpdate(des, role);
+        AgentUpdate(des, role, openhand, stackhand);
     }
     [ObserversRpc]
-    public void AgentUpdate(GameObject des, PlayerModel.TypeOfPlayer role)
-    {
-        des.GetComponent<PlayerModel>().PlayerRole = role;
+    public void AgentUpdate(GameObject des, PlayerModel.TypeOfPlayer role, List<string> openhand, List<string> stackhand)
+    {   
+        PlayerModel targetModel = des.GetComponent<PlayerModel>();
+
+        //FieldInfo[] fields = typeof(PlayerModel).GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy);
+
+        //foreach (FieldInfo field in fields)
+        //{
+        //    field.SetValue(targetModel, field.GetValue(sourceModel));
+        //    Debug.Log(field.GetValue(sourceModel));
+        //}
+        targetModel.IsAgent = true;
+        targetModel.PlayerRole = role;
+        targetModel.openHand = new List<GameObject>();
+        foreach (var card in openhand)
+        {
+            Debug.Log("CARD NAME: " + card);
+
+            foreach(Transform cardtr in GameObject.Find("DeckPanel").transform)
+            {
+                if(cardtr.gameObject.name == card)
+                {
+                    targetModel.openHand.Add(cardtr.gameObject);
+                    break;
+                }
+            }
+
+            
+        }
+
+        targetModel.stackHand = new List<GameObject>();
+        foreach (var card in stackhand)
+        {
+            Debug.Log("CARD NAME: " + card);
+
+            foreach (Transform cardtr in GameObject.Find("DeckPanel").transform)
+            {
+                if (cardtr.gameObject.name == card)
+                {
+                    targetModel.stackHand.Add(cardtr.gameObject);
+                    break;
+                }
+            }
+
+
+        }
     }
 
     // butonla alakali kisimlar burada buna script ac.!

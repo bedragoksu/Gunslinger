@@ -51,7 +51,6 @@ public class CardManager : NetworkBehaviour
         {
             
             CardObjects = new GameObject[_cardNum];
-            CardOrder = new List<int>();
             foreach (var card in Cards)
             {
                 GameObject sampleCard = createSampleCard(card);
@@ -97,10 +96,20 @@ public class CardManager : NetworkBehaviour
                 }
                 _symbolCount = 0;
             }
-            
+
+            InitializeCardOrder();
             CardOrder = ShuffleList(CardOrder);
         }
 
+    }
+
+    public void InitializeCardOrder()
+    {
+        CardOrder = new List<int>();
+        for (int i = 0; i < _cardNum; i++)
+        {
+            CardOrder.Add(i);
+        }
     }
 
     GameObject createSampleCard(CardObject card)
@@ -110,7 +119,6 @@ public class CardManager : NetworkBehaviour
         CardDisplayer cardDisplayer = newCard.GetComponent<CardDisplayer>();
         cardDisplayer.DisplayCard(card);
 
-        CardOrder.Add(_cardCounter);
         CardObjects[_cardCounter++] = newCard;
 
         return newCard;
@@ -126,7 +134,6 @@ public class CardManager : NetworkBehaviour
 
             newCard.name = cardname + "_" + (i + 1);
             AssignSymbol(newCard, i);
-            CardOrder.Add(_cardCounter);
             CardObjects[_cardCounter++] = newCard;
         }
         AssignSymbol(sampleCard, 0);
