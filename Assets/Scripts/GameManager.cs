@@ -25,6 +25,7 @@ public class GameManager : NetworkBehaviour
     [SerializeField] private PlayerRolesController _prc;
     [SerializeField] private CardsController _cc;
     [SerializeField] private CharacterCanvasController _ccc;
+    [SerializeField] private AgentController _agentController;
 
     public GameObject[] _turns;
     [SyncVar] private int _turnInt; public int GetTurnInt() { return _turnInt; }
@@ -357,6 +358,7 @@ public class GameManager : NetworkBehaviour
     {
         StartCoroutine(PlayRoutine());
     }
+
     private IEnumerator PlayRoutine()
     {
         yield return new WaitForSeconds(0.5f);
@@ -369,6 +371,8 @@ public class GameManager : NetworkBehaviour
             if (IsServer)
             {
                 ScreenLog.Instance.SendEvent(TextType.Debug, "AGENT PLAY TURN ONLY SERVER"); // bedra sena fatih agent burada karar verecek
+                Debug.Log("AGENT PLAY TURN ONLY SERVER");
+                _agentController.AgentDecideToPlay(_turns[_turnInt]);
             }
         }
         else
@@ -376,7 +380,6 @@ public class GameManager : NetworkBehaviour
 
             if (_thisPlayer.GetComponent<PlayerModel>().PlayerID == _turnInt) //true
             {
-                ScreenLog.Instance.SendEvent(TextType.Debug, "activa");
                 //Activate(_discardButton);
                 OpenCloseDiscardButton(true);
                 // activate the open hands clickable
@@ -412,7 +415,8 @@ public class GameManager : NetworkBehaviour
         var currentPlayer = _turns[_turnInt];
         var end = GameObject.Find("CardsController").GetComponent<CardsController>().DrawCards(currentPlayer, 2);
         yield return new WaitUntil(() => end);
-        AssignStateServer(GameState.PlayCard);
+        UpdateGameState(GameState.PlayCard);
+        //AssignStateServer(GameState.PlayCard);
     } 
 
     
