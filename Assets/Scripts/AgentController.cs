@@ -52,6 +52,41 @@ public class AgentController : NetworkBehaviour
 
 
         // STACK HAND'E ATILABILECEK KARTLAR
+        while (OpenHandCardNames.Any(item => item.StartsWith("Mustang", StringComparison.OrdinalIgnoreCase)))
+        {
+            StartCoroutine(MoveRoutine(Tuple.Create("Mustang", OpenHandCardNames, AgentPlayerModel)));
+        }
+        while (OpenHandCardNames.Any(item => item.StartsWith("Scope", StringComparison.OrdinalIgnoreCase)))
+        {
+            StartCoroutine(MoveRoutine(Tuple.Create("Scope", OpenHandCardNames, AgentPlayerModel)));
+
+        }
+        while (OpenHandCardNames.Any(item => item.StartsWith("Barrel", StringComparison.OrdinalIgnoreCase)))
+        {
+            StartCoroutine(MoveRoutine(Tuple.Create("Barrel", OpenHandCardNames, AgentPlayerModel)));
+
+        }
+        while (OpenHandCardNames.Any(item => item.StartsWith("Volcanic", StringComparison.OrdinalIgnoreCase)))
+        {
+            StartCoroutine(MoveRoutine(Tuple.Create("Volcanic", OpenHandCardNames, AgentPlayerModel)));
+
+        }
+        while (OpenHandCardNames.Any(item => item.StartsWith("Remington", StringComparison.OrdinalIgnoreCase)))
+        {
+            StartCoroutine(MoveRoutine(Tuple.Create("Remington", OpenHandCardNames, AgentPlayerModel)));
+        }
+        while (OpenHandCardNames.Any(item => item.StartsWith("Rev. Carabine", StringComparison.OrdinalIgnoreCase)))
+        {
+            StartCoroutine(MoveRoutine(Tuple.Create("Rev. Carabine", OpenHandCardNames, AgentPlayerModel)));
+        }
+        while (OpenHandCardNames.Any(item => item.StartsWith("Schofield", StringComparison.OrdinalIgnoreCase)))
+        {
+            StartCoroutine(MoveRoutine(Tuple.Create("Schofield", OpenHandCardNames, AgentPlayerModel)));
+        }
+        while (OpenHandCardNames.Any(item => item.StartsWith("Winchester", StringComparison.OrdinalIgnoreCase)))
+        {
+            StartCoroutine(MoveRoutine(Tuple.Create("Winchester", OpenHandCardNames, AgentPlayerModel)));
+        }
 
         // BANG
         BangDecideTree(OpenHandCardNames, CanHitPlayer, AgentPlayerModel);
@@ -320,6 +355,116 @@ public class AgentController : NetworkBehaviour
         yield return new WaitUntil(() => DiscardCard(tuple.Item1, tuple.Item2, tuple.Item3));
         Debug.Log("DISCARD ENDEDD");
     }
+    private IEnumerator MoveRoutine(Tuple<string, List<string>, PlayerModel> tuple)
+    {
+        yield return new WaitUntil(() => MoveToStackHand(tuple.Item1, tuple.Item2, tuple.Item3));
+        Debug.Log("MOVE ENDEDD");
+    }
+
+    private bool MoveToStackHand(string CardName, List<string> OpenHandCardNames, PlayerModel AgentPlayerModel)
+    {
+        int index = -1;
+        for (int i = 0; i < OpenHandCardNames.Count; i++)
+        {
+            if (OpenHandCardNames[i].StartsWith(CardName))
+            {
+                index = i;
+                break;
+            }
+        }
+        if (index != -1)
+        {
+            MoveFromAgentServer(AgentPlayerModel, index);
+            OpenHandCardNames.RemoveAt(index);
+        }
+
+        return true;
+    }
+    [ServerRpc(RequireOwnership = false)]
+    private void MoveFromAgentServer(PlayerModel AgentPlayerModel, int index)
+    {
+        MoveFromAgent(AgentPlayerModel, index);
+    }
+
+    [ObserversRpc]
+    private void MoveFromAgent(PlayerModel AgentPlayerModel, int index)
+    {
+        var c = AgentPlayerModel.openHand[index];
+        AgentPlayerModel.openHand.RemoveAt(index);
+        AgentPlayerModel.stackHand.Add(c);
+
+
+
+        var stack = GameObject.Find("PlayerInfoStack").transform; // fatih
+        foreach (Transform info in stack)
+        {
+            if (info.gameObject.name == AgentPlayerModel.PlayerName)
+            {
+                Debug.Log("move to stack þey iþte " + c.name);
+                if (c.name.StartsWith("Mustang"))
+                {
+                    var m = info.Find("Mustang").gameObject;
+                    m.SetActive(true);
+                }
+                else if (c.name.StartsWith("Scope"))
+                {
+                    info.Find("Scope").gameObject.SetActive(true);
+                }
+                else if (c.name.StartsWith("Barrel"))
+                {
+                    info.Find("Barrel").gameObject.SetActive(true);
+                }
+
+
+
+
+                if (c.name.StartsWith("Volcanic"))
+                {
+                    info.Find("Volcanic").gameObject.SetActive(true);
+                    info.Find("Remington").gameObject.SetActive(false);
+                    info.Find("Rev. Carabine").gameObject.SetActive(false);
+                    info.Find("Schofield").gameObject.SetActive(false);
+                    info.Find("Winchester").gameObject.SetActive(false);
+                }
+                else if (c.name.StartsWith("Remington"))
+                {
+                    info.Find("Volcanic").gameObject.SetActive(false);
+                    info.Find("Remington").gameObject.SetActive(true);
+                    info.Find("Rev. Carabine").gameObject.SetActive(false);
+                    info.Find("Schofield").gameObject.SetActive(false);
+                    info.Find("Winchester").gameObject.SetActive(false);
+                }
+                else if (c.name.StartsWith("Rev. Carabine"))
+                {
+                    info.Find("Volcanic").gameObject.SetActive(false);
+                    info.Find("Remington").gameObject.SetActive(false);
+                    info.Find("Rev. Carabine").gameObject.SetActive(true);
+                    info.Find("Schofield").gameObject.SetActive(false);
+                    info.Find("Winchester").gameObject.SetActive(false);
+                }
+                else if (c.name.StartsWith("Schofield"))
+                {
+                    info.Find("Volcanic").gameObject.SetActive(false);
+                    info.Find("Remington").gameObject.SetActive(false);
+                    info.Find("Rev. Carabine").gameObject.SetActive(false);
+                    info.Find("Schofield").gameObject.SetActive(true);
+                    info.Find("Winchester").gameObject.SetActive(false);
+                }
+                else if (c.name.StartsWith("Winchester"))
+                {
+                    info.Find("Volcanic").gameObject.SetActive(false);
+                    info.Find("Remington").gameObject.SetActive(false);
+                    info.Find("Rev. Carabine").gameObject.SetActive(false);
+                    info.Find("Schofield").gameObject.SetActive(false);
+                    info.Find("Winchester").gameObject.SetActive(true);
+                }
+
+
+
+            }
+        }
+    }
+
 
     private bool DiscardCard(string CardName, List<string> OpenHandCardNames, PlayerModel AgentPlayerModel)
     {

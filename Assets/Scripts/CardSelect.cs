@@ -14,6 +14,7 @@ public class CardSelect : MonoBehaviour
 
     private GameObject _target;
     private int _distanceBetweenTarget = -1;
+    private int _circularDistanceBetweenTarget = -1;
 
     private Camera _camera;
 
@@ -55,6 +56,7 @@ public class CardSelect : MonoBehaviour
                             {
                                 _target = hit.collider.gameObject;
                                 _distanceBetweenTarget = _actions.CalculateDistance(_thisPlayerObject, _target);
+                                _circularDistanceBetweenTarget = _actions.GetCircularDistance(_thisPlayerObject, _target);
                             }
 
                         }
@@ -88,6 +90,7 @@ public class CardSelect : MonoBehaviour
         int index = 0;
         _target = null;
         _distanceBetweenTarget = -1;
+        _circularDistanceBetweenTarget = -1;
 
         if (_gameManager.CurrentGameState == GameManager.GameState.PlayCard)
         {
@@ -162,18 +165,28 @@ public class CardSelect : MonoBehaviour
                     break;
                 case "Volcanic":
                     _actions.AddingGunToPlayer(_thisPlayerObject, 1, this.gameObject, true, "Volcanic");
+                    index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
+                    _actions.MustangAction(_thisPlayerObject, index);
                     break;
                 case "Remington":
                     _actions.AddingGunToPlayer(_thisPlayerObject, 3, this.gameObject, false, "Remington");
+                    index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
+                    _actions.MustangAction(_thisPlayerObject, index);
                     break;
                 case "Rev. Carabine":
                     _actions.AddingGunToPlayer(_thisPlayerObject, 4, this.gameObject, false, "Rev. Carabine");
+                    index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
+                    _actions.MustangAction(_thisPlayerObject, index);
                     break;
                 case "Schofield":
                     _actions.AddingGunToPlayer(_thisPlayerObject, 2, this.gameObject, false, "Schofield");
+                    index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
+                    _actions.MustangAction(_thisPlayerObject, index);
                     break;
                 case "Winchester":
                     _actions.AddingGunToPlayer(_thisPlayerObject, 5, this.gameObject, false, "Winchester");
+                    index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
+                    _actions.MustangAction(_thisPlayerObject, index);
                     break;
 
             }
@@ -195,7 +208,7 @@ public class CardSelect : MonoBehaviour
         var before = _gameManager.IsActiveButton();
         _gameManager.OpenCloseDiscardButton(false);
         yield return new WaitUntil(() => _target != null);
-        yield return new WaitUntil(() => _distanceBetweenTarget == 1);
+        yield return new WaitUntil(() => _circularDistanceBetweenTarget == 1);
         _gameManager.OpenCloseDiscardButton(before);
 
         var name = _actions.PanicAction(_thisPlayerObject, index, _target);
@@ -205,6 +218,7 @@ public class CardSelect : MonoBehaviour
 
         _target = null;
         _distanceBetweenTarget = -1;
+        _circularDistanceBetweenTarget = -1;
 
     }
 

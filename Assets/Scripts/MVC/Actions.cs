@@ -117,22 +117,24 @@ public class Actions : MonoBehaviour
     public void AddingGunToPlayer(GameObject player, int rangeAmount, GameObject theCard, bool multipleBangs, string cardName)
     {
         cardsController.AddGunServer(player, rangeAmount, theCard, multipleBangs, cardName);
-        GameObject cardfrompanel = null;
-        GameObject handpanel = GameObject.Find("HandPanel");
-        for (int i = 0; i < handpanel.transform.childCount; i++)
-        {
-            if (handpanel.transform.GetChild(i).gameObject.name.StartsWith(cardName))
-            {
-                cardfrompanel = handpanel.transform.GetChild(i).gameObject;
-                break;
-            }
-        }
+        //GameObject cardfrompanel = null;
+        //GameObject handpanel = GameObject.Find("HandPanel");
+        //for (int i = 0; i < handpanel.transform.childCount; i++)
+        //{
+        //    if (handpanel.transform.GetChild(i).gameObject.name.StartsWith(cardName))
+        //    {
+        //        cardfrompanel = handpanel.transform.GetChild(i).gameObject;
+        //        break;
+        //    }
+        //}
 
-        if (cardfrompanel)
-        {
-            cardfrompanel.transform.SetParent(GameObject.Find("StackHandPanel").transform);
-            cardfrompanel.SetActive(false);
-        }
+        //if (cardfrompanel)
+        //{
+        //    cardfrompanel.transform.SetParent(GameObject.Find("StackHandPanel").transform);
+        //    cardfrompanel.SetActive(false);
+        //}
+
+
     }
 
     public void BeerAction(PlayerModel player) // Bitki çayý // bedra 2 kere ayni sey
@@ -185,8 +187,11 @@ public class Actions : MonoBehaviour
             }
         }
         cardsController.DrawTheCardServer(player, indexOfDeck);
-        //var handpanel = GameObject.Find("HandPanel").transform;
-        //t.GetChild(indexOfDeck).transform.SetParent(handpanel);
+        var handpanel = GameObject.Find("HandPanel").transform;
+        t.GetChild(indexOfDeck).transform.SetParent(handpanel);
+
+
+        gameManager.PlayerInfoStack.GetComponent<PlayerInfoControllerUI>().UpdateStackCanvas();
 
         return true;
     }

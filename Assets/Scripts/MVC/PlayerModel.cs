@@ -176,14 +176,12 @@ public class PlayerModel : NetworkBehaviour
         {
 
             GameManager gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-            Debug.Log("PLAYERS COUNT ON STOP1 " + GameObject.FindGameObjectsWithTag("Player").Length.ToString());
             gameManager.oldPlayers = GameObject.FindGameObjectsWithTag("Player");
 
 
             gameManager.g = Instantiate(gameObject, gameObject.transform.position, gameObject.transform.rotation);
 
             gameManager.GetComponent<GameManager>().SomeoneDestroyed = true;
-            Debug.Log("PLAYERS COUNT ON STOP2 " + GameObject.FindGameObjectsWithTag("Player").Length.ToString());
 
             //GameObject g = Instantiate(gameObject, gameObject.transform.position, gameObject.transform.rotation);
             //ServerManager.Spawn(g);
