@@ -204,7 +204,7 @@ public class Actions : MonoBehaviour
         }
         
     }
-    public void GatlingAction(GameObject player, int playedCard) // Makineli tüfek
+    public void GatlingAction(GameObject player) // Makineli tüfek
     {
         var players = gameManager._turns;
 
@@ -212,10 +212,10 @@ public class Actions : MonoBehaviour
         {
             if (pl != player)
             {
-                BangAction(player, pl); // bedra playedInt?
+                BangAction(player, pl);
             }
         }
-        DiscardCard(player, playedCard);
+        
     }
 
 

@@ -372,7 +372,7 @@ public class GameManager : NetworkBehaviour
             {
                 ScreenLog.Instance.SendEvent(TextType.Debug, "AGENT PLAY TURN ONLY SERVER"); // bedra sena fatih agent burada karar verecek
                 Debug.Log("AGENT PLAY TURN ONLY SERVER");
-                _agentController.AgentDecideToPlay(_turns[_turnInt]);
+                StartCoroutine(_agentController.AgentDecideToPlay(_turns[_turnInt]));
             }
         }
         else
