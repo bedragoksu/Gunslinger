@@ -38,7 +38,6 @@ namespace Gunslinger.Controller
         // Update is called once per frame
         void Update()
         {
-            Debug.Log("here");
             if (Input.anyKeyDown)
             {
                 if (Input.GetKeyDown(KeyCode.I))

@@ -15,6 +15,8 @@ public class AgentController : NetworkBehaviour
     [SerializeField] private Actions _actions;
     [SerializeField] private CardsController cardsController;
 
+    private float _timeDelay = 2f;
+
     private class InfoPlayer
     {
         public string Name;
@@ -34,7 +36,7 @@ public class AgentController : NetworkBehaviour
     }
 
     // currentbulletpoint, IsAlive, cardnum, varsa rol, name,acik kartlar
-    public void AgentDecideToPlay(GameObject AgentPlayer)
+    public IEnumerator AgentDecideToPlay(GameObject AgentPlayer)
     {
         // about players
         PlayerModel AgentPlayerModel = AgentPlayer.GetComponent<PlayerModel>();
@@ -47,49 +49,92 @@ public class AgentController : NetworkBehaviour
 
         // DECIDE TREE
         AgentPlayerModel.PlayedBang = false;
-        bool StillCanPlay = true;
+
+
+        // STACK HAND'E ATILABILECEK KARTLAR
 
         // BANG
         BangDecideTree(OpenHandCardNames, CanHitPlayer, AgentPlayerModel);
-        
-        // play
-        while(AgentPlayerModel.openHand.Count >= AgentPlayerModel.CurrentBulletPoint && StillCanPlay )
+        yield return new WaitForSeconds(_timeDelay);
+
+        // HEALTH
+        while (AgentPlayerModel.CurrentBulletPoint < MaxBulletPoint)
         {
-            // stack hand'e atilabilecek kartlar
-
-            // can hesabi
-            while(AgentPlayerModel.CurrentBulletPoint < MaxBulletPoint)
+            if (OpenHandCardNames.Any(item => item.StartsWith("Beer", StringComparison.OrdinalIgnoreCase)))
             {
-                if(OpenHandCardNames.Any(item => item.StartsWith("Beer", StringComparison.OrdinalIgnoreCase)))
-                {
-                    // play beer
-                    _actions.BeerAction(AgentPlayerModel);
-                    DiscardCard("Beer", OpenHandCardNames, AgentPlayerModel);
-                }
-                else if(OpenHandCardNames.Any(item => item.StartsWith("Saloon", StringComparison.OrdinalIgnoreCase)))
-                {
-                    // play saloon
-                    _actions.SaloonAction();
-                    DiscardCard("Saloon", OpenHandCardNames, AgentPlayerModel);
-                }
-                else
-                {
-                    break;
-                }
+                // play beer
+                Debug.Log("BÝTKÝ ÇAY ÝÇÝYORUM");
+                _actions.BeerAction(AgentPlayerModel);
+                StartCoroutine(DiscardCardRoutine(Tuple.Create("Beer", OpenHandCardNames, AgentPlayerModel)));
+                yield return new WaitForSeconds(_timeDelay);
             }
-
-            // gatling bang
-
-
-            // panic cat balou
-
-            // wells fargo, stage coach
-
-            StillCanPlay = false;
+            else if (OpenHandCardNames.Any(item => item.StartsWith("Saloon", StringComparison.OrdinalIgnoreCase)))
+            {
+                // play saloon
+                Debug.Log("HERKESE BENDEN ÇAY");
+                _actions.SaloonAction();
+                StartCoroutine(DiscardCardRoutine(Tuple.Create("Saloon", OpenHandCardNames, AgentPlayerModel)));
+                yield return new WaitForSeconds(_timeDelay);
+            }
+            else
+            {
+                break;
+            }
         }
 
-        // discard
+        // gatling bang
+        if (OpenHandCardNames.Any(item => item.StartsWith("Gatling", StringComparison.OrdinalIgnoreCase)))
+        {
+            Debug.Log("GATLING ATTII");
+            _actions.GatlingAction(AgentPlayer);
+            StartCoroutine(DiscardCardRoutine(Tuple.Create("Gatling", OpenHandCardNames, AgentPlayerModel)));
+            yield return new WaitForSeconds(_timeDelay);
+        }
 
+        BangDecideTree(OpenHandCardNames, CanHitPlayer, AgentPlayerModel);
+        yield return new WaitForSeconds(_timeDelay);
+
+        // panic cat balou
+
+
+        // wells fargo, stage coach
+
+        // discard
+        while (AgentPlayerModel.openHand.Count > AgentPlayerModel.CurrentBulletPoint)
+        {
+            Debug.Log($"open hand count: {AgentPlayerModel.openHand.Count} , CurrentBulletPoint: {AgentPlayerModel.CurrentBulletPoint}");
+            if(OpenHandCardNames.Any(item => item.StartsWith("Panic", StringComparison.OrdinalIgnoreCase)))
+            {
+                StartCoroutine(DiscardCardRoutine(Tuple.Create("Panic", OpenHandCardNames, AgentPlayerModel)));
+                Debug.Log("PANÝK DISCARD EDÝLDÝ");
+            }
+            else if (OpenHandCardNames.Any(item => item.StartsWith("Cat Balou", StringComparison.OrdinalIgnoreCase)))
+            {
+                StartCoroutine(DiscardCardRoutine(Tuple.Create("Cat Balou", OpenHandCardNames, AgentPlayerModel)));
+                Debug.Log("CAT BALOU DISCARD EDÝLDÝ");
+            }
+            else if (OpenHandCardNames.Any(item => item.StartsWith("Wells Fargo", StringComparison.OrdinalIgnoreCase)))
+            {
+                StartCoroutine(DiscardCardRoutine(Tuple.Create("Wells Fargo", OpenHandCardNames, AgentPlayerModel)));
+                Debug.Log("WELLS FARGO DISCARD EDÝLDÝ");
+            }
+            else if (OpenHandCardNames.Any(item => item.StartsWith("Stage Coach", StringComparison.OrdinalIgnoreCase)))
+            {
+                StartCoroutine(DiscardCardRoutine(Tuple.Create("Stage Coach", OpenHandCardNames, AgentPlayerModel)));
+                Debug.Log("STAGE COACH DISCARD EDÝLDÝ");
+            }
+            else if(AgentPlayerModel.openHand.Count > AgentPlayerModel.CurrentBulletPoint)
+            {
+                Debug.Log($"{OpenHandCardNames[0]} DISCARD EDÝLDÝ");
+                StartCoroutine(DiscardCardRoutine(Tuple.Create(OpenHandCardNames[0], OpenHandCardNames, AgentPlayerModel)));
+            }
+            yield return new WaitForSeconds(_timeDelay);
+        }
+
+        yield return new WaitForSeconds(_timeDelay);
+
+        Debug.Log("NEXXTTTT");
+        _gameManager.NextUIButton();
 
     }
 
@@ -108,9 +153,9 @@ public class AgentController : NetworkBehaviour
                 case PlayerModel.TypeOfPlayer.Sheriff:
                     // hit randomly
                     AgentPlayerModel.PlayedBang = true;
-                    DiscardCard("Bang", OpenHandCardNames, AgentPlayerModel);
+                    StartCoroutine(DiscardCardRoutine(Tuple.Create("Bang", OpenHandCardNames, AgentPlayerModel)));
                     index = Random.Range(0, CanHitPlayer.Count);
-                    BangForAgent(AgentPlayerModel, (CanHitPlayer[index].gameObject));
+                    StartCoroutine(BangRoutine(Tuple.Create(AgentPlayerModel, (CanHitPlayer[index].gameObject))));
                     break;
                 case PlayerModel.TypeOfPlayer.Deputy:
                     // hit randomly unless its not the sheriff
@@ -118,53 +163,64 @@ public class AgentController : NetworkBehaviour
                     if (HitListWithoutSheriff.Count != 0)
                     {
                         AgentPlayerModel.PlayedBang = true;
-                        DiscardCard("Bang", OpenHandCardNames, AgentPlayerModel);
+                        StartCoroutine(DiscardCardRoutine(Tuple.Create("Bang", OpenHandCardNames, AgentPlayerModel)));
                         index = Random.Range(0, HitListWithoutSheriff.Count);
-                        BangForAgent(AgentPlayerModel, (HitListWithoutSheriff[index].gameObject));
+                        StartCoroutine(BangRoutine(Tuple.Create(AgentPlayerModel, (HitListWithoutSheriff[index].gameObject))));
                     }
                     break;
                 case PlayerModel.TypeOfPlayer.Outlaw:
                     // hit the sheriff
                     AgentPlayerModel.PlayedBang = true;
-                    DiscardCard("Bang", OpenHandCardNames, AgentPlayerModel);
+                    StartCoroutine(DiscardCardRoutine(Tuple.Create("Bang", OpenHandCardNames, AgentPlayerModel)));
 
                     PlayerModel Sheriff = CanHitPlayer.FirstOrDefault(player => player.PlayerRole == PlayerModel.TypeOfPlayer.Sheriff);
 
                     if (Sheriff)
                     {
-                        BangForAgent(AgentPlayerModel, Sheriff.gameObject);
+                        StartCoroutine(BangRoutine(Tuple.Create(AgentPlayerModel, Sheriff.gameObject)));
                     }
                     else
                     {
                         index = Random.Range(0, CanHitPlayer.Count);
-                        BangForAgent(AgentPlayerModel, (CanHitPlayer[index].gameObject));
+                        StartCoroutine(BangRoutine(Tuple.Create(AgentPlayerModel, (CanHitPlayer[index].gameObject))));
                     }
                     break;
                 case PlayerModel.TypeOfPlayer.Renegade:
                     // if there is only sheriff then bang it, but there is someone else hit it
                     AgentPlayerModel.PlayedBang = true;
-                    DiscardCard("Bang", OpenHandCardNames, AgentPlayerModel);
+                    StartCoroutine(DiscardCardRoutine(Tuple.Create("Bang", OpenHandCardNames, AgentPlayerModel)));
 
                     HitListWithoutSheriff = CanHitPlayer.Where(player => player.PlayerRole != PlayerModel.TypeOfPlayer.Sheriff).ToList();
                     if (HitListWithoutSheriff.Count != 0)
                     {
                         AgentPlayerModel.PlayedBang = true;
-                        DiscardCard("Bang", OpenHandCardNames, AgentPlayerModel);
+                        StartCoroutine(DiscardCardRoutine(Tuple.Create("Bang", OpenHandCardNames, AgentPlayerModel)));
                         index = Random.Range(0, HitListWithoutSheriff.Count);
-                        BangForAgent(AgentPlayerModel, (HitListWithoutSheriff[index].gameObject));
+                        StartCoroutine(BangRoutine(Tuple.Create(AgentPlayerModel, (HitListWithoutSheriff[index].gameObject))));
                     }
                     else
                     {
                         index = Random.Range(0, CanHitPlayer.Count);
-                        BangForAgent(AgentPlayerModel, (CanHitPlayer[index].gameObject));
+                        StartCoroutine(BangRoutine(Tuple.Create(AgentPlayerModel, (CanHitPlayer[index].gameObject))));
                     }
                     break;
             }
+
         }
     }
 
     private bool barrelSaved = false;
-    private void BangForAgent(PlayerModel AgentPlayer, GameObject target) // wait falan at
+
+    private IEnumerator BangRoutine(Tuple<PlayerModel, GameObject> tuple)
+    {
+
+        yield return new WaitUntil(() => BangForAgent(tuple.Item1, tuple.Item2));
+
+        yield return new WaitForSeconds(_timeDelay/10);
+        barrelSaved = false;
+    }
+
+    private bool BangForAgent(PlayerModel AgentPlayer, GameObject target)
     {
         PlayerModel targetPlayer = target.GetComponent<PlayerModel>();
 
@@ -226,6 +282,7 @@ public class AgentController : NetworkBehaviour
             }
 
         }
+        return true;
     }
 
 
@@ -258,7 +315,13 @@ public class AgentController : NetworkBehaviour
         return PlayerInfos;
     }
 
-    private void DiscardCard(string CardName, List<string> OpenHandCardNames, PlayerModel AgentPlayerModel)
+    private IEnumerator DiscardCardRoutine(Tuple<string, List<string>, PlayerModel> tuple)
+    {
+        yield return new WaitUntil(() => DiscardCard(tuple.Item1, tuple.Item2, tuple.Item3));
+        Debug.Log("DISCARD ENDEDD");
+    }
+
+    private bool DiscardCard(string CardName, List<string> OpenHandCardNames, PlayerModel AgentPlayerModel)
     {
         int index = -1;
         for (int i = 0; i < OpenHandCardNames.Count; i++)
@@ -274,6 +337,8 @@ public class AgentController : NetworkBehaviour
             RemoveCardFromAgentServer(AgentPlayerModel,index);
             OpenHandCardNames.RemoveAt(index);
         }
+
+        return true;
     }
 
     [ServerRpc (RequireOwnership = false)]

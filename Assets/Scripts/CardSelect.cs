@@ -132,7 +132,8 @@ public class CardSelect : MonoBehaviour
                 case "Gatling":
                     Debug.Log("GATLING TIKLANDII");
                     index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
-                    _actions.GatlingAction(_thisPlayerObject, index);
+                    _actions.GatlingAction(_thisPlayerObject);
+                    _actions.DiscardCard(_thisPlayerObject, index);
                     break;
                 case "Mustang":
                     Debug.Log("MUSTANG TIKLANDII");

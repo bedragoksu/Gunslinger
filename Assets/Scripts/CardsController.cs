@@ -352,7 +352,7 @@ namespace Gunslinger.Controller
             if (player.CurrentBulletPoint <= 0) // dead 
             {
                 player.IsAlive = false;
-
+                player.CurrentBulletPoint = 0;
 
                 var currentAlives = GetAlivePlayers();
                 bool lastSheriff = true;
