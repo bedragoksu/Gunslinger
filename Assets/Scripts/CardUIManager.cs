@@ -9,7 +9,7 @@ using System;
 public class CardUIManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     // Scale factors
-    public Vector3 hoverScale = new Vector3(1.2f, 1.2f, 1.2f);
+    public Vector3 hoverScale;
     public float duration = 0.2f;
     public bool isSelected = false;
 
@@ -28,7 +28,7 @@ public class CardUIManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         // Save the original scale
         originalScale = transform.localScale;
-
+        hoverScale = new Vector3(originalScale.x * 1.2f, originalScale.y * 1.2f, originalScale.z * 1.2f);
         background = transform.Find("Background").gameObject;
         picture = transform.Find("Picture").gameObject;
     }
