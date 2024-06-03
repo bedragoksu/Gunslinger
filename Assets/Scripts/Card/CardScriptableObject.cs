@@ -5,7 +5,7 @@ using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using FishNet;
 using FishNet.Connection;
-using NeptunDigital;
+//using NeptunDigital;
 
 
 [CreateAssetMenu(fileName = "New Card", menuName = "Card/Card")]

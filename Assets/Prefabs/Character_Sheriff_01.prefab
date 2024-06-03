@@ -10084,6 +10084,8 @@ MonoBehaviour:
   IsAlive: 1
   Range: 1
   hasGun: 0
+  Spark: {fileID: 1292447602209560836}
+  Flare: {fileID: 220827182503358601}
   clicked: 0
   magicNum: 0
   gameObj: {fileID: 5294451582369181646}

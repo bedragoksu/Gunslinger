@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Gunslinger.Controller;
-using NeptunDigital;
+//using NeptunDigital;
 using System;
 using UnityEngine.UI;
 using System.Xml.Linq;
@@ -320,7 +320,7 @@ public class Actions : MonoBehaviour
 
     public void DiscardCard(GameObject player, int i)
     {
-        ScreenLog.Instance.SendEvent(TextType.Debug, "discard card");
+        //ScreenLog.Instance.SendEvent(TextType.Debug, "discard card");
         StartCoroutine("DiscardCardRoutine", Tuple.Create(player, i));
 
 

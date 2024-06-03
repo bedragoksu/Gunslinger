@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using FishNet.Object;
-using NeptunDigital;
+//using NeptunDigital;
 using Gunslinger.Controller;
 using FishNet.Object.Synchronizing;
 using TMPro;
@@ -79,7 +79,7 @@ public class GameManager : NetworkBehaviour
             }
             else if (Input.GetKeyDown(KeyCode.DownArrow))
             {
-                ScreenLog.Instance.SendEvent(TextType.Debug, $"curr state: { CurrentGameState}");
+                //ScreenLog.Instance.SendEvent(TextType.Debug, $"curr state: { CurrentGameState}");
             }
         }
 
@@ -203,7 +203,7 @@ public class GameManager : NetworkBehaviour
     // butonla alakali kisimlar burada buna script ac.!
     public void DiscardUIButton(GameObject ButtonsObj)
     {
-        ScreenLog.Instance.SendEvent(TextType.Debug, "discard ui button");
+        //ScreenLog.Instance.SendEvent(TextType.Debug, "discard ui button");
 
         Button[] buttons = ButtonsObj.GetComponentsInChildren<Button>();
         buttons[0].interactable = false;
@@ -220,7 +220,7 @@ public class GameManager : NetworkBehaviour
     }
     public void NextUIButton()
     {
-        ScreenLog.Instance.SendEvent(TextType.Debug, "next ui button");
+        //ScreenLog.Instance.SendEvent(TextType.Debug, "next ui button");
 
         _turns[_turnInt].GetComponent<PlayerModel>().PlayedBang = false;
         StartCoroutine(r());
@@ -265,7 +265,7 @@ public class GameManager : NetworkBehaviour
             _turnInt %= _turns.Length;
         } while (!_turns[_turnInt].GetComponent<PlayerModel>().IsAlive);
         
-        ScreenLog.Instance.SendEvent(TextType.Debug, $"_turnInt= {_turnInt}");
+        //ScreenLog.Instance.SendEvent(TextType.Debug, $"_turnInt= {_turnInt}");
     }
 
     public enum GameState
@@ -350,7 +350,7 @@ public class GameManager : NetworkBehaviour
 
     private void HandleDiscardCard()
     {
-        ScreenLog.Instance.SendEvent(TextType.Debug, "DISCARD CARD STATE");
+        //ScreenLog.Instance.SendEvent(TextType.Debug, "DISCARD CARD STATE");
     }
 
     private void HandlePlayCard()
@@ -361,15 +361,15 @@ public class GameManager : NetworkBehaviour
     private IEnumerator PlayRoutine()
     {
         yield return new WaitForSeconds(0.5f);
-        ScreenLog.Instance.SendEvent(TextType.Debug, "PLAY CARD STATE");
-        ScreenLog.Instance.SendEvent(TextType.Debug, $"turnint: {_turnInt}, {_thisPlayer.GetComponent<PlayerModel>().PlayerID}");
+        //ScreenLog.Instance.SendEvent(TextType.Debug, "PLAY CARD STATE");
+        //ScreenLog.Instance.SendEvent(TextType.Debug, $"turnint: {_turnInt}, {_thisPlayer.GetComponent<PlayerModel>().PlayerID}");
 
         if (_turns[_turnInt].GetComponent<PlayerModel>().IsAgent)
         {
-            ScreenLog.Instance.SendEvent(TextType.Debug, "AGENT PLAY TURN");
+            //ScreenLog.Instance.SendEvent(TextType.Debug, "AGENT PLAY TURN");
             if (IsServer)
             {
-                ScreenLog.Instance.SendEvent(TextType.Debug, "AGENT PLAY TURN ONLY SERVER"); // bedra sena fatih agent burada karar verecek
+                //ScreenLog.Instance.SendEvent(TextType.Debug, "AGENT PLAY TURN ONLY SERVER"); // bedra sena fatih agent burada karar verecek
                 Debug.Log("AGENT PLAY TURN ONLY SERVER");
                 StartCoroutine(_agentController.AgentDecideToPlay(_turns[_turnInt]));
             }
@@ -395,7 +395,7 @@ public class GameManager : NetworkBehaviour
 
     private void HandleDrawCard()
     {
-        ScreenLog.Instance.SendEvent(TextType.Debug, $"DRAW CARD STATE");
+        //ScreenLog.Instance.SendEvent(TextType.Debug, $"DRAW CARD STATE");
         if (!_isRoleAssinged) // canvas duzeni icin
         {
             CharacterDisplayer.GetComponent<CharacterDisplayer>().roleOnChange();
@@ -410,7 +410,7 @@ public class GameManager : NetworkBehaviour
     }
     private IEnumerator DrawCardRoutine()
     {
-        ScreenLog.Instance.SendEvent(TextType.Debug, $"DRAW CARD ROUTINE");
+        //ScreenLog.Instance.SendEvent(TextType.Debug, $"DRAW CARD ROUTINE");
         var currentPlayer = _turns[_turnInt];
         var end = GameObject.Find("CardsController").GetComponent<CardsController>().DrawCards(currentPlayer, 2);
         yield return new WaitUntil(() => end);
@@ -452,7 +452,7 @@ public class GameManager : NetworkBehaviour
 
     private void HandleLobby()
     {
-        ScreenLog.Instance.SendEvent(TextType.Debug, $"LOBBY STATE");
+        //ScreenLog.Instance.SendEvent(TextType.Debug, $"LOBBY STATE");
         _canStart = true;
         AssignTurnIndex(0);
     }

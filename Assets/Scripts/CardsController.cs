@@ -1,6 +1,6 @@
 using FishNet.Managing;
 using FishNet.Object;
-using NeptunDigital;
+//using NeptunDigital;
 using System.Collections.Generic;
 using UnityEngine;
 using FishNet.Object.Synchronizing;
@@ -136,7 +136,7 @@ namespace Gunslinger.Controller
         [ObserversRpc]
         public void DrawCardsServer(GameObject player, int amount)
         {
-            ScreenLog.Instance.SendEvent(TextType.Debug, "DRAWING CARDS");
+            //ScreenLog.Instance.SendEvent(TextType.Debug, "DRAWING CARDS");
             for(int i=0; i < amount; i++)
             {
                 if (CardPointer == _cardNum) CardPointer = 0;
@@ -188,13 +188,13 @@ namespace Gunslinger.Controller
         [ServerRpc(RequireOwnership =false)]
         public void DiscardCardsServer(GameObject player, int i)
         {
-            ScreenLog.Instance.SendEvent(TextType.Debug, "discard card server");
+            //ScreenLog.Instance.SendEvent(TextType.Debug, "discard card server");
             DiscardCards(player, i);
         }
         [ObserversRpc]
         public void DiscardCards(GameObject player, int i)
         {
-            ScreenLog.Instance.SendEvent(TextType.Debug, "discard card observer");
+            //ScreenLog.Instance.SendEvent(TextType.Debug, "discard card observer");
             var playermodel = player.GetComponent<PlayerModel>();
 
             //string Card = GameObject.Find("HandPanel").transform.GetChild(i).gameObject.name;
@@ -237,7 +237,7 @@ namespace Gunslinger.Controller
         [ServerRpc(RequireOwnership = false)]
         public void MoveToStackServer(GameObject player, int i)
         {
-            ScreenLog.Instance.SendEvent(TextType.Debug, "move to stack server");
+            //ScreenLog.Instance.SendEvent(TextType.Debug, "move to stack server");
             MoveToStack(player, i);
         }
         [ObserversRpc]
@@ -247,7 +247,7 @@ namespace Gunslinger.Controller
 
             // birer tane mustang scope vs olabilir bedra
 
-            ScreenLog.Instance.SendEvent(TextType.Debug, "move to stack observer");
+            //ScreenLog.Instance.SendEvent(TextType.Debug, "move to stack observer");
             var playermodel = player.GetComponent<PlayerModel>();
 
             if (player == gameManager._thisPlayer)
