@@ -10,7 +10,7 @@ public class CardSelect : MonoBehaviour
     private GameManager _gameManager;
 
     private GameObject _thisPlayerObject;
-    [HideInInspector]public PlayerModel _thisPlayerModel; //private bedra
+    [HideInInspector] public PlayerModel _thisPlayerModel; //private bedra
 
     private GameObject _target;
     private int _distanceBetweenTarget = -1;
@@ -56,7 +56,7 @@ public class CardSelect : MonoBehaviour
                                 _target = hit.collider.gameObject;
                                 _distanceBetweenTarget = _actions.CalculateDistance(_thisPlayerObject, _target);
                             }
-                            
+
                         }
                     }
                 }
@@ -89,13 +89,13 @@ public class CardSelect : MonoBehaviour
         _target = null;
         _distanceBetweenTarget = -1;
 
-        if(_gameManager.CurrentGameState == GameManager.GameState.PlayCard)
+        if (_gameManager.CurrentGameState == GameManager.GameState.PlayCard)
         {
             switch (cardName)
             {
                 case "Bang":
                     Debug.Log("BANG TIKLANDIIIII");
-                    if (CanHitAnyone(_thisPlayerObject))
+                    if (_actions.CanHitAnyone(_thisPlayerObject).Count != 0)
                     {
                         if (_thisPlayerModel.CanPlayMultipleBangs || !_thisPlayerModel.PlayedBang)
                         {
@@ -146,7 +146,7 @@ public class CardSelect : MonoBehaviour
                     Debug.Log("BARREL TIKLANDII");
                     index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
                     _actions.MustangAction(_thisPlayerObject, index);
-                    break; 
+                    break;
                 case "Cat Balou": // herhangi bir oyuncunun open handi
                     Debug.Log("EMRÝVAKÝ TIKLANDII");
                     index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
@@ -158,13 +158,13 @@ public class CardSelect : MonoBehaviour
                     StartCoroutine("PanicRoutine", index);
                     break;
                 case "Volcanic":
-                    _actions.AddingGunToPlayer(_thisPlayerObject, 1,this.gameObject, true, "Volcanic");
+                    _actions.AddingGunToPlayer(_thisPlayerObject, 1, this.gameObject, true, "Volcanic");
                     break;
                 case "Remington":
-                    _actions.AddingGunToPlayer(_thisPlayerObject, 3, this.gameObject,false, "Remington");
+                    _actions.AddingGunToPlayer(_thisPlayerObject, 3, this.gameObject, false, "Remington");
                     break;
                 case "Rev. Carabine":
-                    _actions.AddingGunToPlayer(_thisPlayerObject, 4, this.gameObject,false, "Rev. Carabine");
+                    _actions.AddingGunToPlayer(_thisPlayerObject, 4, this.gameObject, false, "Rev. Carabine");
                     break;
                 case "Schofield":
                     _actions.AddingGunToPlayer(_thisPlayerObject, 2, this.gameObject, false, "Schofield");
@@ -185,20 +185,7 @@ public class CardSelect : MonoBehaviour
     }
 
     // kimseye vuramýyorsak??
-    private bool CanHitAnyone(GameObject player)
-    {
-        var plList = _gameManager._turns;
 
-        foreach(var pl in plList)
-        {
-            if(pl != player && pl.GetComponent<PlayerModel>().IsAlive)
-            {
-                if (_actions.CalculateScopeCanHit(player, pl)) return true;
-            }
-        }
-
-        return false;
-    }
 
     private IEnumerator PanicRoutine(int index)
     {
@@ -212,7 +199,7 @@ public class CardSelect : MonoBehaviour
 
         yield return new WaitUntil(() => name);
         yield return new WaitForSeconds(1f);
-        
+
         _target = null;
         _distanceBetweenTarget = -1;
 
@@ -225,7 +212,7 @@ public class CardSelect : MonoBehaviour
         yield return new WaitUntil(() => _target != null);
         _gameManager.OpenCloseDiscardButton(before);
 
-        _actions.CatBalouAction( _target);
+        _actions.CatBalouAction(_target);
         yield return new WaitForSeconds(0.3f);
         _actions.DiscardCard(_thisPlayerObject, index);
         _target = null;
@@ -245,8 +232,8 @@ public class CardSelect : MonoBehaviour
         // slm ben züb, ayçayla bilgisayarýnýzý çaldýk. çok eðleniyoruz. pc böyle mi býrakýlýr ajsfasjfgasakj
         // ehehe salak bilgisayarýnýn þifresi yok???
         //artýk gelinbizi polise þikayet edecekler
-        
-        _actions.BangAction(_thisPlayerObject,_target);
+
+        _actions.BangAction(_thisPlayerObject, _target);
         yield return new WaitForSeconds(0.3f);
         _actions.DiscardCard(_thisPlayerObject, index);
         _target = null;

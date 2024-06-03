@@ -21,7 +21,7 @@ public class Actions : MonoBehaviour
         Debug.Log($"target of bang: {targetPlayer.PlayerName}");
 
         bool hasBarrel = false;
-        foreach(var stack in targetPlayer.stackHand)
+        foreach (var stack in targetPlayer.stackHand)
         {
             if (stack.name.StartsWith("Barrel"))
             {
@@ -42,7 +42,7 @@ public class Actions : MonoBehaviour
         {
             bool hasMissed = false;
             var hand = targetPlayer.openHand;
-            for (int i=0; i< hand.Count; i++)
+            for (int i = 0; i < hand.Count; i++)
             {
                 var name = hand[i].name;
                 if (name.StartsWith("Missed"))
@@ -53,12 +53,12 @@ public class Actions : MonoBehaviour
                     break;
                 }
             }
-            
+
             //bitki cayi
-            if(!hasMissed)
+            if (!hasMissed)
             {
                 var hasBeer = false;
-                if(targetPlayer.CurrentBulletPoint == 1)
+                if (targetPlayer.CurrentBulletPoint == 1)
                 {
                     for (int i = 0; i < hand.Count; i++)
                     {
@@ -74,13 +74,31 @@ public class Actions : MonoBehaviour
                 }
                 if (!hasBeer) { cardsController.UpdateHealthServer(targetPlayer, -1); }
             }
-            
+
         }
     }
 
 
+    public List<PlayerModel> CanHitAnyone(GameObject player)
+    {
+        var plList = gameManager._turns;
+        List<PlayerModel> CanHitList = new List<PlayerModel>();
 
-    private IEnumerator CheckTheNextCard(GameObject player)
+        foreach (var pl in plList)
+        {
+            if (pl != player && pl.GetComponent<PlayerModel>().IsAlive)
+            {
+                if (CalculateScopeCanHit(player, pl))
+                {
+                    CanHitList.Add(pl.GetComponent<PlayerModel>());
+                }
+            }
+        }
+
+        return CanHitList;
+    }
+
+    public IEnumerator CheckTheNextCard(GameObject player)
     {
         // next card to (TheNextCard) panel
         var b = cardsController.CheckNext(player);
@@ -119,7 +137,7 @@ public class Actions : MonoBehaviour
 
     public void BeerAction(PlayerModel player, int playedCard) // Bitki çayý // bedra 2 kere ayni sey
     {
-        var maxbullet = (player.PlayerRole == PlayerModel.TypeOfPlayer.Sheriff)? 5 : 4;
+        var maxbullet = (player.PlayerRole == PlayerModel.TypeOfPlayer.Sheriff) ? 5 : 4;
         if (player.CurrentBulletPoint < maxbullet)
         {
             cardsController.UpdateHealthServer(player, 1);
@@ -138,16 +156,16 @@ public class Actions : MonoBehaviour
         DiscardCard(player.gameObject, playedCard);
     }
 
-    public void CatBalouAction( GameObject target) // Emrivaki
+    public void CatBalouAction(GameObject target) // Emrivaki
     {
         // target'in elinden random bir karti iskartaya cikar
         var targetmodel = target.GetComponent<PlayerModel>();
         var i = UnityEngine.Random.Range(0, targetmodel.openHand.Count);
         DiscardCard(target, i);
     }
-    
-    
-    public bool PanicAction(GameObject player,int playedCard ,GameObject target) // Panik
+
+
+    public bool PanicAction(GameObject player, int playedCard, GameObject target) // Panik
     {
         var targetmodel = target.GetComponent<PlayerModel>();
         var i = UnityEngine.Random.Range(0, targetmodel.openHand.Count);
@@ -159,9 +177,9 @@ public class Actions : MonoBehaviour
         var t = GameObject.Find("DeckPanel").transform;
 
         int indexOfDeck = 0;
-        for(int j=0; j<69; j++) // 69 = cardNum bedra
+        for (int j = 0; j < 69; j++) // 69 = cardNum bedra
         {
-            if(t.GetChild(j).name == card.name)
+            if (t.GetChild(j).name == card.name)
             {
                 indexOfDeck = j;
                 break;
@@ -170,15 +188,15 @@ public class Actions : MonoBehaviour
         cardsController.DrawTheCardServer(player, indexOfDeck);
         //var handpanel = GameObject.Find("HandPanel").transform;
         //t.GetChild(indexOfDeck).transform.SetParent(handpanel);
-        
+
         return true;
     }
 
-   
+
     public void SaloonAction(GameObject player, int playedCard) // Kahvehane
     {
         var players = gameManager._turns;
-        foreach(var pl in players)
+        foreach (var pl in players)
         {
             cardsController.UpdateHealthServer(pl.GetComponent<PlayerModel>(), 1);
         }
@@ -188,11 +206,11 @@ public class Actions : MonoBehaviour
     {
         var players = gameManager._turns;
 
-        foreach(var pl in players)
+        foreach (var pl in players)
         {
-            if(pl != player)
+            if (pl != player)
             {
-                BangAction(player,pl); // bedra playedInt?
+                BangAction(player, pl); // bedra playedInt?
             }
         }
         DiscardCard(player, playedCard);
@@ -245,13 +263,14 @@ public class Actions : MonoBehaviour
         List<PlayerModel> aliveList = cardsController.GetAlivePlayers();
 
 
-        for(int i=0; i< aliveList.Count;i++)
+        for (int i = 0; i < aliveList.Count; i++)
         {
             var model = aliveList[i];
             if (model.PlayerName == plModel.PlayerName)
             {
                 indexA = i;
-            }else if (model.PlayerName == targetModel.PlayerName)
+            }
+            else if (model.PlayerName == targetModel.PlayerName)
             {
                 indexB = i;
             }
@@ -263,15 +282,15 @@ public class Actions : MonoBehaviour
         dist = Mathf.Min(directDistance, circularDistance);
         return dist;
     }
-    public bool CalculateScopeCanHit(GameObject thisPlayer,GameObject target)
+    public bool CalculateScopeCanHit(GameObject thisPlayer, GameObject target)
     {
         int scopeLevel = thisPlayer.GetComponent<PlayerModel>().Range; // player'in infosundan cek
         int d = scopeLevel - CalculateDistance(thisPlayer, target);
 
-        return (d>=0); // if >=0 can if <0 cannot
+        return (d >= 0); // if >=0 can if <0 cannot
     }
 
-    
+
     public void MoveToStackHand(GameObject player, int i)
     {
         StartCoroutine("MoveToStackRoutine", Tuple.Create(player, i));
