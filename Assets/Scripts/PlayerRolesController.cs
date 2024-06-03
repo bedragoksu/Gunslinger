@@ -1,6 +1,6 @@
 using FishNet.Managing;
 using FishNet.Object;
-using NeptunDigital;
+//using NeptunDigital;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -87,7 +87,7 @@ namespace Gunslinger.Controller
                 var randomint = Random.Range(0, possiblePlayerTypes.Count); // 0
                 var type = possiblePlayerTypes[randomint];
                 possiblePlayerTypes.RemoveAt(randomint);
-                ScreenLog.Instance.SendEvent(TextType.Debug, $"player stuff: {player} {type}");
+                //ScreenLog.Instance.SendEvent(TextType.Debug, $"player stuff: {player} {type}");
                 var plmodel = player.GetComponent<PlayerModel>();
                 AssignRolesServer(player, type, counter, plmodel.PlayerName);
                 //AssignCards(player, servercardmanager.CardOrder);

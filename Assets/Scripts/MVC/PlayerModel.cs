@@ -5,7 +5,7 @@ using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using FishNet;
 using FishNet.Connection;
-using NeptunDigital;
+//using NeptunDigital;
 using Gunslinger.Controller;
 
 public class PlayerModel : NetworkBehaviour
@@ -29,6 +29,9 @@ public class PlayerModel : NetworkBehaviour
     public int Range = 1;
     public bool hasGun = false;
 
+    public GameObject Spark;
+    public GameObject Flare;
+
     public bool clicked = false;
 
     [SyncVar] public int magicNum = 0;
@@ -50,7 +53,7 @@ public class PlayerModel : NetworkBehaviour
     {
         base.OnStartClient();
 
-        ScreenLog.Instance.SendEvent(TextType.Debug, $"onstartclienttt: {base.ObjectId}");
+        //ScreenLog.Instance.SendEvent(TextType.Debug, $"onstartclienttt: {base.ObjectId}");
         counter= base.ObjectId;
         openHand = new List<GameObject>();
 
@@ -64,7 +67,7 @@ public class PlayerModel : NetworkBehaviour
             PlayerUI ui = pl.GetComponent<PlayerUI>();
             string playerName = ui.PlayerName;
 
-            ScreenLog.Instance.SendEvent(TextType.Debug, $"name and id: {playerName} {counter}");
+            //ScreenLog.Instance.SendEvent(TextType.Debug, $"name and id: {playerName} {counter}");
 
             AssignPlayerModelServer(player,
                 counter,

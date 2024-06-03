@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using FishNet.Managing;
 using Gunslinger.Controller;
 using System.CodeDom.Compiler;
-using NeptunDigital;
+//using NeptunDigital;
 
 public class CardManager : NetworkBehaviour
 {
@@ -59,7 +59,7 @@ public class CardManager : NetworkBehaviour
                     case "Bang": // ok
                         createCards(sampleCard, 25); break;
                     case "Missed": // ok
-                        createCards(sampleCard, 1); break;
+                        createCards(sampleCard, 11); break;
                     case "Gatling": // ok
                         createCards(sampleCard, 1); break;
                     case "Cat Balou": // ok
@@ -73,7 +73,7 @@ public class CardManager : NetworkBehaviour
                     case "Saloon": // ok
                         createCards(sampleCard, 1); break;
                     case "Beer": // ok
-                        createCards(sampleCard, 16); break;
+                        createCards(sampleCard, 6); break;
                     case "Mustang": // ok // onune ac
                         createCards(sampleCard, 2); break;
                     case "Scope": // ok
