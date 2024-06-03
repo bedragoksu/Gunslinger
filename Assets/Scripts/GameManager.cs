@@ -171,7 +171,6 @@ public class GameManager : NetworkBehaviour
         targetModel.openHand = new List<GameObject>();
         foreach (var card in openhand)
         {
-            Debug.Log("CARD NAME: " + card);
 
             foreach(Transform cardtr in GameObject.Find("DeckPanel").transform)
             {

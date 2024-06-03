@@ -48,28 +48,28 @@ namespace Gunslinger.Controller
 
             }
 
-            GameObject cardObj = null;
-            foreach(var c in plModel.openHand)
-            {
-                if (c.name.StartsWith(cardName))
-                {
+            //GameObject cardObj = null;
+            //foreach(var c in plModel.openHand)
+            //{
+            //    if (c.name.StartsWith(cardName))
+            //    {
                     
-                    cardObj = c;
-                    break;
-                }
-            }
+            //        cardObj = c;
+            //        break;
+            //    }
+            //}
             
 
-            if (cardObj) 
-            {
-                plModel.openHand.Remove(cardObj);
-                plModel.stackHand.Add(cardObj);
-            }
-            else
-            {
-                plModel.openHand.Remove(theCard);
-                plModel.stackHand.Add(theCard);
-            }
+            //if (cardObj) 
+            //{
+            //    plModel.openHand.Remove(cardObj);
+            //    plModel.stackHand.Add(cardObj);
+            //}
+            //else
+            //{
+            //    plModel.openHand.Remove(theCard);
+            //    plModel.stackHand.Add(theCard);
+            //}
 
             
             plModel.Range = rangeAmount;
@@ -161,7 +161,27 @@ namespace Gunslinger.Controller
         {
             var child = GetChildOfDeck(index, _deck);
             child.SetActive(true);
+
+            if (player == gameManager._thisPlayer)
+            {
+                foreach (Transform c in GameObject.Find("HandPanel").transform)
+                {
+                    c.SetParent(GameObject.Find("DeckPanel").transform);
+                }
+            }
+
             player.GetComponent<PlayerModel>().openHand.Add(child);
+
+
+            if (player == gameManager._thisPlayer)
+            {
+                foreach (var c in gameManager._thisPlayer.GetComponent<PlayerModel>().openHand)
+                {
+                    Debug.Log("foreach");
+                    c.transform.SetParent(GameObject.Find("HandPanel").transform);
+                }
+            }
+
         }
 
         [HideInInspector] public bool discard = false; 
@@ -177,13 +197,26 @@ namespace Gunslinger.Controller
             ScreenLog.Instance.SendEvent(TextType.Debug, "discard card observer");
             var playermodel = player.GetComponent<PlayerModel>();
 
-            if(player == gameManager._thisPlayer)
+            //string Card = GameObject.Find("HandPanel").transform.GetChild(i).gameObject.name;
+            //foreach (Transform c in GameObject.Find("HandPanel").transform)
+            //{
+            //    if(c.gameObject.name == Card)
+            //    {
+            //        c.SetParent(GameObject.Find("DeckPanel").transform);
+            //        break;
+            //    }
+
+            //}
+
+            if (player == gameManager._thisPlayer)
             {
                 foreach (Transform c in GameObject.Find("HandPanel").transform)
                 {
                     c.SetParent(GameObject.Find("DeckPanel").transform);
                 }
             }
+
+
             playermodel.openHand[i].SetActive(false);
             playermodel.openHand.RemoveAt(i);
 
@@ -195,8 +228,8 @@ namespace Gunslinger.Controller
                     c.transform.SetParent(GameObject.Find("HandPanel").transform);
                 }
             }
-            
-            
+
+
             discard = true;
         }
 
@@ -210,6 +243,7 @@ namespace Gunslinger.Controller
         [ObserversRpc]
         public void MoveToStack(GameObject player, int i)
         {
+            Debug.Log("move to stack");
 
             // birer tane mustang scope vs olabilir bedra
 
@@ -236,7 +270,6 @@ namespace Gunslinger.Controller
             {
                 foreach (var c in gameManager._thisPlayer.GetComponent<PlayerModel>().openHand)
                 {
-                    Debug.Log("foreach");
                     c.transform.SetParent(GameObject.Find("HandPanel").transform);
                 }
             }
@@ -246,11 +279,11 @@ namespace Gunslinger.Controller
             {
                 if(info.gameObject.name == playermodel.PlayerName)
                 {
+                    Debug.Log("move to stack þey iþte " + o.name);
                     if (o.name.StartsWith("Mustang"))
                     {
                         var m = info.Find("Mustang").gameObject;
                         m.SetActive(true);
-                        Debug.Log(m.activeSelf);
                     }
                     else if (o.name.StartsWith("Scope"))
                     {
@@ -260,6 +293,53 @@ namespace Gunslinger.Controller
                     {
                         info.Find("Barrel").gameObject.SetActive(true);
                     }
+
+
+
+
+                    if (o.name.StartsWith("Volcanic"))
+                    {
+                        info.Find("Volcanic").gameObject.SetActive(true);
+                        info.Find("Remington").gameObject.SetActive(false);
+                        info.Find("Rev. Carabine").gameObject.SetActive(false);
+                        info.Find("Schofield").gameObject.SetActive(false);
+                        info.Find("Winchester").gameObject.SetActive(false);
+                    }
+                    else if (o.name.StartsWith("Remington"))
+                    {
+                        info.Find("Volcanic").gameObject.SetActive(false);
+                        info.Find("Remington").gameObject.SetActive(true);
+                        info.Find("Rev. Carabine").gameObject.SetActive(false);
+                        info.Find("Schofield").gameObject.SetActive(false);
+                        info.Find("Winchester").gameObject.SetActive(false);
+                    }
+                    else if (o.name.StartsWith("Rev. Carabine"))
+                    {
+                        info.Find("Volcanic").gameObject.SetActive(false);
+                        info.Find("Remington").gameObject.SetActive(false);
+                        info.Find("Rev. Carabine").gameObject.SetActive(true);
+                        info.Find("Schofield").gameObject.SetActive(false);
+                        info.Find("Winchester").gameObject.SetActive(false);
+                    }
+                    else if (o.name.StartsWith("Schofield"))
+                    {
+                        info.Find("Volcanic").gameObject.SetActive(false);
+                        info.Find("Remington").gameObject.SetActive(false);
+                        info.Find("Rev. Carabine").gameObject.SetActive(false);
+                        info.Find("Schofield").gameObject.SetActive(true);
+                        info.Find("Winchester").gameObject.SetActive(false);
+                    }
+                    else if (o.name.StartsWith("Winchester"))
+                    {
+                        info.Find("Volcanic").gameObject.SetActive(false);
+                        info.Find("Remington").gameObject.SetActive(false);
+                        info.Find("Rev. Carabine").gameObject.SetActive(false);
+                        info.Find("Schofield").gameObject.SetActive(false);
+                        info.Find("Winchester").gameObject.SetActive(true);
+                    }
+
+
+
                 }
             }
 
