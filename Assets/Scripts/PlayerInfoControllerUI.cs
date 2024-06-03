@@ -13,7 +13,7 @@ public class PlayerInfoControllerUI : MonoBehaviour
 
     public void InitializeStackCanvas()
     {
-        _players = GameObject.FindGameObjectsWithTag("Player");
+        _players = _gameManager._turns;
         _thisPlayer = _gameManager._thisPlayer;
         foreach (var player in _players)
         {
@@ -39,6 +39,7 @@ public class PlayerInfoControllerUI : MonoBehaviour
 
     public void UpdateStackCanvas()
     {
+        _players = _gameManager._turns;
         int count = 0;
         for (int i = 0; i < _players.Length; i++) { 
             var player = _players[i];

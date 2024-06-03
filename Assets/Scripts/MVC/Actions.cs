@@ -135,14 +135,13 @@ public class Actions : MonoBehaviour
         }
     }
 
-    public void BeerAction(PlayerModel player, int playedCard) // Bitki çayý // bedra 2 kere ayni sey
+    public void BeerAction(PlayerModel player) // Bitki çayý // bedra 2 kere ayni sey
     {
         var maxbullet = (player.PlayerRole == PlayerModel.TypeOfPlayer.Sheriff) ? 5 : 4;
         if (player.CurrentBulletPoint < maxbullet)
         {
             cardsController.UpdateHealthServer(player, 1);
         }
-        DiscardCard(player.gameObject, playedCard);
     }
 
     public void WellsFargoAction(PlayerModel player, int playedCard) // bedra
@@ -193,14 +192,17 @@ public class Actions : MonoBehaviour
     }
 
 
-    public void SaloonAction(GameObject player, int playedCard) // Kahvehane
+    public void SaloonAction() // Kahvehane
     {
         var players = gameManager._turns;
         foreach (var pl in players)
         {
-            cardsController.UpdateHealthServer(pl.GetComponent<PlayerModel>(), 1);
+            if (pl.GetComponent<PlayerModel>().IsAlive)
+            {
+                cardsController.UpdateHealthServer(pl.GetComponent<PlayerModel>(), 1);
+            }
         }
-        DiscardCard(player, playedCard);
+        
     }
     public void GatlingAction(GameObject player, int playedCard) // Makineli tüfek
     {
