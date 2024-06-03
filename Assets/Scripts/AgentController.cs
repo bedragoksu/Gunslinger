@@ -6,7 +6,7 @@ public class AgentController : MonoBehaviour
 {
 
     [SerializeField] private GameManager _gameManager;
-    [SerializeField] private Actions _actions;
+
     private class InfoPlayer
     {
         public string Name;
@@ -32,8 +32,6 @@ public class AgentController : MonoBehaviour
         Dictionary<int, InfoPlayer> PlayerInfos = CreatePlayerInfos(AgentPlayerModel);
 
         // decide tree
-
-
 
     }
 

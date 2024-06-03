@@ -95,7 +95,7 @@ public class CardSelect : MonoBehaviour
             {
                 case "Bang":
                     Debug.Log("BANG TIKLANDIIIII");
-                    if (_actions.CanHitAnyone(_thisPlayerObject).Count != 0)
+                    if (CanHitAnyone(_thisPlayerObject))
                     {
                         if (_thisPlayerModel.CanPlayMultipleBangs || !_thisPlayerModel.PlayedBang)
                         {
@@ -185,7 +185,20 @@ public class CardSelect : MonoBehaviour
     }
 
     // kimseye vuramýyorsak??
-    
+    private bool CanHitAnyone(GameObject player)
+    {
+        var plList = _gameManager._turns;
+
+        foreach(var pl in plList)
+        {
+            if(pl != player && pl.GetComponent<PlayerModel>().IsAlive)
+            {
+                if (_actions.CalculateScopeCanHit(player, pl)) return true;
+            }
+        }
+
+        return false;
+    }
 
     private IEnumerator PanicRoutine(int index)
     {

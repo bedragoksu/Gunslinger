@@ -79,24 +79,6 @@ public class Actions : MonoBehaviour
     }
 
 
-    public List<PlayerModel> CanHitAnyone(GameObject player)
-    {
-        var plList = gameManager._turns;
-        List<PlayerModel> CanHitList = new List<PlayerModel>();
-
-        foreach (var pl in plList)
-        {
-            if (pl != player && pl.GetComponent<PlayerModel>().IsAlive)
-            {
-                if (CalculateScopeCanHit(player, pl))
-                {
-                    CanHitList.Add(pl.GetComponent<PlayerModel>());
-                }
-            }
-        }
-
-        return CanHitList;
-    }
 
     private IEnumerator CheckTheNextCard(GameObject player)
     {
