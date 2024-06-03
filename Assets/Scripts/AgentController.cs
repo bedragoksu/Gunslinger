@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using System;
+using FishNet;
 using Gunslinger.Controller;
 using Random = UnityEngine.Random;
+using FishNet.Object;
 
-public class AgentController : MonoBehaviour
+public class AgentController : NetworkBehaviour
 {
 
     [SerializeField] private GameManager _gameManager;
@@ -36,6 +38,7 @@ public class AgentController : MonoBehaviour
     {
         // about players
         PlayerModel AgentPlayerModel = AgentPlayer.GetComponent<PlayerModel>();
+        int MaxBulletPoint = (AgentPlayerModel.PlayerRole == PlayerModel.TypeOfPlayer.Sheriff) ? 5 : 4;
         Dictionary<int, InfoPlayer> PlayerInfos = CreatePlayerInfos(AgentPlayerModel);
 
         // helper lists
@@ -43,52 +46,125 @@ public class AgentController : MonoBehaviour
         List<string> OpenHandCardNames = CardListByName(AgentPlayerModel);
 
         // DECIDE TREE
+        AgentPlayerModel.PlayedBang = false;
+        bool StillCanPlay = true;
 
         // BANG
+        BangDecideTree(OpenHandCardNames, CanHitPlayer, AgentPlayerModel);
+        
+        // play
+        while(AgentPlayerModel.openHand.Count >= AgentPlayerModel.CurrentBulletPoint && StillCanPlay )
+        {
+            // stack hand'e atilabilecek kartlar
 
-        bool containsBang = OpenHandCardNames.Any(item => item.StartsWith("bang", StringComparison.OrdinalIgnoreCase));
+            // can hesabi
+            while(AgentPlayerModel.CurrentBulletPoint < MaxBulletPoint)
+            {
+                if(OpenHandCardNames.Any(item => item.StartsWith("Beer", StringComparison.OrdinalIgnoreCase)))
+                {
+                    // play beer
+                    _actions.BeerAction(AgentPlayerModel);
+                    DiscardCard("Beer", OpenHandCardNames, AgentPlayerModel);
+                }
+                else if(OpenHandCardNames.Any(item => item.StartsWith("Saloon", StringComparison.OrdinalIgnoreCase)))
+                {
+                    // play saloon
+                    _actions.SaloonAction();
+                    DiscardCard("Saloon", OpenHandCardNames, AgentPlayerModel);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            // gatling bang
+
+
+            // panic cat balou
+
+            // wells fargo, stage coach
+
+            StillCanPlay = false;
+        }
+
+        // discard
+
+
+    }
+
+
+
+    private void BangDecideTree(List<string> OpenHandCardNames, List<PlayerModel> CanHitPlayer, PlayerModel AgentPlayerModel)
+    {
+        bool containsBang = OpenHandCardNames.Any(item => item.StartsWith("Bang", StringComparison.OrdinalIgnoreCase));
 
         if (containsBang && CanHitPlayer.Count != 0 && (AgentPlayerModel.CanPlayMultipleBangs || !AgentPlayerModel.PlayedBang))
         {
             int index = 0;
+            List<PlayerModel> HitListWithoutSheriff = new();
             switch (AgentPlayerModel.PlayerRole)
             {
                 case PlayerModel.TypeOfPlayer.Sheriff:
                     // hit randomly
                     AgentPlayerModel.PlayedBang = true;
+                    DiscardCard("Bang", OpenHandCardNames, AgentPlayerModel);
                     index = Random.Range(0, CanHitPlayer.Count);
                     BangForAgent(AgentPlayerModel, (CanHitPlayer[index].gameObject));
                     break;
                 case PlayerModel.TypeOfPlayer.Deputy:
                     // hit randomly unless its not the sheriff
-                    AgentPlayerModel.PlayedBang = true;
-                    index = Random.Range(0, CanHitPlayer.Count);
-                    BangForAgent(AgentPlayerModel, (CanHitPlayer[index].gameObject));
+                    HitListWithoutSheriff = CanHitPlayer.Where(player => player.PlayerRole != PlayerModel.TypeOfPlayer.Sheriff).ToList();
+                    if (HitListWithoutSheriff.Count != 0)
+                    {
+                        AgentPlayerModel.PlayedBang = true;
+                        DiscardCard("Bang", OpenHandCardNames, AgentPlayerModel);
+                        index = Random.Range(0, HitListWithoutSheriff.Count);
+                        BangForAgent(AgentPlayerModel, (HitListWithoutSheriff[index].gameObject));
+                    }
                     break;
                 case PlayerModel.TypeOfPlayer.Outlaw:
                     // hit the sheriff
                     AgentPlayerModel.PlayedBang = true;
-                    index = Random.Range(0, CanHitPlayer.Count);
-                    BangForAgent(AgentPlayerModel, (CanHitPlayer[index].gameObject));
+                    DiscardCard("Bang", OpenHandCardNames, AgentPlayerModel);
+
+                    PlayerModel Sheriff = CanHitPlayer.FirstOrDefault(player => player.PlayerRole == PlayerModel.TypeOfPlayer.Sheriff);
+
+                    if (Sheriff)
+                    {
+                        BangForAgent(AgentPlayerModel, Sheriff.gameObject);
+                    }
+                    else
+                    {
+                        index = Random.Range(0, CanHitPlayer.Count);
+                        BangForAgent(AgentPlayerModel, (CanHitPlayer[index].gameObject));
+                    }
                     break;
                 case PlayerModel.TypeOfPlayer.Renegade:
                     // if there is only sheriff then bang it, but there is someone else hit it
                     AgentPlayerModel.PlayedBang = true;
-                    index = Random.Range(0, CanHitPlayer.Count);
-                    BangForAgent(AgentPlayerModel, (CanHitPlayer[index].gameObject));
+                    DiscardCard("Bang", OpenHandCardNames, AgentPlayerModel);
+
+                    HitListWithoutSheriff = CanHitPlayer.Where(player => player.PlayerRole != PlayerModel.TypeOfPlayer.Sheriff).ToList();
+                    if (HitListWithoutSheriff.Count != 0)
+                    {
+                        AgentPlayerModel.PlayedBang = true;
+                        DiscardCard("Bang", OpenHandCardNames, AgentPlayerModel);
+                        index = Random.Range(0, HitListWithoutSheriff.Count);
+                        BangForAgent(AgentPlayerModel, (HitListWithoutSheriff[index].gameObject));
+                    }
+                    else
+                    {
+                        index = Random.Range(0, CanHitPlayer.Count);
+                        BangForAgent(AgentPlayerModel, (CanHitPlayer[index].gameObject));
+                    }
                     break;
             }
-
-            // discard that bang
-            DiscardCard("Bang", OpenHandCardNames, AgentPlayerModel);
         }
-
-
-
     }
 
     private bool barrelSaved = false;
-    private void BangForAgent(PlayerModel AgentPlayer, GameObject target)
+    private void BangForAgent(PlayerModel AgentPlayer, GameObject target) // wait falan at
     {
         PlayerModel targetPlayer = target.GetComponent<PlayerModel>();
 
@@ -108,7 +184,7 @@ public class AgentController : MonoBehaviour
         if (hasBarrel)
         {
             // look out for the next card
-            StartCoroutine("CheckTheNextCard", target);
+            StartCoroutine(_actions.CheckTheNextCard(target));
         }
 
 
@@ -195,9 +271,22 @@ public class AgentController : MonoBehaviour
         }
         if (index != -1)
         {
-            AgentPlayerModel.openHand.RemoveAt(index);
+            RemoveCardFromAgentServer(AgentPlayerModel,index);
             OpenHandCardNames.RemoveAt(index);
         }
     }
+
+    [ServerRpc (RequireOwnership = false)]
+    private void RemoveCardFromAgentServer(PlayerModel AgentPlayerModel, int index)
+    {
+        RemoveCardFromAgent(AgentPlayerModel, index);
+    }
+
+    [ObserversRpc]
+    private void RemoveCardFromAgent(PlayerModel AgentPlayerModel, int index)
+    {
+        AgentPlayerModel.openHand.RemoveAt(index);
+    }
+
 
 }

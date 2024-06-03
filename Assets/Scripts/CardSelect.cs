@@ -110,12 +110,14 @@ public class CardSelect : MonoBehaviour
                 case "Saloon":
                     Debug.Log("KAHVEHNE TIKLANDIII");
                     index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
-                    _actions.SaloonAction(_thisPlayerObject, index);
+                    _actions.SaloonAction();
+                    _actions.DiscardCard(_thisPlayerObject, index);
                     break;
                 case "Beer":
                     Debug.Log("BEER KARTI TIKLANDI");
                     index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
-                    _actions.BeerAction(_thisPlayerModel, index);
+                    _actions.BeerAction(_thisPlayerModel);
+                    _actions.DiscardCard(_thisPlayerObject, index);
                     break;
                 case "Wells Fargo":
                     Debug.Log("WELLS FARGO TIKLANDII");
