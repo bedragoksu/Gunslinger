@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using FishNet.Object.Synchronizing;
 using UnityEngine.UI;
+using System.Collections;
 
 namespace Gunslinger.Controller
 {
@@ -23,6 +24,15 @@ namespace Gunslinger.Controller
 
 
         private bool saved = false;
+
+        [Header("Effects")]
+        public Image splatterImage;
+        public AudioSource gunAudioSource;
+        public AudioClip gunAudio;
+
+        public Material RedMaterial;
+        public Material OriginalMaterial;
+
 
         [ServerRpc(RequireOwnership =false)]
         public void AddGunServer(GameObject player, int rangeAmount, GameObject theCard, bool multipleBangs, string cardName)
@@ -426,8 +436,21 @@ namespace Gunslinger.Controller
                 maxpoint = 4;
             }
             if(player.CurrentBulletPoint > maxpoint) player.CurrentBulletPoint = maxpoint;
+            if(player.CurrentBulletPoint < 0) player.CurrentBulletPoint = 0;
 
             characterDisplayer.UpdateBullets();
+
+            if(amount < 0)
+            {
+                if(player.gameObject == gameManager._thisPlayer)
+                {
+                    StartCoroutine(DamageEffect(player.gameObject));
+                }
+                else
+                {
+                    StartCoroutine(DamageOnWorld(player.gameObject));
+                }
+            }
 
             if (player.CurrentBulletPoint <= 0) // dead 
             {
@@ -452,6 +475,30 @@ namespace Gunslinger.Controller
 
             }
 
+        }
+
+        IEnumerator DamageEffect(GameObject player)
+        {
+            Color c = splatterImage.color;
+            SkinnedMeshRenderer meshRenderer = player.transform.Find("sheriff/Character_Sheriff_01").GetComponent<SkinnedMeshRenderer>();
+            gunAudioSource.PlayOneShot(gunAudio);
+            yield return new WaitForSeconds(3f);
+            c.a = 0.6f;
+            splatterImage.color = c;
+            //meshRenderer.material = RedMaterial; // highlight
+            yield return new WaitForSeconds(1f);
+            c.a = 0f;
+            splatterImage.color = c;
+            //meshRenderer.materials[0] = OriginalMaterial;
+        }
+        IEnumerator DamageOnWorld(GameObject player)
+        {
+            SkinnedMeshRenderer meshRenderer = player.transform.Find("sheriff/Character_Sheriff_01").GetComponent<SkinnedMeshRenderer>();
+            gunAudioSource.PlayOneShot(gunAudio);
+            yield return new WaitForSeconds(3f);
+            //meshRenderer.material = RedMaterial;
+            yield return new WaitForSeconds(1f);
+            //meshRenderer.materials[0] = OriginalMaterial;
         }
 
         public List<PlayerModel> GetAlivePlayers()
