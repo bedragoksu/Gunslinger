@@ -487,8 +487,9 @@ namespace Gunslinger.Controller
         {
             Color c = splatterImage.color;
             SkinnedMeshRenderer meshRenderer = player.transform.Find("sheriff/Character_Sheriff_01").GetComponent<SkinnedMeshRenderer>();
+            yield return new WaitForSeconds(1f);
             gunAudioSource.PlayOneShot(gunAudio);
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(2f);
             c.a = 0.6f;
             splatterImage.color = c;
             //meshRenderer.material = RedMaterial; // highlight
@@ -500,8 +501,9 @@ namespace Gunslinger.Controller
         IEnumerator DamageOnWorld(GameObject player)
         {
             SkinnedMeshRenderer meshRenderer = player.transform.Find("sheriff/Character_Sheriff_01").GetComponent<SkinnedMeshRenderer>();
+            yield return new WaitForSeconds(1f);
             gunAudioSource.PlayOneShot(gunAudio);
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(2f);
             //meshRenderer.material = RedMaterial;
             yield return new WaitForSeconds(1f);
             //meshRenderer.materials[0] = OriginalMaterial;

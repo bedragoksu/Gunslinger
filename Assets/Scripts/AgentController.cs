@@ -267,7 +267,7 @@ public class AgentController : NetworkBehaviour
 
         PlayerAnimationController targetAnimationController = target.GetComponent<PlayerAnimationController>();
         PlayerAnimationController playerAnimationController = AgentPlayer.gameObject.GetComponent<PlayerAnimationController>();
-        playerAnimationController.playAnimFireServer(target.transform.position);
+        playerAnimationController.playAnimFireServer(target.transform.position, false);
         bool hasBarrel = false;
         foreach (var stack in targetPlayer.stackHand)
         {
