@@ -8,6 +8,7 @@ using Gunslinger.Controller;
 using Random = UnityEngine.Random;
 using FishNet.Object;
 using FishNet.Demo.AdditiveScenes;
+using UnityEngine.UI;
 
 public class AgentController : NetworkBehaviour
 {
@@ -99,7 +100,7 @@ public class AgentController : NetworkBehaviour
             if (OpenHandCardNames.Any(item => item.StartsWith("Beer", StringComparison.OrdinalIgnoreCase)))
             {
                 // play beer
-                Debug.Log("B›TK› «AY ›«›YORUM");
+                Debug.Log("B√ùTK√ù √áAY √ù√á√ùYORUM");
                 _actions.BeerAction(AgentPlayerModel);
                 StartCoroutine(DiscardCardRoutine(Tuple.Create("Beer", OpenHandCardNames, AgentPlayerModel)));
                 yield return new WaitForSeconds(_timeDelay);
@@ -107,7 +108,7 @@ public class AgentController : NetworkBehaviour
             else if (OpenHandCardNames.Any(item => item.StartsWith("Saloon", StringComparison.OrdinalIgnoreCase)))
             {
                 // play saloon
-                Debug.Log("HERKESE BENDEN «AY");
+                Debug.Log("HERKESE BENDEN √áAY");
                 _actions.SaloonAction();
                 StartCoroutine(DiscardCardRoutine(Tuple.Create("Saloon", OpenHandCardNames, AgentPlayerModel)));
                 yield return new WaitForSeconds(_timeDelay);
@@ -142,26 +143,26 @@ public class AgentController : NetworkBehaviour
             if(OpenHandCardNames.Any(item => item.StartsWith("Panic", StringComparison.OrdinalIgnoreCase)))
             {
                 StartCoroutine(DiscardCardRoutine(Tuple.Create("Panic", OpenHandCardNames, AgentPlayerModel)));
-                Debug.Log("PAN›K DISCARD ED›LD›");
+                Debug.Log("PAN√ùK DISCARD ED√ùLD√ù");
             }
             else if (OpenHandCardNames.Any(item => item.StartsWith("Cat Balou", StringComparison.OrdinalIgnoreCase)))
             {
                 StartCoroutine(DiscardCardRoutine(Tuple.Create("Cat Balou", OpenHandCardNames, AgentPlayerModel)));
-                Debug.Log("CAT BALOU DISCARD ED›LD›");
+                Debug.Log("CAT BALOU DISCARD ED√ùLD√ù");
             }
             else if (OpenHandCardNames.Any(item => item.StartsWith("Wells Fargo", StringComparison.OrdinalIgnoreCase)))
             {
                 StartCoroutine(DiscardCardRoutine(Tuple.Create("Wells Fargo", OpenHandCardNames, AgentPlayerModel)));
-                Debug.Log("WELLS FARGO DISCARD ED›LD›");
+                Debug.Log("WELLS FARGO DISCARD ED√ùLD√ù");
             }
             else if (OpenHandCardNames.Any(item => item.StartsWith("Stage Coach", StringComparison.OrdinalIgnoreCase)))
             {
                 StartCoroutine(DiscardCardRoutine(Tuple.Create("Stage Coach", OpenHandCardNames, AgentPlayerModel)));
-                Debug.Log("STAGE COACH DISCARD ED›LD›");
+                Debug.Log("STAGE COACH DISCARD ED√ùLD√ù");
             }
             else if(AgentPlayerModel.openHand.Count > AgentPlayerModel.CurrentBulletPoint)
             {
-                Debug.Log($"{OpenHandCardNames[0]} DISCARD ED›LD›");
+                Debug.Log($"{OpenHandCardNames[0]} DISCARD ED√ùLD√ù");
                 StartCoroutine(DiscardCardRoutine(Tuple.Create(OpenHandCardNames[0], OpenHandCardNames, AgentPlayerModel)));
             }
             yield return new WaitForSeconds(_timeDelay);
@@ -281,8 +282,10 @@ public class AgentController : NetworkBehaviour
             StartCoroutine(_actions.CheckTheNextCard(target));
         }
 
+        var pointer = target.GetComponent<CardManager>().CardOrder[cardsController.CardPointer];
+        var child = cardsController.GetChildOfDeck(pointer, GameObject.Find("DeckPanel"));
 
-        if (!barrelSaved)
+        if (child.transform.Find("Symbol").GetComponent<Image>().sprite.name != "hearts")
         {
             bool hasMissed = false;
             var hand = targetPlayer.openHand;
@@ -421,7 +424,7 @@ public class AgentController : NetworkBehaviour
         {
             if (info.gameObject.name == AgentPlayerModel.PlayerName)
             {
-                Debug.Log("move to stack ˛ey i˛te " + c.name);
+                Debug.Log("move to stack √æey i√æte " + c.name);
                 if (c.name.StartsWith("Mustang"))
                 {
                     var m = info.Find("Mustang").gameObject;

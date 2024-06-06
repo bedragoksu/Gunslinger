@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using FishNet.Object;
-using NeptunDigital;
+//using NeptunDigital;
 using Gunslinger.Controller;
 using FishNet.Object.Synchronizing;
 using TMPro;
 using UnityEngine.UI;
 using System.Reflection;
+using TMPro;
 
 public class GameManager : NetworkBehaviour
 {
@@ -40,8 +41,8 @@ public class GameManager : NetworkBehaviour
 
     public bool SomeoneDestroyed = false;
     public GameObject g;
-    public GameObject[] oldPlayers;
-    public GameObject[] newPlayers;
+
+    public TMP_Text AlertText;
 
     private Button _discardButton;
     public void OpenCloseDiscardButton(bool open)
@@ -107,7 +108,6 @@ public class GameManager : NetworkBehaviour
                 ServerManager.Spawn(g);
 
                 Debug.Log("PLAYERS COUNT " + GameObject.FindGameObjectsWithTag("Player").Length.ToString());
-                newPlayers = GameObject.FindGameObjectsWithTag("Player");
 
                 destroyedPlayer = _turns[g.GetComponent<PlayerModel>().PlayerID];
                 _turns[g.GetComponent<PlayerModel>().PlayerID] = g;
@@ -396,7 +396,7 @@ public class GameManager : NetworkBehaviour
 
     private void HandleDrawCard()
     {
-        ScreenLog.Instance.SendEvent(TextType.Debug, $"DRAW CARD STATE");
+        //ScreenLog.Instance.SendEvent(TextType.Debug, $"DRAW CARD STATE");
         Debug.Log("DRAW CARD STATE");
         if (!_isRoleAssinged) // canvas duzeni icin
         {
@@ -433,11 +433,12 @@ public class GameManager : NetworkBehaviour
                 _thisPlayer = pl;
             }
         }
+
         StartCoroutine(InitializationRoutine());
     }
     private IEnumerator InitializationRoutine()
     {
-        ScreenLog.Instance.SendEvent(TextType.Debug, "Initialize");
+        //ScreenLog.Instance.SendEvent(TextType.Debug, "Initialize");
         yield return new WaitUntil(() => _prc.AssignRoles());  // bu fonksiyonu parçala
         yield return new WaitForSecondsRealtime(0.5f); // bu bir f hiç olmadý ya :( neyse düzeltcez
 
@@ -504,6 +505,17 @@ public class GameManager : NetworkBehaviour
     public void DrawTheCardObserver(GameObject player, GameObject card)
     {
         player.GetComponent<PlayerModel>().openHand.Add(card);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void ChangeAlertServer(string text)
+    {
+        ChangeAlertText(text);
+    }
+    [ObserversRpc]
+    private void ChangeAlertText(string text)
+    {
+        AlertText.text = text;
     }
 
 }
