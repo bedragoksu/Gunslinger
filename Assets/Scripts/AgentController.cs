@@ -7,6 +7,7 @@ using FishNet;
 using Gunslinger.Controller;
 using Random = UnityEngine.Random;
 using FishNet.Object;
+using UnityEngine.UI;
 
 public class AgentController : NetworkBehaviour
 {
@@ -278,8 +279,10 @@ public class AgentController : NetworkBehaviour
             StartCoroutine(_actions.CheckTheNextCard(target));
         }
 
+        var pointer = target.GetComponent<CardManager>().CardOrder[cardsController.CardPointer];
+        var child = cardsController.GetChildOfDeck(pointer, GameObject.Find("DeckPanel"));
 
-        if (!barrelSaved)
+        if (child.transform.Find("Symbol").GetComponent<Image>().sprite.name != "hearts")
         {
             bool hasMissed = false;
             var hand = targetPlayer.openHand;
