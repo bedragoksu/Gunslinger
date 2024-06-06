@@ -38,7 +38,7 @@ public class PlayerController : NetworkBehaviour
             playerCamera.transform.position = new Vector3(transform.position.x, transform.position.y + cameraYOffset, transform.position.z + cameraZOffset);
             
             playerCamera.transform.SetParent(transform);
-            playerCamera.transform.localRotation = Quaternion.Euler(45f, 0, 0);
+            playerCamera.transform.localRotation = Quaternion.Euler(30f, 0, 0);
 
 
             Vector3 direction = (Vector3.zero - gameObject.transform.position).normalized;
