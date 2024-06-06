@@ -1,6 +1,6 @@
 using FishNet.Managing;
 using FishNet.Object;
-using NeptunDigital;
+//using NeptunDigital;
 using System.Collections.Generic;
 using UnityEngine;
 using FishNet.Object.Synchronizing;
@@ -112,7 +112,7 @@ namespace Gunslinger.Controller
 
             // change saved
             Debug.Log(child.transform.Find("Symbol").GetComponent<Image>().sprite.name);
-            ScreenLog.Instance.SendEvent(TextType.Debug, child.transform.Find("Symbol").GetComponent<Image>().sprite.name);
+            //ScreenLog.Instance.SendEvent(TextType.Debug, child.transform.Find("Symbol").GetComponent<Image>().sprite.name);
             if(child.transform.Find("Symbol").GetComponent<Image>().sprite.name == "hearts")
             {
                 saved = true;

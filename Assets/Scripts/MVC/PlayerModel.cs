@@ -179,8 +179,6 @@ public class PlayerModel : NetworkBehaviour
         {
 
             GameManager gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-            gameManager.oldPlayers = GameObject.FindGameObjectsWithTag("Player");
-
 
             gameManager.g = Instantiate(gameObject, gameObject.transform.position, gameObject.transform.rotation);
 
