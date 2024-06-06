@@ -6093,7 +6093,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &976218033
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10602,6 +10602,8 @@ MonoBehaviour:
   AlertCanvas: {fileID: 989464412}
   EffectSoundAudio: {fileID: 2040396143}
   LossoSoundEffect: {fileID: 8300000, guid: 2f23510cb4bb6344fb3ef00c49a5f0ba, type: 3}
+  LobbyText: {fileID: 1233582103}
+  LobbyCanvas: {fileID: 976218035}
   EndText: {fileID: 1681729652}
   EndCanvas: {fileID: 1700831772}
   _thisPlayer: {fileID: 0}
@@ -12121,6 +12123,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   InputFieldPlayerName: {fileID: 645996596}
+  LobbyText: {fileID: 1233582103}
 --- !u!4 &1931095539
 Transform:
   m_ObjectHideFlags: 0
@@ -12335,10 +12338,10 @@ RectTransform:
   m_Father: {fileID: 976218036}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 111.68}
-  m_SizeDelta: {x: 1152, y: 768}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1963332170
 MonoBehaviour:
