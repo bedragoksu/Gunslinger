@@ -37,7 +37,7 @@ public class CharacterPositionController : MonoBehaviour
             float z = origin.z + radius * Mathf.Sin(angle * Mathf.Deg2Rad);
 
             GameObject cornerObject = new GameObject("SpawnPoint_" + i);
-            cornerObject.transform.position = new Vector3(x, 0f, z);
+            cornerObject.transform.position = new Vector3(x, -0.2f, z);
             corners[i] = cornerObject.transform;
         }
 
