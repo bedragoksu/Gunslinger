@@ -104,7 +104,7 @@ public class PlayerModel : NetworkBehaviour
 
     public void cardchange(bool b)
     {
-        Debug.Log("CARD CHANGE");
+        //Debug.Log("CARD CHANGE");
         GameObject handPanel = GameObject.Find("HandPanel");
         GameObject deckPanel = GameObject.Find("DeckPanel");
 

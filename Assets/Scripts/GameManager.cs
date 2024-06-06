@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using FishNet.Object;
-//using NeptunDigital;
+using NeptunDigital;
 using Gunslinger.Controller;
 using FishNet.Object.Synchronizing;
 using TMPro;
@@ -226,6 +226,7 @@ public class GameManager : NetworkBehaviour
         StartCoroutine(r());
 
         AssignStateServer(GameState.DrawCard);
+
     }
     public void ActivateNextButton()
     {
@@ -395,7 +396,8 @@ public class GameManager : NetworkBehaviour
 
     private void HandleDrawCard()
     {
-        //ScreenLog.Instance.SendEvent(TextType.Debug, $"DRAW CARD STATE");
+        ScreenLog.Instance.SendEvent(TextType.Debug, $"DRAW CARD STATE");
+        Debug.Log("DRAW CARD STATE");
         if (!_isRoleAssinged) // canvas duzeni icin
         {
             CharacterDisplayer.GetComponent<CharacterDisplayer>().roleOnChange();
@@ -435,6 +437,7 @@ public class GameManager : NetworkBehaviour
     }
     private IEnumerator InitializationRoutine()
     {
+        ScreenLog.Instance.SendEvent(TextType.Debug, "Initialize");
         yield return new WaitUntil(() => _prc.AssignRoles());  // bu fonksiyonu parçala
         yield return new WaitForSecondsRealtime(0.5f); // bu bir f hiç olmadý ya :( neyse düzeltcez
 

@@ -1,6 +1,6 @@
 using FishNet.Managing;
 using FishNet.Object;
-//using NeptunDigital;
+using NeptunDigital;
 using System.Collections.Generic;
 using UnityEngine;
 using FishNet.Object.Synchronizing;
@@ -111,6 +111,8 @@ namespace Gunslinger.Controller
             child.transform.localPosition = new Vector3(0f,0f,0f);
 
             // change saved
+            Debug.Log(child.transform.Find("Symbol").GetComponent<Image>().sprite.name);
+            ScreenLog.Instance.SendEvent(TextType.Debug, child.transform.Find("Symbol").GetComponent<Image>().sprite.name);
             if(child.transform.Find("Symbol").GetComponent<Image>().sprite.name == "hearts")
             {
                 saved = true;
@@ -135,28 +137,37 @@ namespace Gunslinger.Controller
                 c.SetParent(deck);
             }
         }
-
-
+       
         public bool DrawCards(GameObject player,int amount)
         {
-            DrawCardsServer(player,amount);
+            DrawCardsObservers(player,amount);
             return true;
         }
 
-        [ObserversRpc]
+
+        [ServerRpc (RequireOwnership = false)]
         public void DrawCardsServer(GameObject player, int amount)
         {
+            DrawCardsObservers(player, amount);
+        }
+
+
+        [ObserversRpc]
+        public void DrawCardsObservers(GameObject player, int amount)
+        {
             //ScreenLog.Instance.SendEvent(TextType.Debug, "DRAWING CARDS");
+            //Debug.Log("DRAW CARDS");
             for(int i=0; i < amount; i++)
             {
                 if (CardPointer == _cardNum) CardPointer = 0;
+                //Debug.Log("card pointer: " + CardPointer);
                 var pointer = player.GetComponent<CardManager>().CardOrder[CardPointer];
                 var child = GetChildOfDeck(pointer,_deck);
-                child.SetActive(true);
+                //Debug.Log("card: " + child.name);
                 player.GetComponent<PlayerModel>().openHand.Add(child);
-                CardPointer++; // herkes icin guncelle
+                child.SetActive(true);
+                CardPointer++;
             }
-            
         }
 
 
@@ -388,9 +399,7 @@ namespace Gunslinger.Controller
             
             for (int i = 0; i < pl.CurrentBulletPoint; i++)
             {
-                Debug.Log($"pointer value is {pointer}");
                 var a = cardOrder[pointer];
-                Debug.Log($"order value is {a}");
 
                 var child = GetChildOfDeck(a, _deck);
                 child.SetActive(true);

@@ -37,8 +37,10 @@ public class Actions : MonoBehaviour
             StartCoroutine("CheckTheNextCard", target);
         }
 
+        var pointer = player.GetComponent<CardManager>().CardOrder[cardsController.CardPointer];
+        var child = cardsController.GetChildOfDeck(pointer, GameObject.Find("DeckPanel"));
 
-        if (!barrelSaved)
+        if (child.transform.Find("Symbol").GetComponent<Image>().sprite.name != "hearts")
         {
             bool hasMissed = false;
             var hand = targetPlayer.openHand;
@@ -102,12 +104,13 @@ public class Actions : MonoBehaviour
     {
         // next card to (TheNextCard) panel
         var b = cardsController.CheckNext(player);
+        barrelSaved = b;
 
         // wait for 2 seconds
         yield return new WaitForSeconds(2f);
 
         // if it has heart then barrelSaved = true otherwise false
-        barrelSaved = b;
+        
 
         // next card to deck
         cardsController.CloseTheNextCardServer();
@@ -148,12 +151,12 @@ public class Actions : MonoBehaviour
 
     public void WellsFargoAction(PlayerModel player, int playedCard) // bedra
     {
-        cardsController.DrawCards(player.gameObject, 3);
+        cardsController.DrawCardsServer(player.gameObject, 3);
         DiscardCard(player.gameObject, playedCard);
     }
     public void StagecoachAction(PlayerModel player, int playedCard)
     {
-        cardsController.DrawCards(player.gameObject, 2);
+        cardsController.DrawCardsServer(player.gameObject, 2);
         DiscardCard(player.gameObject, playedCard);
     }
 
