@@ -17,6 +17,7 @@ public class CharacterDisplayer : MonoBehaviour
     public Image rangeImage;
     public GameObject bullet;
     private PlayerModel pl;
+    public GameManager gameManager;
 
     private void addBullet(int num)
     {
@@ -51,7 +52,10 @@ public class CharacterDisplayer : MonoBehaviour
     public void roleOnChange()
     {
         pl = new PlayerModel();
-        foreach (var p in GameObject.FindGameObjectsWithTag("Player"))
+        GameObject[] pls = null;
+        if (gameManager._turns.Length != 0) pls = gameManager._turns;
+        else pls = GameObject.FindGameObjectsWithTag("Player");
+        foreach (var p in pls)
         {
             if (p.GetComponent<PlayerModel>().enabled)
             {

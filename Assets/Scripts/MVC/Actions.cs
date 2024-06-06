@@ -6,6 +6,7 @@ using Gunslinger.Controller;
 using System;
 using UnityEngine.UI;
 using System.Xml.Linq;
+using FishNet.Object;
 
 public class Actions : MonoBehaviour
 {
@@ -19,8 +20,14 @@ public class Actions : MonoBehaviour
     {
         PlayerModel targetPlayer = target.GetComponent<PlayerModel>();
         Debug.Log($"target of bang: {targetPlayer.PlayerName}");
+
         gameManager.ChangeAlertServer($"{player.GetComponent<PlayerModel>().PlayerName} targetted {targetPlayer.PlayerName}");
 
+        PlayerAnimationController targetAnimationController = target.GetComponent<PlayerAnimationController>();
+        PlayerAnimationController playerAnimationController = player.GetComponent<PlayerAnimationController>();
+
+
+        playerAnimationController.playFire();
         bool hasBarrel = false;
         foreach (var stack in targetPlayer.stackHand)
         {
@@ -78,12 +85,32 @@ public class Actions : MonoBehaviour
                         }
                     }
                 }
-                if (!hasBeer) { cardsController.UpdateHealthServer(targetPlayer, -1); }
+                bool dodged = true;
+                if (!hasBeer) { 
+                    if (targetPlayer.CurrentBulletPoint == 1)
+                    {
+                        
+                        targetAnimationController.playAnimDeathServer();
+                    } else
+                    {
+                        targetAnimationController.playAnimInjureServer();
+                            
+                    }
+                    dodged = false;
+                    cardsController.UpdateHealthServer(targetPlayer, -1); 
+                }
+                if (dodged)
+                {
+                    Debug.Log("Target dogded");
+                    targetAnimationController.playAnimDodgeServer();
+                }
+            } else
+            {
+                targetAnimationController.playAnimDodgeServer();
             }
 
-        }
+        } else { targetAnimationController.playAnimDodgeServer(); }
     }
-
 
     public List<PlayerModel> CanHitAnyone(GameObject player)
     {
@@ -144,7 +171,7 @@ public class Actions : MonoBehaviour
 
     }
 
-    public void BeerAction(PlayerModel player) // Bitki çayý // bedra 2 kere ayni sey
+    public void BeerAction(PlayerModel player) // Bitki Ã§ayÃ½ // bedra 2 kere ayni sey
     {
         var maxbullet = (player.PlayerRole == PlayerModel.TypeOfPlayer.Sheriff) ? 5 : 4;
         if (player.CurrentBulletPoint < maxbullet)
@@ -216,7 +243,7 @@ public class Actions : MonoBehaviour
         }
         
     }
-    public void GatlingAction(GameObject player) // Makineli tüfek
+    public void GatlingAction(GameObject player) // Makineli tÃ¼fek
     {
         var players = gameManager._turns;
 
@@ -231,7 +258,7 @@ public class Actions : MonoBehaviour
     }
 
 
-    public void MustangAction(GameObject player, int playedCard) // Makineli tüfek
+    public void MustangAction(GameObject player, int playedCard) // Makineli tÃ¼fek
     {
         MoveToStackHand(player, playedCard);
     }
@@ -248,7 +275,7 @@ public class Actions : MonoBehaviour
 
         foreach (var card in thisPlayer.stackHand)
         {
-            if (card.name.StartsWith("Scope")) // Dürbün
+            if (card.name.StartsWith("Scope")) // DÃ¼rbÃ¼n
             {
                 dist--;
             }

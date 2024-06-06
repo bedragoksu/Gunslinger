@@ -32,60 +32,100 @@ namespace Gunslinger.Controller
             base.OnStartClient();
             if (!base.IsOwner)
             {
-                gameObject.GetComponent<PlayerAnimationController>().enabled = false;
+                //gameObject.GetComponent<PlayerAnimationController>().enabled = false;
             }
         }
         // Update is called once per frame
-        void Update()
-        {
-            if (Input.anyKeyDown)
-            {
-                if (Input.GetKeyDown(KeyCode.I))
-                {
-                    // injure
-                    playInjure();
-                }
-                else if (Input.GetKeyDown(KeyCode.P))
-                {
-                    // pistol or rifle
-                    playSwitchGun();
-                }
-                else if (Input.GetKeyDown(KeyCode.R))
-                {
-                    // reset
-                    resetAnimations();
-                }
-                else if (Input.GetKeyDown(KeyCode.X))
-                {
-                    // death
-                    playDeath();
-                }
-                else if (Input.GetKeyDown(KeyCode.D))
-                {
-                    // dodge
-                    playDodge();
-                }
-                else if (Input.GetKeyDown(KeyCode.C))
-                {
-                    // current (playing)
-                    playRifleAim();
-                }
-                else if (Input.GetKeyDown(KeyCode.S))
-                {
-                    // walking back
-                    playWalkingBack();
-                }
-                else if (Input.GetKeyDown(KeyCode.W))
-                {
-                    playWalkingFront();
-                }
-            }
+        //void Update()
+        //{
+        //    if (Input.anyKeyDown)
+        //    {
+        //        if (Input.GetKeyDown(KeyCode.I))
+        //        {
+        //            // injure
+        //            playInjure();
+        //        }
+        //        else if (Input.GetKeyDown(KeyCode.P))
+        //        {
+        //            // pistol or rifle
+        //            playSwitchGun();
+        //        }
+        //        else if (Input.GetKeyDown(KeyCode.R))
+        //        {
+        //            // reset
+        //            resetAnimations();
+        //        }
+        //        else if (Input.GetKeyDown(KeyCode.X))
+        //        {
+        //            // death
+        //            playDeath();
+        //        }
+        //        else if (Input.GetKeyDown(KeyCode.D))
+        //        {
+        //            // dodge
+        //            playDodge();
+        //        }
+        //        else if (Input.GetKeyDown(KeyCode.C))
+        //        {
+        //            // current (playing)
+        //            playRifleAim();
+        //        }
+        //        else if (Input.GetKeyDown(KeyCode.S))
+        //        {
+        //            // walking back
+        //            playWalkingBack();
+        //        }
+        //        else if (Input.GetKeyDown(KeyCode.W))
+        //        {
+        //            playWalkingFront();
+        //        }
+        //    }
 
-            // Listen for left mouse button press
-            if (Input.GetMouseButtonDown(0))
-            {
-                playFire();
-            }
+        //    // Listen for left mouse button press
+        //    if (Input.GetMouseButtonDown(0))
+        //    {
+        //        playFire();
+        //    }
+        //}
+        [ServerRpc(RequireOwnership = false)]
+        public void playAnimFireServer()
+        {
+            playAnimFire();
+        }
+        [ObserversRpc]
+        public void playAnimFire()
+        {
+            playFire();
+        }
+        [ServerRpc(RequireOwnership = false)]
+        public void playAnimInjureServer()
+        {
+            playAnimInjure();
+        }
+        [ObserversRpc]
+        public void playAnimInjure()
+        {
+            playInjure();
+        }
+        [ServerRpc(RequireOwnership = false)]
+        public void playAnimDeathServer()
+        {
+            playAnimDeath();
+        }
+        [ObserversRpc]
+        public void playAnimDeath()
+        {
+            playDeath();
+        }
+        [ServerRpc(RequireOwnership = false)]
+        public void playAnimDodgeServer()
+        {
+            playAnimDodge();
+        }
+        [ObserversRpc]
+        public void playAnimDodge()
+        {
+            playDodge();
         }
         public void playInjure()
         {
