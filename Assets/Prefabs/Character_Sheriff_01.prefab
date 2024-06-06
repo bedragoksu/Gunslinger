@@ -10018,6 +10018,8 @@ MonoBehaviour:
   _animator: {fileID: 7560940687452204471}
   _skinnedMesh: {fileID: 5232396616078548046}
   _whitishMaterial: {fileID: 2100000, guid: d7a99683cf500bd4681c8c0f25a4c6a0, type: 2}
+  flare: {fileID: 4930606419119173846}
+  sparks: {fileID: 7551881068477171317}
 --- !u!114 &8280983042249677542
 MonoBehaviour:
   m_ObjectHideFlags: 0

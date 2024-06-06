@@ -5,6 +5,7 @@ using FishNet.Component.Animating;
 using FishNet.Component.Transforming;
 using FishNet.Object;
 using FishNet.Example.ColliderRollbacks;
+using DG.Tweening;
 
 namespace Gunslinger.Controller
 {
@@ -23,6 +24,9 @@ namespace Gunslinger.Controller
         bool _hasRifle = false;
         bool _isPlaying = false;
         // Start is called before the first frame update
+
+        public ParticleSystem flare;
+        public ParticleSystem sparks;
         void Start()
         {
             _networkAnimator = GetComponent<NetworkAnimator>();
@@ -88,14 +92,14 @@ namespace Gunslinger.Controller
         //    }
         //}
         [ServerRpc(RequireOwnership = false)]
-        public void playAnimFireServer()
+        public void playAnimFireServer(Vector3 targetPosition)
         {
-            playAnimFire();
+            playAnimFire(targetPosition);
         }
         [ObserversRpc]
-        public void playAnimFire()
+        public void playAnimFire(Vector3 targetPosition)
         {
-            playFire();
+            playFire(targetPosition);
         }
         [ServerRpc(RequireOwnership = false)]
         public void playAnimInjureServer()
@@ -161,9 +165,17 @@ namespace Gunslinger.Controller
             _isPlaying = !_isPlaying;
             _animator.SetBool("Is Playing", _isPlaying);
         }
-        public void playFire()
+        public void playFire(Vector3 targetPosition)
         {
-            _networkAnimator.SetTrigger("Is Firing");
+            var initialRotation = transform.rotation;
+            transform.DOLookAt(targetPosition, 1f).OnComplete(() =>
+            {
+                // Trigger the firing animation
+                _networkAnimator.SetTrigger("Is Firing");
+
+                // Start coroutine to wait for the animation to finish and then return to initial position
+                StartCoroutine(WaitForAnimationAndReturn(initialRotation));
+            });
         }
         public void playWalkingBack()
         {
@@ -172,6 +184,18 @@ namespace Gunslinger.Controller
         public void playWalkingFront()
         {
             _networkAnimator.SetTrigger("Is Walking Front");
+        }
+
+        private IEnumerator WaitForAnimationAndReturn(Quaternion initialRotation)
+        {
+            // Wait for the animation to start
+            yield return new WaitUntil(() => _animator.GetCurrentAnimatorStateInfo(0).IsName("Firing Pistol"));
+
+            // Wait until the animation has finished
+            yield return new WaitWhile(() => _animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
+
+            // Animation has finished, return to the initial position and rotation
+            transform.DORotateQuaternion(initialRotation, 1f);
         }
     }
 
