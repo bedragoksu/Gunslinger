@@ -53,6 +53,10 @@ public class GameManager : NetworkBehaviour
     [SerializeField] private AudioSource EffectSoundAudio;
     [SerializeField] private AudioClip LossoSoundEffect;
 
+    [Header("End Game")]
+    [SerializeField] private TMP_Text EndText;
+    [SerializeField] private Canvas EndCanvas;
+
     private Button _discardButton;
     public void OpenCloseDiscardButton(bool open)
     {
@@ -71,6 +75,7 @@ public class GameManager : NetworkBehaviour
     {
         UpdateGameState(GameState.Lobby);
         AlertCanvas.enabled = false;
+        EndCanvas.enabled = false;
     }
 
     private void Update()
@@ -356,11 +361,11 @@ public class GameManager : NetworkBehaviour
             // haydutlar kazandi
             if(role == PlayerModel.TypeOfPlayer.Outlaw)
             {
-                ChangeAlert("Victory belongs to the lawless! Victory is ours!".ToUpper());
+                EndText.text = "Victory belongs to the lawless! Victory is ours!";
             }
             else
             {
-                ChangeAlert("Better luck next time! The outlaws take the win.".ToUpper());
+                EndText.text = "Better luck next time! The outlaws take the win.";
             }
 
         }else if (sheriff)
@@ -369,11 +374,11 @@ public class GameManager : NetworkBehaviour
             // haydutlar kazandi
             if (role == PlayerModel.TypeOfPlayer.Sheriff || role == PlayerModel.TypeOfPlayer.Deputy)
             {
-                ChangeAlert("Justice prevails! Congratulations, brave defenders!".ToUpper());
+                EndText.text = "Justice prevails! Congratulations, brave defenders!";
             }
             else
             {
-                ChangeAlert("Looks like the law was on their side this time. Better luck next time!".ToUpper());
+                EndText.text = "Looks like the law was on their side this time. Better luck next time!";
             }
 
         }
@@ -382,15 +387,17 @@ public class GameManager : NetworkBehaviour
             // hain kazandi
             if (role == PlayerModel.TypeOfPlayer.Sheriff || role == PlayerModel.TypeOfPlayer.Deputy)
             {
-                ChangeAlert("Deception triumphs! The Renegade emerges victorious!".ToUpper());
+                EndText.text = "Deception triumphs! The Renegade emerges victorious!";
             }
             else
             {
-                ChangeAlert("The Renegade played their cards well this time. Next round, perhaps it'll be different.".ToUpper());
+                EndText.text = "The Renegade played their cards well this time. Next round, perhaps it'll be different.";
             }
             
             
         }
+
+        EndCanvas.enabled = true;
 
         // beklet ve finito
         
