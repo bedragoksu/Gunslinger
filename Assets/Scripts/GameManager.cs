@@ -347,20 +347,44 @@ public class GameManager : NetworkBehaviour
             }
         }
 
+        PlayerModel.TypeOfPlayer role = _thisPlayer.GetComponent<PlayerModel>().PlayerRole;
+
         if (outlaw)
         {
             // haydutlar kazandi
+            if(role == PlayerModel.TypeOfPlayer.Outlaw)
+            {
+                ChangeAlert("OUTLAWS WON, CONGRATZ");
+            }
+            else
+            {
+                ChangeAlert("OUTLAWS WON, MAYBE NEXT TIME");
+            }
+
         }else if (sheriff)
         {
             // aynasizlar ve serif kazandi
-        }else if (renegade)
+            // haydutlar kazandi
+            if (role == PlayerModel.TypeOfPlayer.Sheriff || role == PlayerModel.TypeOfPlayer.Deputy)
+            {
+                ChangeAlert("Justice prevails! Congratulations, good guys!");
+            }
+            else
+            {
+                ChangeAlert("Justice prevails! MAYBE NEXT TIME");
+            }
+
+        }
+        else if (renegade)
         {
             // hain kazandi
+            ChangeAlert("Deception triumphs! The Renegade emerges victorious!");
         }
 
         // beklet ve finito
         
     }
+
 
     private void HandleDiscardCard()
     {
