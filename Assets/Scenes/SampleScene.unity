@@ -6115,7 +6115,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &989464410
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10518,6 +10518,7 @@ MonoBehaviour:
   SomeoneDestroyed: 0
   g: {fileID: 0}
   AlertText: {fileID: 296990394}
+  AlertCanvas: {fileID: 989464412}
   _thisPlayer: {fileID: 0}
   destroyedPlayer: {fileID: 0}
 --- !u!114 &1671340381
