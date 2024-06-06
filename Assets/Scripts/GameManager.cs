@@ -53,6 +53,10 @@ public class GameManager : NetworkBehaviour
     [SerializeField] private AudioSource EffectSoundAudio;
     [SerializeField] private AudioClip LossoSoundEffect;
 
+    [Header("Lobby")]
+    [SerializeField] public TMP_Text LobbyText;
+    [SerializeField] private Canvas LobbyCanvas;
+
     [Header("End Game")]
     [SerializeField] private TMP_Text EndText;
     [SerializeField] private Canvas EndCanvas;
@@ -76,6 +80,7 @@ public class GameManager : NetworkBehaviour
         UpdateGameState(GameState.Lobby);
         AlertCanvas.enabled = false;
         EndCanvas.enabled = false;
+        LobbyText.enabled = false;
     }
 
     private void Update()
@@ -510,7 +515,7 @@ public class GameManager : NetworkBehaviour
 
         _cardClickUI.makeAllOfTheCardsGray();
 
-
+        LobbyCanvas.enabled = false;
         UpdateGameState(GameState.DrawCard);
         //AssignStateServer(GameState.DrawCard);
     }
