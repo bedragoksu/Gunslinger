@@ -16,6 +16,7 @@ public class AgentController : NetworkBehaviour
     [SerializeField] private GameManager _gameManager;
     [SerializeField] private Actions _actions;
     [SerializeField] private CardsController cardsController;
+    [SerializeField] private AlertTextManager AlertTexts;
 
     private float _timeDelay = 2f;
 
@@ -100,7 +101,6 @@ public class AgentController : NetworkBehaviour
             if (OpenHandCardNames.Any(item => item.StartsWith("Beer", StringComparison.OrdinalIgnoreCase)))
             {
                 // play beer
-                Debug.Log("BÝTKÝ ÇAY ÝÇÝYORUM");
                 _actions.BeerAction(AgentPlayerModel);
                 StartCoroutine(DiscardCardRoutine(Tuple.Create("Beer", OpenHandCardNames, AgentPlayerModel)));
                 yield return new WaitForSeconds(_timeDelay);
@@ -262,7 +262,9 @@ public class AgentController : NetworkBehaviour
         PlayerModel targetPlayer = target.GetComponent<PlayerModel>();
 
         Debug.Log($"{AgentPlayer.PlayerName} hits with bang to {targetPlayer.PlayerName}");
-        _gameManager.ChangeAlertServer($"{AgentPlayer.PlayerName} targetted {targetPlayer.PlayerName}");
+
+        _gameManager.ChangeAlertServer(AlertTexts.GetBangText(AgentPlayer.PlayerName, targetPlayer.PlayerName));
+
         PlayerAnimationController targetAnimationController = target.GetComponent<PlayerAnimationController>();
         PlayerAnimationController playerAnimationController = AgentPlayer.gameObject.GetComponent<PlayerAnimationController>();
         playerAnimationController.playFire();
@@ -286,7 +288,12 @@ public class AgentController : NetworkBehaviour
         var pointer = target.GetComponent<CardManager>().CardOrder[cardsController.CardPointer];
         var child = cardsController.GetChildOfDeck(pointer, GameObject.Find("DeckPanel"));
 
-        if (child.transform.Find("Symbol").GetComponent<Image>().sprite.name != "hearts")
+        if (hasBarrel && child.transform.Find("Symbol").GetComponent<Image>().sprite.name == "hearts")
+        {
+            _gameManager.ChangeAlertServer(AlertTexts.GetBarrelText(targetPlayer.PlayerName));
+        }
+
+        if ((hasBarrel && child.transform.Find("Symbol").GetComponent<Image>().sprite.name != "hearts") || !hasBarrel)
         {
             bool hasMissed = false;
             var hand = targetPlayer.openHand;
@@ -297,6 +304,7 @@ public class AgentController : NetworkBehaviour
                 {
                     _actions.DiscardCard(target, i);
                     hasMissed = true;
+                    _gameManager.ChangeAlertServer(AlertTexts.GetMissedText(targetPlayer.PlayerName));
                     //MissedAction(targetPlayer);
                     break;
                 }
@@ -315,6 +323,7 @@ public class AgentController : NetworkBehaviour
                         {
                             _actions.DiscardCard(target, i);
                             hasBeer = true;
+                            _gameManager.ChangeAlertServer(AlertTexts.GetBeerText(targetPlayer.PlayerName));
                             //MissedAction(targetPlayer);
                             break;
                         }

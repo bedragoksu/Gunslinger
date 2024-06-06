@@ -12,16 +12,17 @@ public class Actions : MonoBehaviour
 {
     public CardsController cardsController;
     public GameManager gameManager;
+    [SerializeField] private AlertTextManager AlertTexts;
 
     // Card Actions
 
     bool barrelSaved = false;
-    public void BangAction(GameObject player, GameObject target) // Bang
+    public void BangAction(GameObject player, GameObject target, bool Gatling) // Bang
     {
         PlayerModel targetPlayer = target.GetComponent<PlayerModel>();
         Debug.Log($"target of bang: {targetPlayer.PlayerName}");
 
-        gameManager.ChangeAlertServer($"{player.GetComponent<PlayerModel>().PlayerName} targetted {targetPlayer.PlayerName}");
+        if(!Gatling) gameManager.ChangeAlertServer(AlertTexts.GetBangText(player.GetComponent<PlayerModel>().PlayerName,targetPlayer.PlayerName));
 
         PlayerAnimationController targetAnimationController = target.GetComponent<PlayerAnimationController>();
         PlayerAnimationController playerAnimationController = player.GetComponent<PlayerAnimationController>();
@@ -48,8 +49,12 @@ public class Actions : MonoBehaviour
         var pointer = player.GetComponent<CardManager>().CardOrder[cardsController.CardPointer];
         var child = cardsController.GetChildOfDeck(pointer, GameObject.Find("DeckPanel"));
 
+        if(hasBarrel && child.transform.Find("Symbol").GetComponent<Image>().sprite.name == "hearts")
+        {
+            gameManager.ChangeAlertServer(AlertTexts.GetBarrelText(targetPlayer.PlayerName));
+        }
 
-        if (child.transform.Find("Symbol").GetComponent<Image>().sprite.name != "hearts")
+        if ((hasBarrel && child.transform.Find("Symbol").GetComponent<Image>().sprite.name != "hearts") || !hasBarrel)
         {
             bool hasMissed = false;
             var hand = targetPlayer.openHand;
@@ -60,7 +65,7 @@ public class Actions : MonoBehaviour
                 {
                     DiscardCard(target, i);
                     hasMissed = true;
-                    gameManager.ChangeAlertServer($"Missed card saved {targetPlayer.PlayerName}");
+                    gameManager.ChangeAlertServer(AlertTexts.GetMissedText(targetPlayer.PlayerName));
                     //MissedAction(targetPlayer);
                     break;
                 }
@@ -69,7 +74,6 @@ public class Actions : MonoBehaviour
             //bitki cayi
             if (!hasMissed)
             {
-                gameManager.ChangeAlertServer($"Missed card couldnt save you, {targetPlayer.PlayerName}");
                 var hasBeer = false;
                 if (targetPlayer.CurrentBulletPoint == 1)
                 {
@@ -79,6 +83,7 @@ public class Actions : MonoBehaviour
                         if (name.StartsWith("Beer"))
                         {
                             DiscardCard(target, i);
+                            gameManager.ChangeAlertServer(AlertTexts.GetBeerText(targetPlayer.PlayerName));
                             hasBeer = true;
                             //MissedAction(targetPlayer);
                             break;
@@ -121,7 +126,7 @@ public class Actions : MonoBehaviour
         {
             if (pl != player && pl.GetComponent<PlayerModel>().IsAlive)
             {
-                if (CalculateScopeCanHit(player, pl))
+                if (CalculateScopeCanHit(player, pl, false))
                 {
                     CanHitList.Add(pl.GetComponent<PlayerModel>());
                 }
@@ -178,6 +183,7 @@ public class Actions : MonoBehaviour
         {
             cardsController.UpdateHealthServer(player, 1);
         }
+        gameManager.ChangeAlertServer(AlertTexts.GetBeerText(player.PlayerName));
     }
 
     public void WellsFargoAction(PlayerModel player, int playedCard) // bedra
@@ -196,6 +202,8 @@ public class Actions : MonoBehaviour
         // target'in elinden random bir karti iskartaya cikar
         var targetmodel = target.GetComponent<PlayerModel>();
         var i = UnityEngine.Random.Range(0, targetmodel.openHand.Count);
+        gameManager.ChangeAlertServer(AlertTexts.GetCatBalouText(  gameManager._turns[gameManager.GetTurnInt()].GetComponent<PlayerModel>().PlayerName  ,
+                                                                                                                                        targetmodel.PlayerName ));
         DiscardCard(target, i);
     }
 
@@ -207,6 +215,9 @@ public class Actions : MonoBehaviour
         var card = targetmodel.openHand[i];
         DiscardCard(target, i); // target'in elinden random bir kart silindi.
         DiscardCard(player, playedCard); // panic karti silindi.
+
+        gameManager.ChangeAlertServer(AlertTexts.GetPanicText(player.GetComponent<PlayerModel>().PlayerName, targetmodel.PlayerName));
+
 
         // deck'in altindaki o card draw the card icine atilmali
         var t = GameObject.Find("DeckPanel").transform;
@@ -233,6 +244,7 @@ public class Actions : MonoBehaviour
 
     public void SaloonAction() // Kahvehane
     {
+        gameManager.ChangeAlertServer(AlertTexts.GetSaloonText(gameManager._turns[gameManager.GetTurnInt()].GetComponent<PlayerModel>().PlayerName));
         var players = gameManager._turns;
         foreach (var pl in players)
         {
@@ -247,11 +259,13 @@ public class Actions : MonoBehaviour
     {
         var players = gameManager._turns;
 
+        gameManager.ChangeAlertServer(AlertTexts.GetGatlingText(player.GetComponent<PlayerModel>().PlayerName));
+
         foreach (var pl in players)
         {
             if (pl != player)
             {
-                BangAction(player, pl);
+                BangAction(player, pl, true);
             }
         }
         
@@ -323,12 +337,15 @@ public class Actions : MonoBehaviour
         dist = Mathf.Min(directDistance, circularDistance);
         return dist;
     }
-    public bool CalculateScopeCanHit(GameObject thisPlayer, GameObject target)
+    public bool CalculateScopeCanHit(GameObject thisPlayer, GameObject target, bool bang)
     {
         int scopeLevel = thisPlayer.GetComponent<PlayerModel>().Range; // player'in infosundan cek
         int d = scopeLevel - CalculateDistance(thisPlayer, target);
+        bool hit = (d >= 0);
 
-        return (d >= 0); // if >=0 can if <0 cannot
+        //if (!hit && bang) gameManager.ChangeAlert(AlertTexts.GetRangeForBangText());
+
+        return hit; // if >=0 can if <0 cannot
     }
 
 

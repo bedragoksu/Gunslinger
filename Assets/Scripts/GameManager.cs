@@ -42,10 +42,15 @@ public class GameManager : NetworkBehaviour
     public bool SomeoneDestroyed = false;
     public GameObject g;
 
+    [Header("Alert")]
     [SerializeField] private TMP_Text AlertText;
     [SerializeField] private Canvas AlertCanvas;
-    public Queue AlertTextList = new();
+    [HideInInspector] public Queue AlertTextList = new();
     private bool CanStartRoutine = true;
+
+    [Header("Sound Effct")]
+    [SerializeField] private AudioSource EffectSoundAudio;
+    [SerializeField] private AudioClip LossoSoundEffect;
 
     private Button _discardButton;
     public void OpenCloseDiscardButton(bool open)
@@ -64,6 +69,7 @@ public class GameManager : NetworkBehaviour
     private void Start()
     {
         UpdateGameState(GameState.Lobby);
+        AlertCanvas.enabled = false;
     }
 
     private void Update()
@@ -527,6 +533,11 @@ public class GameManager : NetworkBehaviour
         AlertTextList.Enqueue(text);
     }
 
+    public void ChangeAlert(string text)
+    {
+        AlertTextList.Enqueue(text);
+    }
+
     public IEnumerator AlertRoutine()
     {
         CanStartRoutine = false;
@@ -535,8 +546,10 @@ public class GameManager : NetworkBehaviour
             string txt = AlertTextList.Dequeue().ToString();
             Debug.Log(txt);
             AlertText.text = txt;
+            EffectSoundAudio.clip = LossoSoundEffect;
+            EffectSoundAudio.Play();
             AlertCanvas.enabled = true;
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(2.5f);
             AlertCanvas.enabled = false;
         }
         CanStartRoutine = true;

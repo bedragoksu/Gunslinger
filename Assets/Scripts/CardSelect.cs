@@ -18,6 +18,7 @@ public class CardSelect : MonoBehaviour
 
     private Camera _camera;
 
+    public bool MovedOn = false;
 
     private void Start()
     {
@@ -83,6 +84,7 @@ public class CardSelect : MonoBehaviour
     }
     public void OnClick() // discard islemlerini burada yapabilirsin
     {
+        MovedOn = true;
         var cardName = this.GetComponent<CardDisplayer>().nameText.text;
         _camera = Camera.main;
         //Debug.Log(cardName);
@@ -105,6 +107,14 @@ public class CardSelect : MonoBehaviour
                             _thisPlayerModel.PlayedBang = true;
                             StartCoroutine("BangRoutine", this.gameObject);
                         }
+                        else
+                        {
+                            _gameManager.ChangeAlert("Already fired a Bang!");
+                        }
+                    }
+                    else
+                    {
+                        _gameManager.ChangeAlert(GameObject.Find("AlertTextManager").GetComponent<AlertTextManager>().GetBangNobodyIsInRangeText());
                     }
                     break;
                 //case "Missed":
@@ -205,6 +215,13 @@ public class CardSelect : MonoBehaviour
 
     private IEnumerator PanicRoutine(int index)
     {
+        _target = null;
+        _distanceBetweenTarget = -1;
+        _circularDistanceBetweenTarget = -1;
+
+        _gameManager.ChangeAlert(GameObject.Find("AlertTextManager").GetComponent<AlertTextManager>().GetPanicRangeText());
+
+
         var before = _gameManager.IsActiveButton();
         _gameManager.OpenCloseDiscardButton(false);
         yield return new WaitUntil(() => _target != null);
@@ -224,7 +241,11 @@ public class CardSelect : MonoBehaviour
 
     private IEnumerator CatBalouRoutine(int index)
     {
+        _target = null;
+        _distanceBetweenTarget = -1;
+        _circularDistanceBetweenTarget = -1;
         var before = _gameManager.IsActiveButton();
+
         _gameManager.OpenCloseDiscardButton(false);
         yield return new WaitUntil(() => _target != null);
         _gameManager.OpenCloseDiscardButton(before);
@@ -238,10 +259,13 @@ public class CardSelect : MonoBehaviour
 
     private IEnumerator BangRoutine(GameObject card)
     {
+        _target = null;
+        _distanceBetweenTarget = -1;
+        _circularDistanceBetweenTarget = -1;
         var before = _gameManager.IsActiveButton();
         _gameManager.OpenCloseDiscardButton(false);
         yield return new WaitUntil(() => _target != null);
-        yield return new WaitUntil(() => _actions.CalculateScopeCanHit(_thisPlayerObject, _target));
+        yield return new WaitUntil(() => _actions.CalculateScopeCanHit(_thisPlayerObject, _target, true));
         _gameManager.OpenCloseDiscardButton(before);
         Debug.Log($"bang to: {_target.name}");
 
@@ -250,7 +274,7 @@ public class CardSelect : MonoBehaviour
         // ehehe salak bilgisayarýnýn þifresi yok???
         //artýk gelinbizi polise þikayet edecekler
 
-        _actions.BangAction(_thisPlayerObject, _target);
+        _actions.BangAction(_thisPlayerObject, _target, false);
         yield return new WaitForSeconds(0.3f);
         _actions.DiscardCard(_thisPlayerObject, index);
         _target = null;
