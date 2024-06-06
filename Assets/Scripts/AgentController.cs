@@ -262,6 +262,7 @@ public class AgentController : NetworkBehaviour
         PlayerModel targetPlayer = target.GetComponent<PlayerModel>();
 
         Debug.Log($"{AgentPlayer.PlayerName} hits with bang to {targetPlayer.PlayerName}");
+        _gameManager.ChangeAlertServer($"{AgentPlayer.PlayerName} targetted {targetPlayer.PlayerName}");
         PlayerAnimationController targetAnimationController = target.GetComponent<PlayerAnimationController>();
         PlayerAnimationController playerAnimationController = AgentPlayer.gameObject.GetComponent<PlayerAnimationController>();
         playerAnimationController.playAnimFireServer(target.transform.position);
