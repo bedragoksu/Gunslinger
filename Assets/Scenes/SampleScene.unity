@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571328, b: 0.3069217, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -10588,6 +10588,7 @@ MonoBehaviour:
   _cc: {fileID: 348911315}
   _ccc: {fileID: 956483203}
   _agentController: {fileID: 693054344}
+  _cardClickUI: {fileID: 900478375}
   _turns: []
   _turnInt: 0
   CharacterDisplayer: {fileID: 907288054}
@@ -10600,6 +10601,8 @@ MonoBehaviour:
   AlertCanvas: {fileID: 989464412}
   EffectSoundAudio: {fileID: 2040396143}
   LossoSoundEffect: {fileID: 8300000, guid: 2f23510cb4bb6344fb3ef00c49a5f0ba, type: 3}
+  EndText: {fileID: 1681729652}
+  EndCanvas: {fileID: 1700831772}
   _thisPlayer: {fileID: 0}
   destroyedPlayer: {fileID: 0}
 --- !u!114 &1671340381
@@ -10914,7 +10917,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1700831770
 MonoBehaviour:
   m_ObjectHideFlags: 0
