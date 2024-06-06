@@ -27,7 +27,8 @@ public class Actions : MonoBehaviour
         PlayerAnimationController playerAnimationController = player.GetComponent<PlayerAnimationController>();
 
 
-        playerAnimationController.playFire();
+        playerAnimationController.playAnimFireServer(target.transform.position);
+
         bool hasBarrel = false;
         foreach (var stack in targetPlayer.stackHand)
         {

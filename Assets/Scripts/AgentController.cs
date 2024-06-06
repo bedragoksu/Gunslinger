@@ -265,7 +265,7 @@ public class AgentController : NetworkBehaviour
         _gameManager.ChangeAlertServer($"{AgentPlayer.PlayerName} targetted {targetPlayer.PlayerName}");
         PlayerAnimationController targetAnimationController = target.GetComponent<PlayerAnimationController>();
         PlayerAnimationController playerAnimationController = AgentPlayer.gameObject.GetComponent<PlayerAnimationController>();
-        playerAnimationController.playFire();
+        playerAnimationController.playAnimFireServer(target.transform.position);
         bool hasBarrel = false;
         foreach (var stack in targetPlayer.stackHand)
         {
@@ -325,11 +325,12 @@ public class AgentController : NetworkBehaviour
                 {
                     if (targetPlayer.CurrentBulletPoint == 1)
                     {
-                        targetAnimationController.playDeath();
+
+                        targetAnimationController.playAnimDeathServer();
                     }
                     else
                     {
-                        targetAnimationController.playInjure();
+                        targetAnimationController.playAnimInjureServer();
 
                     }
                     dodged = false;
@@ -337,11 +338,17 @@ public class AgentController : NetworkBehaviour
                 }
                 if (dodged)
                 {
-                    targetAnimationController.playDodge();
+                    Debug.Log("Target dogded");
+                    targetAnimationController.playAnimDodgeServer();
                 }
+            }
+            else
+            {
+                targetAnimationController.playAnimDodgeServer();
             }
 
         }
+        else { targetAnimationController.playAnimDodgeServer(); }
         return true;
     }
 
