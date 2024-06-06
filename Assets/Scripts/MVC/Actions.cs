@@ -6,6 +6,7 @@ using Gunslinger.Controller;
 using System;
 using UnityEngine.UI;
 using System.Xml.Linq;
+using FishNet.Object;
 
 public class Actions : MonoBehaviour
 {
@@ -19,7 +20,10 @@ public class Actions : MonoBehaviour
     {
         PlayerModel targetPlayer = target.GetComponent<PlayerModel>();
         Debug.Log($"target of bang: {targetPlayer.PlayerName}");
+        PlayerAnimationController targetAnimationController = target.GetComponent<PlayerAnimationController>();
+        PlayerAnimationController playerAnimationController = player.GetComponent<PlayerAnimationController>();
 
+        playerAnimationController.playFire();
         bool hasBarrel = false;
         foreach (var stack in targetPlayer.stackHand)
         {
@@ -74,12 +78,32 @@ public class Actions : MonoBehaviour
                         }
                     }
                 }
-                if (!hasBeer) { cardsController.UpdateHealthServer(targetPlayer, -1); }
+                bool dodged = true;
+                if (!hasBeer) { 
+                    if (targetPlayer.CurrentBulletPoint == 1)
+                    {
+                        
+                        targetAnimationController.playAnimDeathServer();
+                    } else
+                    {
+                        targetAnimationController.playAnimInjureServer();
+                            
+                    }
+                    dodged = false;
+                    cardsController.UpdateHealthServer(targetPlayer, -1); 
+                }
+                if (dodged)
+                {
+                    Debug.Log("Target dogded");
+                    targetAnimationController.playAnimDodgeServer();
+                }
+            } else
+            {
+                targetAnimationController.playAnimDodgeServer();
             }
 
-        }
+        } else { targetAnimationController.playAnimDodgeServer(); }
     }
-
 
     public List<PlayerModel> CanHitAnyone(GameObject player)
     {

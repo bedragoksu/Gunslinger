@@ -7,6 +7,7 @@ using FishNet;
 using Gunslinger.Controller;
 using Random = UnityEngine.Random;
 using FishNet.Object;
+using FishNet.Demo.AdditiveScenes;
 
 public class AgentController : NetworkBehaviour
 {
@@ -260,7 +261,9 @@ public class AgentController : NetworkBehaviour
         PlayerModel targetPlayer = target.GetComponent<PlayerModel>();
 
         Debug.Log($"{AgentPlayer.PlayerName} hits with bang to {targetPlayer.PlayerName}");
-
+        PlayerAnimationController targetAnimationController = target.GetComponent<PlayerAnimationController>();
+        PlayerAnimationController playerAnimationController = AgentPlayer.gameObject.GetComponent<PlayerAnimationController>();
+        playerAnimationController.playFire();
         bool hasBarrel = false;
         foreach (var stack in targetPlayer.stackHand)
         {
@@ -313,7 +316,25 @@ public class AgentController : NetworkBehaviour
                         }
                     }
                 }
-                if (!hasBeer) { cardsController.UpdateHealthServer(targetPlayer, -1); }
+                bool dodged = true;
+                if (!hasBeer)
+                {
+                    if (targetPlayer.CurrentBulletPoint == 1)
+                    {
+                        targetAnimationController.playDeath();
+                    }
+                    else
+                    {
+                        targetAnimationController.playInjure();
+
+                    }
+                    dodged = false;
+                    cardsController.UpdateHealthServer(targetPlayer, -1);
+                }
+                if (dodged)
+                {
+                    targetAnimationController.playDodge();
+                }
             }
 
         }

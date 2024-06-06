@@ -4449,6 +4449,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _characterCanvasController: {fileID: 956483203}
   players: []
+  gameManager: {fileID: 1671340380}
 --- !u!4 &818434029
 Transform:
   m_ObjectHideFlags: 0
@@ -5230,6 +5231,7 @@ MonoBehaviour:
   range: {fileID: 595576613}
   rangeImage: {fileID: 291407237}
   bullet: {fileID: 571427445936285066, guid: 33038db5c0d0d0242ad9d03fc11e0932, type: 3}
+  gameManager: {fileID: 1671340380}
 --- !u!1001 &909738990
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5743,6 +5745,7 @@ MonoBehaviour:
   textInstance: {fileID: 6054355889567586522, guid: e1e61c5aa7526ac48af37a07bba86a4a, type: 3}
   worldSpaceCanvasInstance: {fileID: 5746876481029342413, guid: 5c3392f34031a3d47be618c7253466d5, type: 3}
   offset: {x: 0, y: 0, z: -0.58}
+  gameManager: {fileID: 1671340380}
 --- !u!4 &956483204
 Transform:
   m_ObjectHideFlags: 0

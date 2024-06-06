@@ -14,10 +14,13 @@ public class CharacterCanvasController : MonoBehaviour
     [SerializeField] GameObject worldSpaceCanvasInstance;
 
     public Vector3 offset;
+    public GameManager gameManager;
     //Start is called before the first frame update
     public void UpdateCanvas()
     {
-        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        GameObject[] players = null;
+        if (gameManager._turns.Length != 0) players = gameManager._turns;
+        else players = GameObject.FindGameObjectsWithTag("Player");
         _mainCamera = GameObject.Find("Main Camera");
         Camera camera = _mainCamera.GetComponent<Camera>();
         _worldSpaceCanvas.GetComponent<Canvas>().worldCamera = camera;
