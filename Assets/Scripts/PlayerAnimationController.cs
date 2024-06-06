@@ -92,14 +92,14 @@ namespace Gunslinger.Controller
         //    }
         //}
         [ServerRpc(RequireOwnership = false)]
-        public void playAnimFireServer(Vector3 targetPosition)
+        public void playAnimFireServer(Vector3 targetPosition, bool isGatling)
         {
-            playAnimFire(targetPosition);
+            playAnimFire(targetPosition, isGatling);
         }
         [ObserversRpc]
-        public void playAnimFire(Vector3 targetPosition)
+        public void playAnimFire(Vector3 targetPosition, bool isGatling)
         {
-            playFire(targetPosition);
+            playFire(targetPosition, isGatling);
         }
         [ServerRpc(RequireOwnership = false)]
         public void playAnimInjureServer()
@@ -165,17 +165,25 @@ namespace Gunslinger.Controller
             _isPlaying = !_isPlaying;
             _animator.SetBool("Is Playing", _isPlaying);
         }
-        public void playFire(Vector3 targetPosition)
+        public void playFire(Vector3 targetPosition, bool isGatling)
         {
             var initialRotation = transform.rotation;
-            transform.DOLookAt(targetPosition, 1f).OnComplete(() =>
+            if (!isGatling)
             {
-                // Trigger the firing animation
-                _networkAnimator.SetTrigger("Is Firing");
+                transform.DOLookAt(targetPosition, 1f).OnComplete(() =>
+                {
 
-                // Start coroutine to wait for the animation to finish and then return to initial position
-                StartCoroutine(WaitForAnimationAndReturn(initialRotation));
-            });
+                    // Trigger the firing animation
+                    _networkAnimator.SetTrigger("Is Firing");
+                    flare.Play();
+                    sparks.Play();
+                    // Start coroutine to wait for the animation to finish and then return to initial position
+                    StartCoroutine(WaitForAnimationAndReturn(initialRotation));
+                });
+            } else
+            {
+                _networkAnimator.SetTrigger("Is Firing");
+            }
         }
         public void playWalkingBack()
         {
