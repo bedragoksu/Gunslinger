@@ -118,10 +118,10 @@ namespace Gunslinger.Controller
             model.PlayerRole = type;
             model.PlayerID = id;
             model.PlayerName = name;
-            model.CurrentBulletPoint = 1;
+            model.CurrentBulletPoint = 2;
             if(type == PlayerModel.TypeOfPlayer.Sheriff)
             {
-                model.CurrentBulletPoint = 2;
+                model.CurrentBulletPoint = 3;
             }
         }
 
