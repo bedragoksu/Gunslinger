@@ -6,17 +6,17 @@ public class AlertTextManager : MonoBehaviour
 {
     public string GetBangText(string PlayerName, string TargetName)
     {
-        return $"{PlayerName} targetted {TargetName}";
+        return $"{PlayerName} aims a Bang! at {TargetName}";
     }
 
     public string GetBarrelText(string PlayerName)
     {
-        return $"Your barrel saved you, {PlayerName}";
+        return $"{PlayerName}'s barrel comes to the rescue";
     }
 
     public string GetMissedText(string PlayerName)
     {
-        return $"Missed card saved you, {PlayerName}";
+        return $"Your Missed card saved you! {PlayerName} dodges the bullet!";
     }
 
     public string GetBeerText(string PlayerName)
