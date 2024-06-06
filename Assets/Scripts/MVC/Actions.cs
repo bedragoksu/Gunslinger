@@ -19,6 +19,7 @@ public class Actions : MonoBehaviour
     {
         PlayerModel targetPlayer = target.GetComponent<PlayerModel>();
         Debug.Log($"target of bang: {targetPlayer.PlayerName}");
+        gameManager.ChangeAlertServer($"{player.GetComponent<PlayerModel>().PlayerName} targetted {targetPlayer.PlayerName}");
 
         bool hasBarrel = false;
         foreach (var stack in targetPlayer.stackHand)
@@ -40,6 +41,7 @@ public class Actions : MonoBehaviour
         var pointer = player.GetComponent<CardManager>().CardOrder[cardsController.CardPointer];
         var child = cardsController.GetChildOfDeck(pointer, GameObject.Find("DeckPanel"));
 
+
         if (child.transform.Find("Symbol").GetComponent<Image>().sprite.name != "hearts")
         {
             bool hasMissed = false;
@@ -51,6 +53,7 @@ public class Actions : MonoBehaviour
                 {
                     DiscardCard(target, i);
                     hasMissed = true;
+                    gameManager.ChangeAlertServer($"Missed card saved {targetPlayer.PlayerName}");
                     //MissedAction(targetPlayer);
                     break;
                 }
@@ -59,6 +62,7 @@ public class Actions : MonoBehaviour
             //bitki cayi
             if (!hasMissed)
             {
+                gameManager.ChangeAlertServer($"Missed card couldnt save you, {targetPlayer.PlayerName}");
                 var hasBeer = false;
                 if (targetPlayer.CurrentBulletPoint == 1)
                 {

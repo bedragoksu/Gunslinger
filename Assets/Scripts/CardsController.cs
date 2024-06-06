@@ -264,8 +264,6 @@ namespace Gunslinger.Controller
         [ObserversRpc]
         public void MoveToStack(GameObject player, int i)
         {
-            Debug.Log("move to stack");
-
             // birer tane mustang scope vs olabilir bedra
 
             //ScreenLog.Instance.SendEvent(TextType.Debug, "move to stack observer");
@@ -300,7 +298,6 @@ namespace Gunslinger.Controller
             {
                 if(info.gameObject.name == playermodel.PlayerName)
                 {
-                    Debug.Log("move to stack þey iþte " + o.name);
                     if (o.name.StartsWith("Mustang"))
                     {
                         var m = info.Find("Mustang").gameObject;

@@ -261,6 +261,7 @@ public class AgentController : NetworkBehaviour
         PlayerModel targetPlayer = target.GetComponent<PlayerModel>();
 
         Debug.Log($"{AgentPlayer.PlayerName} hits with bang to {targetPlayer.PlayerName}");
+        _gameManager.ChangeAlertServer($"{AgentPlayer.PlayerName} targetted {targetPlayer.PlayerName}");
 
         bool hasBarrel = false;
         foreach (var stack in targetPlayer.stackHand)
