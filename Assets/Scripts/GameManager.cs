@@ -42,7 +42,10 @@ public class GameManager : NetworkBehaviour
     public bool SomeoneDestroyed = false;
     public GameObject g;
 
-    public TMP_Text AlertText;
+    [SerializeField] private TMP_Text AlertText;
+    [SerializeField] private Canvas AlertCanvas;
+    public Queue AlertTextList = new();
+    private bool CanStartRoutine = true;
 
     private Button _discardButton;
     public void OpenCloseDiscardButton(bool open)
@@ -107,7 +110,6 @@ public class GameManager : NetworkBehaviour
                 string oldName = g.GetComponent<PlayerModel>().PlayerName;
                 ServerManager.Spawn(g);
 
-                Debug.Log("PLAYERS COUNT " + GameObject.FindGameObjectsWithTag("Player").Length.ToString());
 
                 destroyedPlayer = _turns[g.GetComponent<PlayerModel>().PlayerID];
                 _turns[g.GetComponent<PlayerModel>().PlayerID] = g;
@@ -143,6 +145,11 @@ public class GameManager : NetworkBehaviour
                 //}
                 //ScreenLog.Instance.SendEvent(TextType.Debug, $"destroyed: {des.GetComponent<PlayerModel>().PlayerName}");
             }
+        }
+
+        if(AlertTextList.Count != 0 && CanStartRoutine)
+        {
+            StartCoroutine(AlertRoutine());
         }
 
     }
@@ -434,6 +441,8 @@ public class GameManager : NetworkBehaviour
             }
         }
 
+        AlertCanvas.enabled = false;
+        
         StartCoroutine(InitializationRoutine());
     }
     private IEnumerator InitializationRoutine()
@@ -515,7 +524,24 @@ public class GameManager : NetworkBehaviour
     [ObserversRpc]
     private void ChangeAlertText(string text)
     {
-        AlertText.text = text;
+        AlertTextList.Enqueue(text);
     }
+
+    public IEnumerator AlertRoutine()
+    {
+        CanStartRoutine = false;
+        while(AlertTextList.Count != 0)
+        {
+            string txt = AlertTextList.Dequeue().ToString();
+            Debug.Log(txt);
+            AlertText.text = txt;
+            AlertCanvas.enabled = true;
+            yield return new WaitForSeconds(2f);
+            AlertCanvas.enabled = false;
+        }
+        CanStartRoutine = true;
+    }
+
+
 
 }

@@ -20,8 +20,12 @@ public class Actions : MonoBehaviour
     {
         PlayerModel targetPlayer = target.GetComponent<PlayerModel>();
         Debug.Log($"target of bang: {targetPlayer.PlayerName}");
+
+        gameManager.ChangeAlertServer($"{player.GetComponent<PlayerModel>().PlayerName} targetted {targetPlayer.PlayerName}");
+
         PlayerAnimationController targetAnimationController = target.GetComponent<PlayerAnimationController>();
         PlayerAnimationController playerAnimationController = player.GetComponent<PlayerAnimationController>();
+
 
         playerAnimationController.playFire();
         bool hasBarrel = false;
@@ -44,6 +48,7 @@ public class Actions : MonoBehaviour
         var pointer = player.GetComponent<CardManager>().CardOrder[cardsController.CardPointer];
         var child = cardsController.GetChildOfDeck(pointer, GameObject.Find("DeckPanel"));
 
+
         if (child.transform.Find("Symbol").GetComponent<Image>().sprite.name != "hearts")
         {
             bool hasMissed = false;
@@ -55,6 +60,7 @@ public class Actions : MonoBehaviour
                 {
                     DiscardCard(target, i);
                     hasMissed = true;
+                    gameManager.ChangeAlertServer($"Missed card saved {targetPlayer.PlayerName}");
                     //MissedAction(targetPlayer);
                     break;
                 }
@@ -63,6 +69,7 @@ public class Actions : MonoBehaviour
             //bitki cayi
             if (!hasMissed)
             {
+                gameManager.ChangeAlertServer($"Missed card couldnt save you, {targetPlayer.PlayerName}");
                 var hasBeer = false;
                 if (targetPlayer.CurrentBulletPoint == 1)
                 {
@@ -164,7 +171,7 @@ public class Actions : MonoBehaviour
 
     }
 
-    public void BeerAction(PlayerModel player) // Bitki çayý // bedra 2 kere ayni sey
+    public void BeerAction(PlayerModel player) // Bitki Ã§ayÃ½ // bedra 2 kere ayni sey
     {
         var maxbullet = (player.PlayerRole == PlayerModel.TypeOfPlayer.Sheriff) ? 5 : 4;
         if (player.CurrentBulletPoint < maxbullet)
@@ -236,7 +243,7 @@ public class Actions : MonoBehaviour
         }
         
     }
-    public void GatlingAction(GameObject player) // Makineli tüfek
+    public void GatlingAction(GameObject player) // Makineli tÃ¼fek
     {
         var players = gameManager._turns;
 
@@ -251,7 +258,7 @@ public class Actions : MonoBehaviour
     }
 
 
-    public void MustangAction(GameObject player, int playedCard) // Makineli tüfek
+    public void MustangAction(GameObject player, int playedCard) // Makineli tÃ¼fek
     {
         MoveToStackHand(player, playedCard);
     }
@@ -268,7 +275,7 @@ public class Actions : MonoBehaviour
 
         foreach (var card in thisPlayer.stackHand)
         {
-            if (card.name.StartsWith("Scope")) // Dürbün
+            if (card.name.StartsWith("Scope")) // DÃ¼rbÃ¼n
             {
                 dist--;
             }
