@@ -27,6 +27,7 @@ public class GameManager : NetworkBehaviour
     [SerializeField] private CardsController _cc;
     [SerializeField] private CharacterCanvasController _ccc;
     [SerializeField] private AgentController _agentController;
+    [SerializeField] public CardClickUI _cardClickUI;
 
     public GameObject[] _turns;
     [SyncVar] private int _turnInt; public int GetTurnInt() { return _turnInt; }
@@ -234,9 +235,10 @@ public class GameManager : NetworkBehaviour
     public void NextUIButton()
     {
         //ScreenLog.Instance.SendEvent(TextType.Debug, "next ui button");
-
+        _cardClickUI.makeAllOfTheCardsGray();
         _turns[_turnInt].GetComponent<PlayerModel>().PlayedBang = false;
         StartCoroutine(r());
+        
 
         AssignStateServer(GameState.DrawCard);
 
@@ -354,11 +356,11 @@ public class GameManager : NetworkBehaviour
             // haydutlar kazandi
             if(role == PlayerModel.TypeOfPlayer.Outlaw)
             {
-                ChangeAlert("OUTLAWS WON, CONGRATZ");
+                ChangeAlert("Victory belongs to the lawless! Victory is ours!".ToUpper());
             }
             else
             {
-                ChangeAlert("OUTLAWS WON, MAYBE NEXT TIME");
+                ChangeAlert("Better luck next time! The outlaws take the win.".ToUpper());
             }
 
         }else if (sheriff)
@@ -367,18 +369,27 @@ public class GameManager : NetworkBehaviour
             // haydutlar kazandi
             if (role == PlayerModel.TypeOfPlayer.Sheriff || role == PlayerModel.TypeOfPlayer.Deputy)
             {
-                ChangeAlert("Justice prevails! Congratulations, good guys!");
+                ChangeAlert("Justice prevails! Congratulations, brave defenders!".ToUpper());
             }
             else
             {
-                ChangeAlert("Justice prevails! MAYBE NEXT TIME");
+                ChangeAlert("Looks like the law was on their side this time. Better luck next time!".ToUpper());
             }
 
         }
         else if (renegade)
         {
             // hain kazandi
-            ChangeAlert("Deception triumphs! The Renegade emerges victorious!");
+            if (role == PlayerModel.TypeOfPlayer.Sheriff || role == PlayerModel.TypeOfPlayer.Deputy)
+            {
+                ChangeAlert("Deception triumphs! The Renegade emerges victorious!".ToUpper());
+            }
+            else
+            {
+                ChangeAlert("The Renegade played their cards well this time. Next round, perhaps it'll be different.".ToUpper());
+            }
+            
+            
         }
 
         // beklet ve finito
@@ -434,6 +445,11 @@ public class GameManager : NetworkBehaviour
     private void HandleDrawCard()
     {
         //ScreenLog.Instance.SendEvent(TextType.Debug, $"DRAW CARD STATE");
+        if (_thisPlayer == _turns[GetTurnInt()])
+        {
+            _cardClickUI.makeAllOfTheCardsWhite();
+        }
+
         Debug.Log("DRAW CARD STATE");
         if (!_isRoleAssinged) // canvas duzeni icin
         {

@@ -208,6 +208,8 @@ public class CardSelect : MonoBehaviour
             _actions.DiscardCard(_thisPlayerObject, index);
         }
         //_thisPlayerModel.clicked = false;
+
+        _gameManager._cardClickUI.makeAllOfTheCardsWhite();
     }
 
     // kimseye vuramýyorsak??
