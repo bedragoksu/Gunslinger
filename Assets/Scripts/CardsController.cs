@@ -11,6 +11,8 @@ namespace Gunslinger.Controller
 {
     public class CardsController : NetworkBehaviour
     {
+
+
         [SerializeField] private NetworkManager _networkManager;
         public GameManager gameManager;
         public PlayerRolesController prc;
@@ -29,6 +31,7 @@ namespace Gunslinger.Controller
         public Image splatterImage;
         public AudioSource gunAudioSource;
         public AudioClip gunAudio;
+        public AudioClip missedAudio;
 
         public Material RedMaterial;
         public Material OriginalMaterial;
@@ -256,13 +259,13 @@ namespace Gunslinger.Controller
 
         [HideInInspector] public bool move = false;
         [ServerRpc(RequireOwnership = false)]
-        public void MoveToStackServer(GameObject player, int i)
+        public void MoveToStackServer(GameObject player, int i, string name)
         {
             //ScreenLog.Instance.SendEvent(TextType.Debug, "move to stack server");
-            MoveToStack(player, i);
+            MoveToStack(player, i, name);
         }
         [ObserversRpc]
-        public void MoveToStack(GameObject player, int i)
+        public void MoveToStack(GameObject player, int i, string name)
         {
             // birer tane mustang scope vs olabilir bedra
 
@@ -298,16 +301,16 @@ namespace Gunslinger.Controller
             {
                 if(info.gameObject.name == playermodel.PlayerName)
                 {
-                    if (o.name.StartsWith("Mustang"))
+                    if (name.StartsWith("Mustang"))
                     {
                         var m = info.Find("Mustang").gameObject;
                         m.SetActive(true);
                     }
-                    else if (o.name.StartsWith("Scope"))
+                    else if (name.StartsWith("Scope"))
                     {
                         info.Find("Scope").gameObject.SetActive(true);
                     }
-                    else if (o.name.StartsWith("Barrel"))
+                    else if (name.StartsWith("Barrel"))
                     {
                         info.Find("Barrel").gameObject.SetActive(true);
                     }
@@ -315,45 +318,50 @@ namespace Gunslinger.Controller
 
 
 
-                    if (o.name.StartsWith("Volcanic"))
+                    if (name.StartsWith("Volcanic"))
                     {
                         info.Find("Volcanic").gameObject.SetActive(true);
                         info.Find("Remington").gameObject.SetActive(false);
                         info.Find("Rev. Carabine").gameObject.SetActive(false);
                         info.Find("Schofield").gameObject.SetActive(false);
                         info.Find("Winchester").gameObject.SetActive(false);
+                        if (player == gameManager._thisPlayer) characterDisplayer.UpdateRangeText(1);
                     }
-                    else if (o.name.StartsWith("Remington"))
+                    else if (name.StartsWith("Remington"))
                     {
                         info.Find("Volcanic").gameObject.SetActive(false);
                         info.Find("Remington").gameObject.SetActive(true);
                         info.Find("Rev. Carabine").gameObject.SetActive(false);
                         info.Find("Schofield").gameObject.SetActive(false);
                         info.Find("Winchester").gameObject.SetActive(false);
+                        if (player == gameManager._thisPlayer) characterDisplayer.UpdateRangeText(3);
                     }
-                    else if (o.name.StartsWith("Rev. Carabine"))
+                    else if (name.StartsWith("Rev. Carabine"))
                     {
                         info.Find("Volcanic").gameObject.SetActive(false);
                         info.Find("Remington").gameObject.SetActive(false);
                         info.Find("Rev. Carabine").gameObject.SetActive(true);
                         info.Find("Schofield").gameObject.SetActive(false);
                         info.Find("Winchester").gameObject.SetActive(false);
+                        if (player == gameManager._thisPlayer) characterDisplayer.UpdateRangeText(4);
                     }
-                    else if (o.name.StartsWith("Schofield"))
+                    else if (name.StartsWith("Schofield"))
                     {
                         info.Find("Volcanic").gameObject.SetActive(false);
                         info.Find("Remington").gameObject.SetActive(false);
                         info.Find("Rev. Carabine").gameObject.SetActive(false);
                         info.Find("Schofield").gameObject.SetActive(true);
                         info.Find("Winchester").gameObject.SetActive(false);
+                        if (player == gameManager._thisPlayer) characterDisplayer.UpdateRangeText(2);
                     }
-                    else if (o.name.StartsWith("Winchester"))
+                    else if (name.StartsWith("Winchester"))
                     {
                         info.Find("Volcanic").gameObject.SetActive(false);
                         info.Find("Remington").gameObject.SetActive(false);
                         info.Find("Rev. Carabine").gameObject.SetActive(false);
                         info.Find("Schofield").gameObject.SetActive(false);
                         info.Find("Winchester").gameObject.SetActive(true);
+                        if (player == gameManager._thisPlayer) characterDisplayer.UpdateRangeText(5);
                     }
 
 
@@ -483,6 +491,22 @@ namespace Gunslinger.Controller
 
         }
 
+        [ServerRpc (RequireOwnership = false)]
+        public void MissedEffectServer()
+        {
+            MissedEffect();
+        }
+        [ObserversRpc]
+        private void MissedEffect()
+        {
+            StartCoroutine(MissedEffectRoutine());
+        }
+        IEnumerator MissedEffectRoutine()
+        {
+            yield return new WaitForSeconds(1f);
+            gunAudioSource.PlayOneShot(missedAudio);
+            yield return new WaitForSeconds(2f);
+        }
         IEnumerator DamageEffect(GameObject player)
         {
             Color c = splatterImage.color;

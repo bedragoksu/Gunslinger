@@ -103,7 +103,13 @@ public class CharacterDisplayer : MonoBehaviour
         {
             removeBullet(numberOfChildren - pl.CurrentBulletPoint);
         }
+        
     }
+
+    public void UpdateRangeText(int rang)
+    {
+        range.text = rang.ToString();
+    } 
     private int getActiveChildren()
     {
         int num = 0;

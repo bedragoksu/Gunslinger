@@ -1944,6 +1944,7 @@ MonoBehaviour:
   splatterImage: {fileID: 1603576557}
   gunAudioSource: {fileID: 129682230}
   gunAudio: {fileID: 8300000, guid: abe46220f77e5f942af9d014382661fc, type: 3}
+  missedAudio: {fileID: 8300000, guid: f665d34ae9c639b43953f4718cab0fb2, type: 3}
   RedMaterial: {fileID: 2100000, guid: 3d327e8f6352fc44fa3898fc61c839e9, type: 2}
   OriginalMaterial: {fileID: 2100000, guid: 66a8a6e30880caa48908020cf5388217, type: 2}
   discard: 0

@@ -22,6 +22,8 @@ public class Actions : MonoBehaviour
         PlayerModel targetPlayer = target.GetComponent<PlayerModel>();
         Debug.Log($"target of bang: {targetPlayer.PlayerName}");
 
+        bool tookDamage = false;
+
         if(!Gatling) gameManager.ChangeAlertServer(AlertTexts.GetBangText(player.GetComponent<PlayerModel>().PlayerName,targetPlayer.PlayerName));
 
         PlayerAnimationController targetAnimationController = target.GetComponent<PlayerAnimationController>();
@@ -103,6 +105,7 @@ public class Actions : MonoBehaviour
                             
                     }
                     dodged = false;
+                    tookDamage = true;
                     cardsController.UpdateHealthServer(targetPlayer, -1); 
                 }
                 if (dodged)
@@ -116,6 +119,8 @@ public class Actions : MonoBehaviour
             }
 
         } else { targetAnimationController.playAnimDodgeServer(); }
+
+        if (!tookDamage) cardsController.MissedEffectServer();
     }
 
     public List<PlayerModel> CanHitAnyone(GameObject player)
@@ -191,11 +196,13 @@ public class Actions : MonoBehaviour
     {
         cardsController.DrawCardsServer(player.gameObject, 3);
         DiscardCard(player.gameObject, playedCard);
+        gameManager._cardClickUI.makeAllOfTheCardsWhite();
     }
     public void StagecoachAction(PlayerModel player, int playedCard)
     {
         cardsController.DrawCardsServer(player.gameObject, 2);
         DiscardCard(player.gameObject, playedCard);
+        gameManager._cardClickUI.makeAllOfTheCardsWhite();
     }
 
     public void CatBalouAction(GameObject target) // Emrivaki
@@ -269,13 +276,14 @@ public class Actions : MonoBehaviour
                 BangAction(player, pl, true);
             }
         }
-        
+        gameManager._cardClickUI.makeAllOfTheCardsWhite();
     }
 
 
-    public void MustangAction(GameObject player, int playedCard) // Makineli tüfek
+    public void MustangAction(GameObject player, int playedCard, string CardName) // Makineli tüfek
     {
-        MoveToStackHand(player, playedCard);
+        gameManager._cardClickUI.makeAllOfTheCardsWhite();
+        MoveToStackHand(player, playedCard, CardName);
     }
 
     // General Functions
@@ -350,18 +358,18 @@ public class Actions : MonoBehaviour
     }
 
 
-    public void MoveToStackHand(GameObject player, int i)
+    public void MoveToStackHand(GameObject player, int i, string name)
     {
-        StartCoroutine("MoveToStackRoutine", Tuple.Create(player, i));
+        StartCoroutine(MoveToStackRoutine(Tuple.Create(player, i), name));
 
         gameManager._thisPlayer.GetComponent<PlayerModel>().clicked = false;
         gameManager.PlayerInfoStack.GetComponent<PlayerInfoControllerUI>().UpdateStackCanvas();
     }
-    IEnumerator MoveToStackRoutine(Tuple<GameObject, int> tuple)
+    IEnumerator MoveToStackRoutine(Tuple<GameObject, int> tuple, string name)
     {
         var player = tuple.Item1;
         var i = tuple.Item2;
-        cardsController.MoveToStackServer(player, i);
+        cardsController.MoveToStackServer(player, i, name);
         //var c = GameObject.Find("HandPanel").transform.GetChild(i);
         //c.SetParent(GameObject.Find("DeckPanel").transform);
         yield return new WaitUntil(() => cardsController.move);

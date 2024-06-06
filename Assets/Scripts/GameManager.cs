@@ -385,7 +385,7 @@ public class GameManager : NetworkBehaviour
         else if (renegade)
         {
             // hain kazandi
-            if (role == PlayerModel.TypeOfPlayer.Sheriff || role == PlayerModel.TypeOfPlayer.Deputy)
+            if (role == PlayerModel.TypeOfPlayer.Renegade)
             {
                 EndText.text = "Deception triumphs! The Renegade emerges victorious!";
             }
@@ -411,6 +411,7 @@ public class GameManager : NetworkBehaviour
 
     private void HandlePlayCard()
     {
+        
         StartCoroutine(PlayRoutine());
     }
 
@@ -452,10 +453,7 @@ public class GameManager : NetworkBehaviour
     private void HandleDrawCard()
     {
         //ScreenLog.Instance.SendEvent(TextType.Debug, $"DRAW CARD STATE");
-        if (_thisPlayer == _turns[GetTurnInt()])
-        {
-            _cardClickUI.makeAllOfTheCardsWhite();
-        }
+        
 
         Debug.Log("DRAW CARD STATE");
         if (!_isRoleAssinged) // canvas duzeni icin
@@ -509,8 +507,10 @@ public class GameManager : NetworkBehaviour
         yield return new WaitForSecondsRealtime(0.5f);
 
         yield return new WaitUntil(() => _cc.DealCards());
-        
-        
+
+        _cardClickUI.makeAllOfTheCardsGray();
+
+
         UpdateGameState(GameState.DrawCard);
         //AssignStateServer(GameState.DrawCard);
     }
