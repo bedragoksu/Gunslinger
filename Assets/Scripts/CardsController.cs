@@ -443,11 +443,11 @@ namespace Gunslinger.Controller
             int maxpoint = 0;
             if (player.PlayerRole == PlayerModel.TypeOfPlayer.Sheriff)
             {
-                 maxpoint = 5;
+                 maxpoint = 3;
             }
             else
             {
-                maxpoint = 4;
+                maxpoint = 2;
             }
             if(player.CurrentBulletPoint > maxpoint) player.CurrentBulletPoint = maxpoint;
             if(player.CurrentBulletPoint < 0) player.CurrentBulletPoint = 0;

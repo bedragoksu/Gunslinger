@@ -403,7 +403,7 @@ public class GameManager : NetworkBehaviour
         }
 
         EndCanvas.enabled = true;
-
+        Time.timeScale = 0;
         // beklet ve finito
         
     }
