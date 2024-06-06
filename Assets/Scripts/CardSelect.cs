@@ -84,6 +84,8 @@ public class CardSelect : MonoBehaviour
     }
     public void OnClick() // discard islemlerini burada yapabilirsin
     {
+        if (_gameManager._thisPlayer != _gameManager._turns[_gameManager.GetTurnInt()]) return;
+        
         MovedOn = true;
         var cardName = this.GetComponent<CardDisplayer>().nameText.text;
         _camera = Camera.main;
