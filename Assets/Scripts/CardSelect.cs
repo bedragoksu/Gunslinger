@@ -124,12 +124,14 @@ public class CardSelect : MonoBehaviour
                     Debug.Log("KAHVEHNE TIKLANDIII");
                     index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
                     _actions.SaloonAction();
+                    _gameManager._cardClickUI.makeAllOfTheCardsWhite();
                     _actions.DiscardCard(_thisPlayerObject, index);
                     break;
                 case "Beer":
                     Debug.Log("BEER KARTI TIKLANDI");
                     index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
                     _actions.BeerAction(_thisPlayerModel);
+                    _gameManager._cardClickUI.makeAllOfTheCardsWhite();
                     _actions.DiscardCard(_thisPlayerObject, index);
                     break;
                 case "Wells Fargo":
@@ -151,17 +153,17 @@ public class CardSelect : MonoBehaviour
                 case "Mustang":
                     Debug.Log("MUSTANG TIKLANDII");
                     index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
-                    _actions.MustangAction(_thisPlayerObject, index);
+                    _actions.MustangAction(_thisPlayerObject, index, "Mustang");
                     break;
                 case "Scope":
                     Debug.Log("SCOPE TIKLANDII");
                     index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
-                    _actions.MustangAction(_thisPlayerObject, index);
+                    _actions.MustangAction(_thisPlayerObject, index, "Scope");
                     break;
                 case "Barrel":
                     Debug.Log("BARREL TIKLANDII");
                     index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
-                    _actions.MustangAction(_thisPlayerObject, index);
+                    _actions.MustangAction(_thisPlayerObject, index, "Barrel");
                     break;
                 case "Cat Balou": // herhangi bir oyuncunun open handi
                     Debug.Log("EMRÝVAKÝ TIKLANDII");
@@ -176,27 +178,27 @@ public class CardSelect : MonoBehaviour
                 case "Volcanic":
                     _actions.AddingGunToPlayer(_thisPlayerObject, 1, this.gameObject, true, "Volcanic");
                     index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
-                    _actions.MustangAction(_thisPlayerObject, index);
+                    _actions.MustangAction(_thisPlayerObject, index, "Volcanic");
                     break;
                 case "Remington":
                     _actions.AddingGunToPlayer(_thisPlayerObject, 3, this.gameObject, false, "Remington");
                     index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
-                    _actions.MustangAction(_thisPlayerObject, index);
+                    _actions.MustangAction(_thisPlayerObject, index, "Remington");
                     break;
                 case "Rev. Carabine":
                     _actions.AddingGunToPlayer(_thisPlayerObject, 4, this.gameObject, false, "Rev. Carabine");
                     index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
-                    _actions.MustangAction(_thisPlayerObject, index);
+                    _actions.MustangAction(_thisPlayerObject, index, "Rev. Carabine");
                     break;
                 case "Schofield":
                     _actions.AddingGunToPlayer(_thisPlayerObject, 2, this.gameObject, false, "Schofield");
                     index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
-                    _actions.MustangAction(_thisPlayerObject, index);
+                    _actions.MustangAction(_thisPlayerObject, index, "Schofield");
                     break;
                 case "Winchester":
                     _actions.AddingGunToPlayer(_thisPlayerObject, 5, this.gameObject, false, "Winchester");
                     index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
-                    _actions.MustangAction(_thisPlayerObject, index);
+                    _actions.MustangAction(_thisPlayerObject, index, "Winchester");
                     break;
 
             }
@@ -206,10 +208,11 @@ public class CardSelect : MonoBehaviour
             _gameManager.ActivateNextButton();
             index = FindIndexInOpenHand(_thisPlayerModel, this.gameObject);
             _actions.DiscardCard(_thisPlayerObject, index);
+            _gameManager._cardClickUI.makeAllOfTheCardsWhite();
         }
         //_thisPlayerModel.clicked = false;
 
-        _gameManager._cardClickUI.makeAllOfTheCardsWhite();
+        
     }
 
     // kimseye vuramýyorsak??

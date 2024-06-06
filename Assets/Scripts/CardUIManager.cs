@@ -28,7 +28,7 @@ public class CardUIManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         // Save the original scale
         originalScale = transform.localScale;
-        hoverScale = new Vector3(originalScale.x * 1.2f, originalScale.y * 1.2f, originalScale.z * 1.2f);
+        hoverScale = new Vector3(1.2f, 1.2f, 1.2f);
         background = transform.Find("Background").gameObject;
         picture = transform.Find("Picture").gameObject;
     }
@@ -64,11 +64,19 @@ public class CardUIManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void ToHoverScale()
     {
+        if (gameObject.transform.parent.gameObject.name == "HandPanel")
+        {
+            originalScale = new Vector3(1f, 1f, 1f);
+        }
         transform.DOScale(hoverScale, duration);
     }
 
     public void ToOriginalScale()
     {
+        if (gameObject.transform.parent.gameObject.name == "HandPanel")
+        {
+            originalScale = new Vector3(1f, 1f, 1f);
+        }
         transform.DOScale(originalScale, duration);
     }
 
