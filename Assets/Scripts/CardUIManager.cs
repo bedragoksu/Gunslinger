@@ -108,8 +108,14 @@ public class CardUIManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         if (_players == null)
         {
-            _players = GameObject.FindGameObjectsWithTag("Player");
             _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+            if (_gameManager._turns.Length != 0 ) {
+                _players = _gameManager._turns;
+            } else
+            {
+                _players = GameObject.FindGameObjectsWithTag("Player");
+            }
+            
             _thisPlayer = _gameManager._thisPlayer;
             _thisPlayerIndex = Array.IndexOf(_players, _thisPlayer);
         }

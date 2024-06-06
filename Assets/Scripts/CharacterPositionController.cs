@@ -6,9 +6,12 @@ public class CharacterPositionController : MonoBehaviour
 {
     [SerializeField] CharacterCanvasController _characterCanvasController;
     public GameObject[] players;
+    public GameManager gameManager;
     public void UpdateCharacterPositions()
     {
-        players = GameObject.FindGameObjectsWithTag("Player");
+        GameObject[] players = null;
+        if (gameManager._turns.Length != 0) players = gameManager._turns;
+        else players = GameObject.FindGameObjectsWithTag("Player");
         Transform[] corners = CalculatePolygonCorners(Vector3.zero, players.Length, 5f);
         for (int i = 0; i < players.Length; i++)
         {
